@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useLocation } from "wouter";
 
 import RightSideNav from "@/components/RightSideNav";
 
@@ -8,25 +9,48 @@ import HMISection from "@/sections/OT_Services/02_HMISection";
 
 export default function OT_Services() {
     const [showFloatingButton, setShowFloatingButton] = useState(false);
-    
-        useEffect(() => {
-            window.scrollTo(0, 0);
-        }, []);
-    
-        useEffect(() => {
-            const handleScroll = () => {
-              const scrollTop = window.scrollY;
-            
-              setShowFloatingButton(scrollTop > 300);
-            };
+    const [location] = useLocation();
+
+    // 페이지 로드 시 최상단으로 이동
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    // URL 해시에 따른 섹션 스크롤
+    useEffect(() => {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        setTimeout(() => {
+          const section = document.getElementById(hash);
+          if (section) {
+            const headerOffset = 80;
+            const elementPosition = section.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+            });
+          }
+        }, 100);
+      }
+    }, [location]);
+
+    // 스크롤 이벤트 리스너
+    useEffect(() => {
+        const handleScroll = () => {
+          const scrollTop = window.scrollY;
         
-            window.addEventListener("scroll", handleScroll);
-            return () => window.removeEventListener("scroll", handleScroll);
-        }, []);
-    
-        const scrollToTop = () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
+          setShowFloatingButton(scrollTop > 300);
         };
+    
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     return (
         <div className="min-h-screen bg-white flex flex-col">

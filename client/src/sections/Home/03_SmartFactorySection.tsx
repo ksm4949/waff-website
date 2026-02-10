@@ -63,7 +63,7 @@ export default function SmartFactorySection() {
                 </Reveal>
 
                 <Reveal delay={300}>
-                <div className="bg-secondary/20 p-6 rounded-lg border border-border hover:shadow-lg hover:border-accent transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+                <div className="bg-secondary/20 p-6 rounded-lg border border-border hover:shadow-lg hover:border-primary transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                     <h3 className="text-lg font-bold text-foreground mb-3">
                         <span className="text-accent">W-MES</span>
                         {" "}(Waff-Manufacturing Execution System)
@@ -121,9 +121,8 @@ export default function SmartFactorySection() {
             {/* Cards grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.map((item, index) => (
-                <Reveal delay={index*300}>
+                <Reveal key={item.title} delay={index*300}>
                 <div
-                    key={index}
                     className="bg-secondary/20 rounded-2xl border overflow-hidden h-full flex flex-col hover:border-accent hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
                 >
                     {/* Image */}

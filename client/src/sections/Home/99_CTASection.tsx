@@ -9,14 +9,16 @@ export default function HomeCTASection() {
                   스마트 제조의 미래를 함께 만들어보세요.
                 </h2>
               </Reveal>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                <Reveal delay={500}>
-                  와프의 솔루션으로 당신의 공장을 디지털 시대로 이끌어보세요.
-                </Reveal>
-                <Reveal delay={1000}>
+              <Reveal delay={500}>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    와프의 솔루션으로 당신의 공장을 디지털 시대로 이끌어보세요.
+                </p>
+              </Reveal>
+              <Reveal delay={1000}>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">  
                   지금 바로 상담을 신청하고 제조 혁신의 첫 걸음을 내딛으세요.
-                </Reveal>
-              </p>
+                </p>
+              </Reveal>
             </div>
         </section>
     )
