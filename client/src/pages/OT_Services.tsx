@@ -8,8 +8,22 @@ import RetrofitSection from "@/sections/OT_Services/01_RetrofitSection";
 import HMISection from "@/sections/OT_Services/02_HMISection";
 
 export default function OT_Services() {
-    const [showFloatingButton, setShowFloatingButton] = useState(false);
     const [location] = useLocation();
+    const [showFloatingButton, setShowFloatingButton] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
+
+    useEffect(() => {
+      const handleScroll = () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        setScrollProgress(scrolled);
+        setShowFloatingButton(scrollTop > 300);
+      };  
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     // 페이지 로드 시 최상단으로 이동
     useEffect(() => {
@@ -54,6 +68,14 @@ export default function OT_Services() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            {/* Scroll Progress Bar */}
+            <div className="fixed top-0 left-0 right-0 z-[100] h-1 bg-secondary/20">
+              <div
+                className="h-full bg-gradient-to-r from-primary via-accent to-primary transition-all duration-300 ease-out"
+                style={{ width: `${scrollProgress}%` }}
+              />
+            </div>
+
             <RightSideNav
               items={[
                 { id: "ot_main", label: "OT Service" },
