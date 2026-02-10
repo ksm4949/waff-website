@@ -41,24 +41,34 @@ export default function Header() {
     return location === href || location.startsWith(href + "/");
   };
 
-  const linkClass = (href: string, isHovered: boolean) => {
-    const active = isActive(href);
+  const linkClass = (menuId: string, href: string) => {
+    const activeRoute = isActive(href);
+
+    // ✅ hover 중이면, hover 메뉴만 활성처럼 보이게
+    const isVisualActive = hoveredMenu
+      ? hoveredMenu === menuId
+      : activeRoute;
+
     return [
-      "group relative h-16 md:h-20 px-6 flex items-center", // ✅ 높이를 헤더와 동일하게
+      "group relative h-16 md:h-20 px-6 flex items-center",
       "text-sm font-medium transition-all duration-300",
-      active || isHovered
+      isVisualActive
         ? "text-primary bg-gray-50"
         : "text-muted-foreground hover:text-primary hover:bg-gray-50",
     ].join(" ");
   };
 
   // const underlineClass = (href: string) => {
-  const underlineClass = (href: string, isHovered: boolean) => {
-    const active = isActive(href);
+  const underlineClass = (menuId: string, href: string) => {
+    const activeRoute = isActive(href);
+
+    const isVisualActive = hoveredMenu
+      ? hoveredMenu === menuId
+      : activeRoute;
+
     return [
       "absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary to-accent transition-all duration-300 rounded-full",
-      // active ? "w-full" : "w-0 group-hover:w-full",
-      (active || isHovered) ? "w-full" : "w-0 group-hover:w-full",
+      isVisualActive ? "w-full" : "w-0 group-hover:w-full",
     ].join(" ");
   };
 
@@ -163,11 +173,11 @@ export default function Header() {
                 <a
                   href={`${menu.href}#${menu.section}`}
                   onClick={(e) => handleMenuClick(e, menu.href, menu.section)}
-                  className={linkClass(menu.href, hoveredMenu === menu.id)}
+                  className={linkClass(menu.id, menu.href)}
                 >
                   {menu.title}
                   {/* <span className={underlineClass(`${menu.href}`)} /> */}
-                  <span className={underlineClass(menu.href, hoveredMenu === menu.id)} />
+                  <span className={underlineClass(menu.id, menu.href)} />
                 </a>
               </div>
             ))}
@@ -188,7 +198,7 @@ export default function Header() {
              <div className="px-8 py-10">
               <div className="grid grid-cols-3 gap-8">
                 {menuData.map((menu) => (
-                  <div key={menu.id}>
+                  <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)}>
                     <ul className="space-y-2">
                       {menu.submenus.map((submenu, index) => (
                         <li key={index}>
