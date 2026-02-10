@@ -186,13 +186,12 @@ export default function Header() {
           {/* Mega Menu */}
           <div
             className={`absolute left-0 right-0 top-full w-full
-                        bg-background/98 backdrop-blur-xl
-                        border-t-2  shadow-lg
-                        transition-all duration-300
-              ${
-              showMegaMenu
-                ? "opacity-100 visible translate-y-0"
-                : "opacity-0 invisible -translate-y-2 pointer-events-none"
+            bg-background/98 backdrop-blur-xl border-t-2 shadow-lg
+            origin-top will-change-[opacity,transform]
+            transition-[opacity,transform]
+            ${showMegaMenu
+              ? "opacity-100 translate-y-0 scale-y-100 duration-[450ms] ease-out pointer-events-auto"
+              : "opacity-0 -translate-y-0 duration-320 ease-in pointer-events-none"
             }`}
           >
              <div className="px-8 py-10">
