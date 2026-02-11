@@ -12,7 +12,6 @@ import CompIntro from "./pages/CompIntro"
 import IT_Services from "./pages/IT_Services";
 import OT_Services from "./pages/OT_Services";
 import CMS from "./pages/CMS";
-import Retrofit from "./pages/Retrofit";
 import Contact from "./pages/Contact";
 
 function Router() {
@@ -29,7 +28,6 @@ function Router() {
         <Route path="/itservice" component={IT_Services} />
         <Route path="/itservice/cms" component={CMS} />
         <Route path="/otservice" component={OT_Services} />
-        <Route path="/otservice/retrofit" component={Retrofit} />
         <Route path="/contact" component={Contact} />
         <Route path="/404" component={NotFound} />
         {/* Final fallback route */}

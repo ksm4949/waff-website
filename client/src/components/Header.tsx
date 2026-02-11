@@ -96,8 +96,8 @@ export default function Header() {
       submenus: [
         { section: "it_main", title: "IT Service" },
         { section: "it_monitoring", title: "모니터링 / 제어 솔루션" },
-        { section: "it_manage", title: "관리 솔루션" },
         { section: "it_ai", title: "AI 기반 솔루션" },
+        { section: "it_manage", title: "관리 솔루션" },
         { section: "it_pm", title: "생산관리 솔루션" },
       ],
     },
@@ -108,7 +108,7 @@ export default function Header() {
       section: "intro",
       submenus: [
         { section: "ot_main", title: "OT Service" },
-        { section: "ot_retro", title: "CNC Retrofit" },
+        { section: "retro_main", title: "CNC Retrofit" },
         { section: "ot_hmi", title: "HMI" },
       ],
     },

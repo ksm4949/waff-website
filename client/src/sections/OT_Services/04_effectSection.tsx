@@ -12,7 +12,7 @@ export default function RetroEffectSection() {
             <div className="divider-modern mx-auto w-24 mb-6" />
             <Reveal>
               <p className="section-subtitle">
-                CNC Retrofit 도입으로 얻을 수 있는 구체적인 성과
+                CNC Retrofit 도입으로 얻을 수 있는 기대효과
               </p>
             </Reveal>
           </div>

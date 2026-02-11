@@ -5,9 +5,13 @@ import RightSideNav from "@/components/RightSideNav";
 
 import Service_IT_MainSection from "@/sections/IT_Services/00_MainSection";
 import MonitoringSection from "@/sections/IT_Services/01_MonitoringSection";
-import ManageSection from "@/sections/IT_Services/02_ManageSection";
+import CMS_MainSection from "@/sections/IT_Services/02_wcmsSection";
+import CMS_KeySection from "@/sections/IT_Services/02.1_cmsKeySection";
+import CMS_ProcessSection from "@/sections/IT_Services/02.2_cmsProcSection";
+import CMS_CaseSection from "@/sections/IT_Services/02.3_cmsCaseSection";
 import AiSection from "@/sections/IT_Services/03_AiSection";
-import PMSection from "@/sections/IT_Services/04_PMSection";
+import ManageSection from "@/sections/IT_Services/04_ManageSection";
+import PMSection from "@/sections/IT_Services/05_PMSection";
 
 export default function IT_Services() {
     const [location] = useLocation();
@@ -82,16 +86,28 @@ export default function IT_Services() {
               items={[
                 { id: "it_main", label: "IT Service" },
                 { id: "it_monitoring", label: "모니터링 / 제어 솔루션" },
-                { id: "it_manage", label: "관리 솔루션" },
+                { id: "cms_main", label: "W-CMS" },
+                { id: "cms_case", label: "W-CMS 적용사례" },
                 { id: "it_ai", label: "AI 기반 솔루션" },
+                { id: "it_manage", label: "관리 솔루션" },
                 { id: "it_pm", label: "생산관리 솔루션" },
               ]}
             />
 
+            {/* Main */}
             <Service_IT_MainSection />
+            {/* Monitoring */}
             <MonitoringSection />
-            <ManageSection />
+            {/* WCMS */}
+            <CMS_MainSection />
+            <CMS_KeySection />
+            <CMS_ProcessSection />
+            <CMS_CaseSection />
+            {/* AI */}
             <AiSection />
+            {/* Manage */}
+            <ManageSection />
+            {/* MES */}
             <PMSection />
 
             {showFloatingButton && (

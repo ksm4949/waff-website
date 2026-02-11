@@ -56,7 +56,7 @@ export default function SmartFactorySection() {
                     <p className="text-sm text-muted-foreground mb-3">
                         생산 현장의 모든 정보를 실시간으로 시각화하고 제어하는 통합 대시보드
                     </p>
-                    <a href="/itservice/cms" className="text-sm text-accent font-semibold hover:underline inline-flex items-center gap-1 group">
+                    <a href="/itservice#cms_main" className="text-sm text-accent font-semibold hover:underline inline-flex items-center gap-1 group">
                         자세히 보기 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                     </a>
                 </div>

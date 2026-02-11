@@ -53,7 +53,7 @@ export default function HomeRetrofitSection() {
               </div>
 
               <Reveal>
-              <a href="/otservice/retrofit">
+              <a href="/otservice#retro_main">
                 <Button className="w-full px-6 py-3 bg-gradient-to-r from-primary to-accent hover:from-primary hover:to-accent text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2">
                   CNC Retrofit 상세 보기
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

@@ -52,6 +52,46 @@ export default function Service_IT_MainSection () {
 
             <div 
               onClick={() => {
+                document.getElementById('it_ai')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group bg-white rounded-lg p-8 flex flex-col h-full border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
+            >
+              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                <Brain className="w-6 h-6 text-accent" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">AI 기반 솔루션</h3>
+              <div className="flex gap-3 mb-4">
+                  <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
+                  <div>
+                    <h4 className="font-semibold text-foreground">AI공구교환주기 예측</h4>
+                    <p className="text-sm text-muted-foreground">공구 사용 시간, 가공 속도 등 부하에 대한 AI 학습에 기반한 유동적인 교환주기 판단 및 제어</p>
+                  </div>
+              </div>
+              <div className="flex gap-3 mb-4">
+                  <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
+                  <div>
+                    <h4 className="font-semibold text-foreground">AI알람 분석</h4>
+                    <p className="text-sm text-muted-foreground">해당 알람 이전의 로그를 분석해서 해당 알람에 많은 영향을 준 컬럼(항목)을 선별하여 사용자에게 전달</p>
+                  </div>
+              </div>
+              <div className="flex gap-3 mb-4">
+                  <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
+                  <div>
+                    <h4 className="font-semibold text-foreground">CNC머신 지능형 대응을 위한 Ontology-RAG Driven (CNC assistant)</h4>
+                    <p className="text-sm text-muted-foreground">
+                      산업 현장의 매뉴얼·노하우·데이터를 RAG 기반으로 통합하여 CNC 가공 장비의 알람·이상 대응을 <br/>
+                      즉시 해결하여 설비의 다운타임을 감소시키는 지능형 AI-assistant 시스템
+                    </p>
+                  </div>
+              </div>
+              
+              <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
+                상세 보기 →
+              </div>
+            </div>
+
+            <div 
+              onClick={() => {
                 document.getElementById('it_manage')?.scrollIntoView({ behavior: 'smooth' });
               }}
               className="group bg-white rounded-lg p-8 flex flex-col h-full border-2 border-accent/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
@@ -81,36 +121,6 @@ export default function Service_IT_MainSection () {
                     <p className="text-sm text-muted-foreground">PC와 기기간의 실시간 데이터 변환 및 전송을 통해 신속한 데이터 관리 및 공유 가능</p>
                   </div>
               </div>
-              <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
-                상세 보기 →
-              </div>
-            </div>
-
-            <div 
-              onClick={() => {
-                document.getElementById('it_ai')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group bg-white rounded-lg p-8 flex flex-col h-full border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
-            >
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
-                <Brain className="w-6 h-6 text-accent" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">AI 기반 솔루션</h3>
-              <div className="flex gap-3 mb-4">
-                  <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">AI공구교환주기 예측</h4>
-                    <p className="text-sm text-muted-foreground">공구 사용 시간, 가공 속도 등 부하에 대한 AI 학습에 기반한 유동적인 교환주기 판단 및 제어</p>
-                  </div>
-              </div>
-              <div className="flex gap-3 mb-4">
-                  <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
-                  <div>
-                    <h4 className="font-semibold text-foreground">AI알람 분석</h4>
-                    <p className="text-sm text-muted-foreground">해당 알람 이전의 로그를 분석해서 해당 알람에 많은 영향을 준 컬럼(항목)을 선별하여 사용자에게 전달</p>
-                  </div>
-              </div>
-              
               <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
                 상세 보기 →
               </div>

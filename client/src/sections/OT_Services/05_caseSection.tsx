@@ -1,6 +1,5 @@
 import { Reveal } from "@/components/Reveal";
 import ImageSlider from "@/components/ImageSlider";
-import { ArrowRight } from "lucide-react";
 
 export default function RetroCaseSection() {
     const imageSlides = [

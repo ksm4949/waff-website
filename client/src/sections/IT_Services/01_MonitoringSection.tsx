@@ -23,10 +23,20 @@ export default function MonitoringSection() {
               </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 items-stretch">
               {/* Left */}
+              <div className="flex flex-col gap-8 ">
+                  <Reveal className="h-full relative overflow-hidden rounded-xl border border-border bg-secondary/20">
+                    <img
+                      src="/images/it_services/monitoring.png"
+                      alt="monitoring"
+                      className="w-full h-full md:h-full object-center"
+                    />
+                  </Reveal>
+              </div>
+              {/* Right */}
               <div className="flex flex-col gap-8">
-                  <Reveal>
+                  <Reveal className="h-full ">
                     <div className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
@@ -62,42 +72,6 @@ export default function MonitoringSection() {
                         </li>
                       </ul>
                     </div>
-                  </Reveal>
-
-                  <Reveal>
-                    <div className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                              <Monitor className="w-6 h-6 text-primary" />
-                          </div>
-                          <h3 className="text-xl font-bold text-foreground mb-3">구축사례</h3>
-                        </div>
-                        <a href="/itservice/cms">
-                        <Button className="group w-38 flex items-center justify-between bg-primary hover:bg-primary/90 transition-shadow hover:shadow-md">
-                          <span className="transition-transform duration-200 ease-out group-hover:-translate-x-0.5">
-                              살펴보기
-                          </span>
-                          <ArrowRight className="w-4 h-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" />
-                        </Button>
-                      </a>
-                    </div>
-                  </Reveal>
-              </div>
-              {/* Right */}
-              <div className="flex flex-col gap-8">
-                  <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20">
-                      <img
-                        src="/images/it_services/monitoring1.png"
-                        alt="award"
-                        className="w-full h-[520px] md:h-full object-cover"
-                      />
-                  </Reveal>
-                  <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20">
-                    <img
-                      src="/images/it_services/monitoring2.png"
-                      alt="award"
-                      className="w-full h-[520px] md:h-full object-cover"
-                    />
                   </Reveal>
               </div>
           </div>

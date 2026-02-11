@@ -4,8 +4,13 @@ import { useLocation } from "wouter";
 import RightSideNav from "@/components/RightSideNav";
 
 import Service_OT_MainSection from "@/sections/OT_Services/00_MainSection";
-import RetrofitSection from "@/sections/OT_Services/01_RetrofitSection";
-import HMISection from "@/sections/OT_Services/02_HMISection";
+import RetroMainSection from "@/sections/OT_Services/01_RetroMainSection";
+import RetrofitSection from "@/sections/OT_Services/02_RetrofitSection";
+import RetroElSection from "@/sections/OT_Services/03_elementSection";
+import RetroReasonSection from "@/sections/OT_Services/03_reasonSection";
+import RetroEffectSection from "@/sections/OT_Services/04_effectSection";
+import RetroCaseSection from "@/sections/OT_Services/05_caseSection";
+import HMISection from "@/sections/OT_Services/06_HMISection";
 
 export default function OT_Services() {
     const [location] = useLocation();
@@ -79,13 +84,21 @@ export default function OT_Services() {
             <RightSideNav
               items={[
                 { id: "ot_main", label: "OT Service" },
-                { id: "ot_retro", label: "CNC Retrofit" },
+                { id: "retro_main", label: "CNC Retrofit" },
+                { id: "retro_case", label: "Retorfit 적용사례" },
                 { id: "ot_hmi", label: "HMI" },
               ]}
             />
 
             <Service_OT_MainSection />
+            {/* Retrofit */}
+            <RetroMainSection />
             <RetrofitSection />
+            <RetroElSection />
+            <RetroReasonSection />
+            <RetroEffectSection />
+            <RetroCaseSection />
+            {/* HMI */}
             <HMISection />
 
             {showFloatingButton && (

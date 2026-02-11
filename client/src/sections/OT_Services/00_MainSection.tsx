@@ -2,7 +2,7 @@ import { Wrench, User } from "lucide-react";
 
 export default function Service_OT_MainSection () {
     return (
-        <section id="ot_main" className="py-20 md:py-32 bg-gradient-to-br from-slate-50 to-gray-500">
+        <section id="ot_main" className="py-20 md:py-32 bg-white">
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="section-title">OT Services</h2>
@@ -15,12 +15,12 @@ export default function Service_OT_MainSection () {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div 
               onClick={() => {
-                document.getElementById('ot_retro')?.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('retro_main')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="flex flex-col h-full group bg-white rounded-lg p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
+              className="flex flex-col h-full group bg-secondary/20 rounded-lg p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
             >
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
-                <Wrench className="w-6 h-6 text-accent" />
+              <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 transition-colors">
+                <Wrench className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit</h3>
               <div className="flex gap-3 mb-4">
@@ -31,7 +31,7 @@ export default function Service_OT_MainSection () {
                   </div>
               </div>
               
-              <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
+              <div className="mt-auto text-primary font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
                 상세 보기 →
               </div>
             </div>
@@ -40,10 +40,10 @@ export default function Service_OT_MainSection () {
               onClick={() => {
                 document.getElementById('ot_hmi')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="flex flex-col h-full group bg-white rounded-lg p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
+              className="flex flex-col h-full group bg-secondary/20 rounded-lg p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-2"
             >
-              <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
-                <User className="w-6 h-6 text-accent" />
+              <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 transition-colors">
+                <User className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">HMI(Human-Machine Interface) 솔루션</h3>
               <div className="flex gap-3 mb-4">
@@ -54,7 +54,7 @@ export default function Service_OT_MainSection () {
                   </div>
               </div>
              
-              <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
+              <div className="mt-auto text-primary font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
                 상세 보기 →
               </div>
             </div>

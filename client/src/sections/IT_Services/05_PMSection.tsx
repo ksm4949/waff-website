@@ -3,7 +3,7 @@ import { Database } from "lucide-react";
 
 export default function PMSection() {
     return (
-        <section id="it_pm" className="py-20 md:py-32 bg-gradient-to-br from-slate-50 to-gray-500">
+        <section id="it_pm" className="py-20 md:py-32 bg-white">
         <div className="container">
           <div className="text-center mb-16 items-center">
             <Reveal>
@@ -19,16 +19,24 @@ export default function PMSection() {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+              <Reveal className="h-full relative overflow-hidden rounded-lg border border-border bg-white shadow-lg">
+                  <img
+                    src="/images/it_services/pm.png"
+                    alt="W-MES"
+                    className="w-full h-full rounded-lg shadow-lg"
+                  />
+              </Reveal>
+              {/* Right */}
               <div className="flex flex-col gap-8">
-                  <Reveal className="bg-white p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
+                  <Reveal className="h-full bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
-                            <Database className="w-6 h-6 text-accent" />
+                        <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+                            <Database className="w-6 h-6 text-primary" />
                         </div>
-                        <h3 className="text-xl font-bold text-foreground mb-3">W-MES 차별점</h3>
+                        <h3 className="text-2xl font-bold text-foreground mb-3">W-MES 차별점</h3>
                       </div>
-                      <ul className="space-y-2 text-sm text-muted-foreground">
+                      <ul className="space-y-2 text-lg text-muted-foreground">
                         <li className="flex items-center gap-2">
                           <span className="w-1.5 h-1.5 bg-accent rounded-full" />실시간 장비 데이터 연계
                         </li>
@@ -50,14 +58,6 @@ export default function PMSection() {
                       </ul>
                   </Reveal>
               </div>
-              {/* Right */}
-              <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white">
-                  <img
-                    src="/images/it_services/pm.png"
-                    alt="W-MES"
-                    className="w-full h-full md:h-full"
-                  />
-              </Reveal>
           </div>
         </div>
       </section>

@@ -1,71 +1,22 @@
-import { useEffect, useMemo, useState} from "react";
-import { Zap, Monitor, Award } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 
-type Img = { src: string; alt?: string };
-
-const IMAGES: Img[] = [
-  { src: "/images/Landing/hmi.png", alt: "HMI Interface" },
-  { src: "/images/Landing/hmi1.png", alt: "HMI Interface 1" },
-  { src: "/images/Landing/hmi2.png", alt: "HMI Interface 2" },
-  { src: "/images/Landing/hmi3.png", alt: "HMI Interface 3" },
-];
-
-function useCrossfade(images: Img[], intervalMs = 4500, fadeMs = 900) {
-  const [index, setIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState(images.length > 1 ? 1 : 0);
-  const [fade, setFade] = useState(false);
-
-  useEffect(() => {
-    if (images.length <= 1) return;
-
-    let timeout1: ReturnType<typeof setTimeout> | null = null;
-    let timeout2: ReturnType<typeof setTimeout> | null = null;
-
-    const tick = () => {
-      // 다음 이미지 준비
-      setNextIndex((index + 1) % images.length);
-
-      // 페이드 시작
-      setFade(true);
-
-      // 페이드 완료 후 “현재”를 다음으로 고정
-      timeout1 = setTimeout(() => {
-        setIndex((p) => (p + 1) % images.length);
-        setFade(false);
-      }, fadeMs);
-
-      // 다음 틱 예약
-      timeout2 = setTimeout(tick, intervalMs);
-    };
-
-    timeout2 = setTimeout(tick, intervalMs);
-
-    return () => {
-      if (timeout1) clearTimeout(timeout1);
-      if (timeout2) clearTimeout(timeout2);
-    };
-  }, [images.length, index, intervalMs, fadeMs]);
-
-  return { current: images[index], next: images[nextIndex], fade, fadeMs };
-}
-
-export default function HomeHMISection() {
-    const images = useMemo(() => IMAGES, []);
-    const { current, next, fade, fadeMs } = useCrossfade(images, 4800, 1000);
-
+export default function HMISection() {
     return (
-        <section id="home_hmi" className="py-20 md:py-32 bg-white">
+        <section id="ot_hmi" className="py-20 md:py-32 bg-gradient-to-br from-slate-50 to-gray-500">
         <div className="container">
-          <Reveal className="text-center mb-16">
-            <h2 className="section-title">HMI (Human Machine Interface)</h2>
+          <div className="text-center mb-16 items-center">
+            <Reveal>
+              <h2 className="section-title">HMI 솔루션</h2>
+            </Reveal>
             <div className="divider-modern mx-auto w-24 mb-6" />
-            <p className="section-subtitle">
-              직관적이고{" "}
-              <span className="font-bold text-accent">사용자 친화적인</span>
-              {" "}인터페이스로 설비 제어를 단순화합니다
-            </p>
-          </Reveal>
+            <Reveal>
+              <p className="section-subtitle">
+                공장 환경에 맞는 수집 데이터 설계를 바탕으로 다양한 데이터를 수집해 화면 인터페이스로 구현합니다.
+                <br/>
+                {/* <span className="text-primary font-bold">사례 보기</span> */}
+              </p>
+            </Reveal>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <Reveal className="relative h-96">
@@ -78,15 +29,22 @@ export default function HomeHMISection() {
 
             <div className="space-y-8">
               <Reveal>
-                <h3 className="text-2xl font-bold text-foreground mb-4">사용자 중심의 설계</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-4">HMI란?</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  복잡한 산업 설비를 직관적인 화면으로 구성하여 누구나 쉽게 조작할 수 있도록 설계했습니다. 
-                  <br/>
-                  터치스크린, 다중 언어 지원, 맞춤형 레이아웃 등으로 사용자 경험을 극대화합니다.
+                  HMI는 공장 자동화 환경에서 설비와 작업자를 연결하는 핵심 인터페이스입니다. <br/>
+                  각종 센서와 PLC 데이터를 실시간으로 수집·분석하여
+                  운영 현황을 한눈에 파악할 수 있도록 제공합니다. <br/>
+
+                  직관적인 그래픽 UI와 사용자 맞춤 설정 기능을 통해
+                  복잡한 공정도 쉽고 빠르게 제어할 수 있으며, <br/>
+                  설비 이상 감지 및 예방 유지보수를 지원합니다. <br/>
+
+                  스마트팩토리 구현을 위한 필수 요소로,
+                  생산 효율과 품질 경쟁력을 동시에 강화합니다.
                 </p>
               </Reveal>
 
-              <div className="space-y-4">
+              {/* <div className="space-y-4">
                 <Reveal>
                   <div className="flex gap-4 transition-all duration-300 ease-out hover:scale-[1.03] hover:bg-muted/40 rounded-lg p-2">
                     <div className="flex-shrink-0 w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
@@ -122,9 +80,10 @@ export default function HomeHMISection() {
                     </div>
                   </div>
                 </Reveal>
-              </div>
+              </div> */}
             </div>
           </div>
+
         </div>
       </section>
     )

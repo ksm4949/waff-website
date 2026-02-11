@@ -53,9 +53,6 @@ export default function RetrofitSection() {
               <p className="section-subtitle">
                 컨트롤러 교체부터 메인판넬 업그레이드까지 CNC 주요 기능을 고도화 할 수 있는 기술입니다.
                 <br/>
-                <a href="/otservice/retrofit" className="text-accent font-semibold hover:underline inline-flex items-center gap-1 group">
-                  사례 보기
-                </a>
               </p>
             </Reveal>
           </div>
