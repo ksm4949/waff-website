@@ -80,12 +80,12 @@ export default function Header() {
       section: "intro",
       submenus: [
         { title: "인사말", section: "intro" },
-        { title: "와프(WAFF)", section: "comp_point" },
         { title: "Vision", section: "vision" },
         { title: "조직구성", section: "org" },
         { title: "기술력과 인증", section: "technology" },
-        { title: "협력사", section: "partner" },
+        { title: "주요 고객", section: "partner" },
         { title: "연혁", section: "history" },
+        { title: "찾아오시는 길", section: "contact" },
       ],
     },
     {
@@ -131,7 +131,7 @@ export default function Header() {
                     />
                 </div>
                 <img
-                    src="/images/logos/logo2(black).png"
+                    src="/images/logos/logo2(blue).png"
                     alt="logo"
                     className="w-full h-8  object-contain"
                 />

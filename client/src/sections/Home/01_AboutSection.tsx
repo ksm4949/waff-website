@@ -1,5 +1,11 @@
 import { Reveal } from "@/components/Reveal";
 
+type CardItem = {
+  title: string;
+  content: string[]; // 최대 2개
+  img: string;
+};
+
 // CheckCircle2 icon component
 function CheckCircle2({ className }: { className?: string }) {
   return (
@@ -22,11 +28,34 @@ function CheckCircle2({ className }: { className?: string }) {
 }
 
 export default function AboutSection() {
+    const data: CardItem[] = [
+      {
+        title: "중간 벤더 없이 'One-Stop 구축' 가능",
+        content: [
+          "하드웨어부터 소프트웨어까지 한번에 설계, 개발, 적용 가능",
+          "커뮤니케이션 창구 하나로 일정과 품질 안정성 확보 가능"
+        ],
+        img: "/images/intro/intro_part1.png"
+      },
+      {
+        title: "OT 현장 이해 바탕 실용적 IT 설계",
+        content: [
+          "단순한 시스템 개발이 아닌, '장비 운전 특성'을 이해한 상태에서 UX/UI나 MES/CMS를 구현하는 현장 밀착형 솔루션",
+        ],
+        img: "/images/intro/intro_part2.png"
+      },
+      {
+        title: "빠른 문제 해결과 유지보수 용이성",
+        content: [
+          "비통합된 타사 대비 설비 이상, 데이터 오류 발생 시에도 원인 파악과 개선이 빠름",
+        ],
+        img: "/images/intro/intro_part3.png"
+      },
+    ]
+
     return (
         <section id="about" className="py-20 md:py-32 bg-gradient-to-b from-white to-blue-50/30 animate-fade-in-up border-t border-border/40">
-          {/* <div className="pointer-events-none absolute -left-40 -top-0 h-[520px] w-[520px] rounded-full bg-primary/10 blur-3xl" /> */}
-          {/* <div className="pointer-events-none absolute -left-40 top-40 h-[420px] w-[420px] rounded-full bg-accent/10 blur-3xl" /> */}
-          
+
         <div className="container">
           <Reveal className="text-center mb-16">
             <h2 className="section-title">회사개요</h2>
@@ -42,9 +71,8 @@ export default function AboutSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <Reveal delay={200}>
-                <h3 className="text-2xl font-bold text-foreground mb-4">와프(WAFF)란?</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-4">와프(WAFF)는</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                    와프는{" "} 
                     <span className="font-bold text-lg text-accent">IT</span>
                     (데이터 수집&분석)와{" "} 
                     <span className="font-bold text-lg text-accent">OT</span>
@@ -117,6 +145,57 @@ export default function AboutSection() {
                 src="/images/Landing/about.png"
                 alt="Company Introduction"
                 className="w-full h-full object-cover rounded-lg shadow-lg"
+              />
+            </Reveal>
+          </div>
+
+          <div className="mt-24">
+            <div className="container mx-auto px-4">
+                {/* Top badge / message */}
+                <Reveal className="mb-8 text-left">
+                    <div className="inline-block px-4 py-2 bg-primary rounded-full">
+                    <span className="text-sm font-semibold text-white/90">
+                        통합 기업의 강점
+                    </span>
+                    </div>
+                </Reveal>
+                {/* Cards grid */}
+                <Reveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {data.map((item, index) => (
+                    <div
+                        key={index}
+                        className="rounded-2xl border overflow-hidden h-full flex flex-col hover:border-primary transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+                    >
+                        {/* Image */}
+                        <div className="aspect-[16/10] w-full bg-gray-100">
+                            <img
+                                src={item.img}
+                                alt={item.title}
+                                className="h-[400px] w-full object-center"
+                            />
+                        </div>
+                        {/* Text */}
+                        <div className="p-5 flex-1 flex flex-col bg-white">
+                            <h3 className="text-lg font-semibold ">{item.title}</h3>
+                            <div className="mt-2 text-sm text-gray-600 leading-relaxed space-y-2">
+                                {item.content?.map((text, idx) => (
+                                <div key={idx} className="flex gap-3">
+                                    <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
+                                    <p>{text}</p>
+                                </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    ))}
+                </Reveal>
+            </div>
+
+            <Reveal className="mt-16 flex justify-center">
+              <img
+                src="/images/intro/intro_part.png"
+                alt="사업부"
+                className="w-full max-w-6xl rounded-2xl shadow-lg object-cover"
               />
             </Reveal>
           </div>

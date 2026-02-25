@@ -4,9 +4,9 @@ import ImageSlider from "@/components/ImageSlider";
 export default function CMS_CaseSection() {
     const imageSlides = [
         { img: "/images/example/cms_sample1.png", title: "" },
-        { img: "/images/example/cms_sample2.png", title: "" },
-        { img: "/images/example/cms_sample3.png", title: "" },
-        { img: "/images/example/cms_sample4.png", title: "" },
+        { img: "/images/example/ex_cms1.png", title: "" },
+        { img: "/images/example/ex_cms2.png", title: "" },
+        { img: "/images/example/ex_cms3.png", title: "" },
         { img: "/images/example/cms_mobile_sample1.png", title: "" },
         { img: "/images/example/cms_mobile_sample2.png", title: "" },
         { img: "/images/example/cms_mobile_sample3.png", title: "" },

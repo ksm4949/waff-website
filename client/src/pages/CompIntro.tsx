@@ -4,12 +4,12 @@ import { useLocation } from "wouter";
 import RightSideNav from "@/components/RightSideNav";
 
 import IntroSection from "@/sections/CompIntro/00_IntroSection"
-import PointSection from "@/sections/CompIntro/01_PointSection";
 import VisionSection from "@/sections/CompIntro/02_VisionSection";
 import OrganizationSection from "@/sections/CompIntro/03_OrganizationSection"
 import TechnologySection from "@/sections/CompIntro/04_TechnologySection"
 import PartnerSection from "@/sections/CompIntro/05_PartnerSection"
 import HistorySection from "@/sections/CompIntro/06_HistorySection"
+import ContactSection from "./Contact"
 
 export default function CompIntro() {
   const [location] = useLocation();
@@ -83,22 +83,22 @@ export default function CompIntro() {
             <RightSideNav
               items={[
                 { id: "intro", label: "인사말" },
-                { id: "comp_point", label: "와프(WAFF)" },
                 { id: "vision", label: "Vision" },
                 { id: "org", label: "조직구성" },
                 { id: "technology", label: "기술력과 인증" },
-                { id: "partner", label: "협력사" },
+                { id: "partner", label: "주요 고객" },
                 { id: "history", label: "연혁" },
+                { id: "contact", label: "찾아오시는 길" },
               ]}
             />
 
             <IntroSection />
-            <PointSection />
             <VisionSection />
             <OrganizationSection />
             <TechnologySection />
             <PartnerSection />
             <HistorySection />
+            <ContactSection />
 
             {showFloatingButton && (
               <button

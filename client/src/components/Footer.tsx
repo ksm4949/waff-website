@@ -1,6 +1,33 @@
-import { Link } from "wouter";
+import { Link, useLocation  } from "wouter";
 
 export default function Footer() {
+  const [location] = useLocation();
+
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const headerOffset = 80;
+    const y = section.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  const handleMenuClick = (e: React.MouseEvent, href: string, sectionId: string) => {
+    e.preventDefault();
+
+    // ✅ /company 또는 /company#xxx 상태도 같은 페이지로 취급
+    const currentPath = location.split("#")[0];
+    if (currentPath === href) {
+      scrollToSection(sectionId);
+      // 해시도 같이 맞춰주면 새로고침/공유에 좋아요
+      window.history.replaceState(null, "", `${href}#${sectionId}`);
+    } else {
+      // 다른 페이지면 해시 포함해서 이동
+      window.location.href = `${href}#${sectionId}`;
+    }
+  };
+
     return (
         <footer className="bg-gradient-to-r from-foreground to-slate-900 text-white py-4 border-t border-white/10">
             <div className="container">
@@ -32,7 +59,11 @@ export default function Footer() {
                   <div>
                     <div className="space-y-2 text-md">
                       <nav className="">
-                        <Link href="/contact" className="text-white/80 hover:text-white hover:underline">
+                        <Link 
+                          href="/company#contact" 
+                          onClick={(e)=> handleMenuClick(e, "/company", "contact")}
+                          className="text-white/80 hover:text-white hover:underline"
+                        >
                           👉 찾아오시는 길
                         </Link>
                         {/* 다른 추가할 링크들 */}
