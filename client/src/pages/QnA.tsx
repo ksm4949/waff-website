@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import SupportDevNotice from "@/components/support/SupportDevNotice";
+import { Input } from "@/components/ui/input";
 import { qnaPosts } from "@/data/qnaPosts";
 import {
   Pagination,
@@ -9,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Table,
@@ -19,16 +20,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { RefreshCwIcon, SearchIcon } from "lucide-react";
 
 export default function QnA() {
   const [, navigate] = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchInput, setSearchInput] = useState("");
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
 
   const itemsPerPage = 10;
-  const totalCount = qnaPosts.length;
-  const totalPages = Math.max(1, Math.ceil(qnaPosts.length / itemsPerPage));
+  const filteredPosts = useMemo(() => {
+    const keyword = appliedSearchTerm.trim().toLowerCase();
+    if (!keyword) return qnaPosts;
+    return qnaPosts.filter((post) =>
+      [post.title, post.author].some((field) =>
+        field.toLowerCase().includes(keyword)
+      )
+    );
+  }, [appliedSearchTerm]);
+  const totalCount = filteredPosts.length;
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentPosts = qnaPosts.slice(startIndex, startIndex + itemsPerPage);
+  const currentPosts = filteredPosts.slice(startIndex, startIndex + itemsPerPage);
 
   const goToPage = (page: number) => {
     const nextPage = Math.min(Math.max(page, 1), totalPages);
@@ -39,6 +52,21 @@ export default function QnA() {
     "border border-border bg-white text-black hover:bg-[#0b1f4d] hover:text-white";
   const paginationActiveClass =
     "border border-[#0b1f4d] bg-[#0b1f4d] text-white hover:bg-[#0b1f4d] hover:text-white";
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [appliedSearchTerm]);
+
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setAppliedSearchTerm(searchInput);
+  };
+
+  const handleSearchReset = () => {
+    setSearchInput("");
+    setAppliedSearchTerm("");
+    setCurrentPage(1);
+  };
 
   return (
     <section id="qna" className="py-20 md:py-28 bg-white">
@@ -59,6 +87,32 @@ export default function QnA() {
             <Link href="/qna/write">{"\uAE00\uC4F0\uAE30"}</Link>
           </Button>
         </div>
+
+        <form onSubmit={handleSearchSubmit} className="mb-4 flex max-w-md items-center gap-2">
+          <Input
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder={"\uC81C\uBAA9, \uC791\uC131\uC790 \uAC80\uC0C9"}
+          />
+          <Button
+            type="submit"
+            className="bg-[#0b1f4d] text-white hover:bg-[#13357a]"
+            aria-label={"\uAC80\uC0C9"}
+          >
+            <SearchIcon className="size-4" />
+            <span className="sr-only">{"\uAC80\uC0C9"}</span>
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="hover:bg-gray-100 hover:text-foreground"
+            onClick={handleSearchReset}
+            aria-label={"\uCD08\uAE30\uD654"}
+          >
+            <RefreshCwIcon className="size-4" />
+            <span className="sr-only">{"\uCD08\uAE30\uD654"}</span>
+          </Button>
+        </form>
 
         <div className="rounded-lg border border-border/70 bg-background">
           <Table>
