@@ -75,6 +75,7 @@ export default function NoticeWrite() {
               name="title"
               type="text"
               placeholder={"\uC81C\uBAA9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+              className="placeholder:text-gray-400"
               required
             />
           </div>
@@ -88,7 +89,7 @@ export default function NoticeWrite() {
               id="content"
               name="content"
               placeholder={"\uACF5\uC9C0 \uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
-              className="min-h-52"
+              className="min-h-52 placeholder:text-gray-400"
               required
             />
           </div>

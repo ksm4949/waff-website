@@ -52,6 +52,7 @@ export default function QnAWrite() {
                 name="name"
                 type="text"
                 placeholder={"\uC774\uB984\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+                className="placeholder:text-gray-400"
                 required
               />
             </div>
@@ -65,6 +66,7 @@ export default function QnAWrite() {
                 name="password"
                 type="password"
                 placeholder={"\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+                className="placeholder:text-gray-400"
                 required
               />
             </div>
@@ -72,13 +74,25 @@ export default function QnAWrite() {
               <label htmlFor="email" className="text-sm font-medium">
                 {"\uC774\uBA54\uC77C"}
               </label>
-              <Input id="email" name="email" type="email" placeholder="example@email.com" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="example@email.com"
+                className="placeholder:text-gray-400"
+              />
             </div>
             <div className="space-y-2">
               <label htmlFor="phone" className="text-sm font-medium">
                 {"\uC5F0\uB77D\uCC98"}
               </label>
-              <Input id="phone" name="phone" type="tel" placeholder="010-0000-0000" />
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="010-0000-0000"
+                className="placeholder:text-gray-400"
+              />
             </div>
           </div>
 
@@ -92,6 +106,7 @@ export default function QnAWrite() {
               name="title"
               type="text"
               placeholder={"\uC81C\uBAA9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+              className="placeholder:text-gray-400"
               required
             />
           </div>
@@ -105,7 +120,7 @@ export default function QnAWrite() {
               id="content"
               name="content"
               placeholder={"\uBB38\uC758 \uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
-              className="min-h-44"
+              className="min-h-44 placeholder:text-gray-400"
               required
             />
           </div>

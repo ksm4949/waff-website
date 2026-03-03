@@ -74,6 +74,7 @@ export default function QnAVerify() {
                 name="password"
                 type="password"
                 placeholder={"\uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+                className="placeholder:text-gray-400"
                 required
               />
             </div>
