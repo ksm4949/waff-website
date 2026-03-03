@@ -24,27 +24,37 @@ export default function Header() {
     }
   };
 
-  const handleMenuClick = (e: React.MouseEvent, href: string, sectionId: string) => {
+  const handleMenuClick = (
+    e: React.MouseEvent,
+    href: string,
+    sectionId?: string,
+    disableSectionScroll?: boolean
+  ) => {
     e.preventDefault();
+
+    if (disableSectionScroll || !sectionId) {
+      window.location.href = href;
+      return;
+    }
     
     if (location === href) {
-      // 같은 페이지에 있으면 스크롤만 이동
+      // 같�? ?�이지???�으�??�크롤만 ?�동
       scrollToSection(sectionId);
     } else {
-      // 다른 페이지로 이동
+      // ?�른 ?�이지�??�동
       window.location.href = `${href}#${sectionId}`;
     }
   };
 
   const isActive = (href: string) => {
-    // 정확히 일치 or 하위 경로 포함 (예: /company/xxx)
+    // ?�확???�치 or ?�위 경로 ?�함 (?? /company/xxx)
     return location === href || location.startsWith(href + "/");
   };
 
   const linkClass = (menuId: string, href: string) => {
     const activeRoute = isActive(href);
 
-    // ✅ hover 중이면, hover 메뉴만 활성처럼 보이게
+    // ??hover 중이�? hover 메뉴�??�성처럼 보이�?
     const isVisualActive = hoveredMenu
       ? hoveredMenu === menuId
       : activeRoute;
@@ -95,7 +105,7 @@ export default function Header() {
       section: "intro",
       submenus: [
         { section: "it_main", title: "IT Service" },
-        { section: "it_monitoring", title: "모니터링 / 제어 솔루션" },
+        { section: "it_monitoring", title: "모니터링 / 제어솔루션" },
         { section: "it_ai", title: "AI 기반 솔루션" },
         { section: "it_manage", title: "관리 솔루션" },
         { section: "it_pm", title: "생산관리 솔루션" },
@@ -110,6 +120,16 @@ export default function Header() {
         { section: "ot_main", title: "OT Service" },
         { section: "retro_main", title: "CNC Retrofit" },
         { section: "ot_hmi", title: "HMI" },
+      ],
+    },
+    {
+      id: "support",
+      title: "고객지원",
+      href: "/qna",
+      section: "support",
+      submenus: [
+        { href: "/qna", title: "Q & A" },
+        { href: "/notice", title: "공지사항" },
       ],
     },
   ]
@@ -141,7 +161,7 @@ export default function Header() {
         {/* Navigation */}
         {/* <div className="hidden md:flex items-center gap-8">
           <Link href="/company" className={linkClass("/company")}>
-            회사소개
+            ?�사?�개
             <span className={underlineClass("/company")} />
           </Link>
           <Link href="/itservice" className={linkClass("/itservice")}>
@@ -171,8 +191,15 @@ export default function Header() {
                 // className={`w-[200px] ${linkClass(menu.href, hoveredMenu === menu.id)}` }
               >
                 <a
-                  href={`${menu.href}#${menu.section}`}
-                  onClick={(e) => handleMenuClick(e, menu.href, menu.section)}
+                  href={menu.id === "support" ? menu.href : `${menu.href}#${menu.section}`}
+                  onClick={(e) =>
+                    handleMenuClick(
+                      e,
+                      menu.href,
+                      menu.section,
+                      menu.id === "support"
+                    )
+                  }
                   className={linkClass(menu.id, menu.href)}
                 >
                   {menu.title}
@@ -194,19 +221,30 @@ export default function Header() {
               : "opacity-0 -translate-y-0 duration-320 ease-in pointer-events-none"
             }`}
           >
-             <div className="px-8 py-10">
-              <div className="grid grid-cols-3 gap-8">
+             <div className="py-10">
+              <div className="mx-auto grid w-fit grid-cols-4 gap-0">
                 {menuData.map((menu) => (
-                  <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)}>
-                    <ul className="space-y-2">
+                  <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[200px]">
+                    <ul className="space-y-2 text-left pl-4">
                       {menu.submenus.map((submenu, index) => (
                         <li key={index}>
                           <a
-                            href={`${menu.href}#${submenu.section}`}
-                            onClick={(e) =>
-                              handleMenuClick(e, menu.href, submenu.section)
+                            href={
+                              menu.id === "support"
+                                ? ("href" in submenu ? submenu.href : menu.href)
+                                : `${menu.href}#${"section" in submenu ? submenu.section : ""}`
                             }
-                            className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 py-1.5 hover:translate-x-1 flex gap-2 hover:font-bold"
+                            onClick={(e) =>
+                              handleMenuClick(
+                                e,
+                                menu.id === "support"
+                                  ? ("href" in submenu ? submenu.href : menu.href)
+                                  : menu.href,
+                                "section" in submenu ? submenu.section : undefined,
+                                menu.id === "support"
+                              )
+                            }
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 py-1.5 hover:font-bold flex items-center gap-2"
                           >
                             <div className="flex-shrink-0 w-1 h-1 bg-accent rounded-full mt-2" />
                             {submenu.title}
@@ -226,3 +264,4 @@ export default function Header() {
     </header>
   );
 }
+

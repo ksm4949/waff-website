@@ -1,0 +1,142 @@
+import { Button } from "@/components/ui/button";
+import SupportDevNotice from "@/components/support/SupportDevNotice";
+import { qnaPosts } from "@/data/qnaPosts";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useState } from "react";
+import { Link, useLocation } from "wouter";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+export default function QnA() {
+  const [, navigate] = useLocation();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
+  const totalCount = qnaPosts.length;
+  const totalPages = Math.max(1, Math.ceil(qnaPosts.length / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentPosts = qnaPosts.slice(startIndex, startIndex + itemsPerPage);
+
+  const goToPage = (page: number) => {
+    const nextPage = Math.min(Math.max(page, 1), totalPages);
+    setCurrentPage(nextPage);
+  };
+
+  const paginationBaseClass =
+    "border border-border bg-white text-black hover:bg-[#0b1f4d] hover:text-white";
+  const paginationActiveClass =
+    "border border-[#0b1f4d] bg-[#0b1f4d] text-white hover:bg-[#0b1f4d] hover:text-white";
+
+  return (
+    <section id="qna" className="py-20 md:py-28 bg-white">
+      <div className="container">
+        <div className="text-center mb-14">
+          <h1 className="text-3xl md:text-4xl font-bold">Q & A</h1>
+          <div className="divider-modern mx-auto w-24 mb-6" />
+        </div>
+
+        <SupportDevNotice />
+
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            {"\uC804\uCCB4 \uAC8C\uC2DC\uAE00 "}<span className="font-semibold">{totalCount}</span>
+            {"\uAC74"}
+          </p>
+          <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
+            <Link href="/qna/write">{"\uAE00\uC4F0\uAE30"}</Link>
+          </Button>
+        </div>
+
+        <div className="rounded-lg border border-border/70 bg-background">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#0b1f4d] hover:bg-[#0b1f4d]">
+                <TableHead className="w-20 text-center text-white">{"\uBC88\uD638"}</TableHead>
+                <TableHead className="text-white">{"\uC81C\uBAA9"}</TableHead>
+                <TableHead className="w-24 text-center text-white">{"\uC791\uC131\uC790"}</TableHead>
+                <TableHead className="w-32 text-center text-white">{"\uC791\uC131\uC77C"}</TableHead>
+                <TableHead className="w-20 text-center text-white">{"\uC870\uD68C"}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentPosts.map((post) => (
+                <TableRow
+                  key={post.id}
+                  className="cursor-pointer"
+                  onClick={() => navigate(`/qna/${post.id}/verify`)}
+                >
+                  <TableCell className="text-center">{post.id}</TableCell>
+                  <TableCell className="font-medium">{post.title}</TableCell>
+                  <TableCell className="text-center">{post.author}</TableCell>
+                  <TableCell className="text-center">{post.date}</TableCell>
+                  <TableCell className="text-center">{post.views}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        <div className="mt-6">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goToPage(currentPage - 1);
+                  }}
+                  className={`${paginationBaseClass} ${
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }`}
+                />
+              </PaginationItem>
+
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href="#"
+                    isActive={page === currentPage}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      goToPage(page);
+                    }}
+                    className={page === currentPage ? paginationActiveClass : paginationBaseClass}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goToPage(currentPage + 1);
+                  }}
+                  className={`${paginationBaseClass} ${
+                    currentPage === totalPages ? "pointer-events-none opacity-50" : ""
+                  }`}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
+    </section>
+  );
+}

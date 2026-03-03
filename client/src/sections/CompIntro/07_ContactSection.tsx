@@ -1,4 +1,4 @@
-export default function Contact() {
+export default function ContactSection() {
     const mapSrc = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3259.680257626875!2d128.66585347621555!3d35.21443255547466!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3568cd2401e94a59%3A0x11814da8185e7eca!2z6rK97IOB64Ko64-EIOywveybkOyLnCDshLHsgrDqtawg7JmE7JWU66GcIDE0Nw!5e0!3m2!1sko!2skr!4v1770191521644!5m2!1sko!2skr";
 
     return (

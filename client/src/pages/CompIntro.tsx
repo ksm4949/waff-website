@@ -9,7 +9,7 @@ import OrganizationSection from "@/sections/CompIntro/03_OrganizationSection"
 import TechnologySection from "@/sections/CompIntro/04_TechnologySection"
 import PartnerSection from "@/sections/CompIntro/05_PartnerSection"
 import HistorySection from "@/sections/CompIntro/06_HistorySection"
-import ContactSection from "./Contact"
+import ContactSection from "@/sections/CompIntro/07_ContactSection"
 
 export default function CompIntro() {
   const [location] = useLocation();
