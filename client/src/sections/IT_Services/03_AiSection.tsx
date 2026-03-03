@@ -12,7 +12,7 @@ export default function AiSection() {
               <div className="divider-modern mx-auto w-24 mb-6" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-stretch">
             <div className="flex flex-col gap-8 h-full">
               <Reveal className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
                   <div className="flex items-center gap-4">
@@ -57,7 +57,7 @@ export default function AiSection() {
 
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <Reveal>
                   <div className="bg-secondary/20 p-6 rounded-xl border border-primary/20 backdrop-blur-sm transition-all duration-300">

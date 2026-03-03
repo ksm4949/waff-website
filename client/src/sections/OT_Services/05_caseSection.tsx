@@ -38,7 +38,7 @@ export default function RetroCaseSection() {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* 1행 - 실린더 내외경 가공기 */}
             <Reveal className="bg-secondary/20 p-6 rounded-lg border border-border">
               <h3 className="font-semibold text-2xl text-foreground mb-3">

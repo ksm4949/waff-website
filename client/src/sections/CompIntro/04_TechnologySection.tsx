@@ -20,7 +20,7 @@ export default function TechnologySection () {
                 </div>
 
                 {/* Main Tech & Certification Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-start">
                     {/* Left: Cards */}
                     <div className="flex flex-col gap-8">
                         {/* Card 1 */}

@@ -17,7 +17,7 @@ export default function RetroElSection() {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Component 1 */}
               <Reveal className="group bg-primary rounded-lg p-8 border-2 border-primary/20 hover:border-secondary hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
@@ -85,11 +85,11 @@ export default function RetroElSection() {
               </Reveal>
             </div>
 
-            <Reveal className="relative w-full overflow-hidden rounded-2xl shadow-xl aspect-[4/3] bg-black">
+            <Reveal className="relative w-full overflow-hidden rounded-2xl shadow-xl h-full min-h-[320px] lg:min-h-0">
               <img
                 src="/images/example/retro-tools.png"
                 alt="CNC Retrofit 구성 요소"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="w-full h-full object-fill"
               />
             </Reveal>
           </div>

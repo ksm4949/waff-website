@@ -23,7 +23,7 @@ export default function MonitoringSection() {
               </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-stretch">
               {/* Left */}
               <div className="flex flex-col gap-8 ">
                   <Reveal className="h-full relative overflow-hidden rounded-xl border border-border bg-secondary/20">

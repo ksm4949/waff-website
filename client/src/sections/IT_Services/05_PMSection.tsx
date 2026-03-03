@@ -19,7 +19,7 @@ export default function PMSection() {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               <Reveal className="h-full relative overflow-hidden rounded-lg border border-border bg-white shadow-lg">
                   <img
                     src="/images/it_services/pm.png"

@@ -18,7 +18,7 @@ export default function HMISection() {
             </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             <Reveal className="relative h-96">
               <img
                 src="/images/ot_service/hmi4.png"

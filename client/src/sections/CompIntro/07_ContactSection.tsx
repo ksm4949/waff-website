@@ -10,9 +10,9 @@ export default function ContactSection() {
               <p className="mt-3 text-muted-foreground">오시는 길 및 연락처 안내</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
               {/* 주소/연락처 */}
-              <div className="rounded-2xl border p-8 bg-background">
+              <div className="rounded-2xl border p-8 bg-background h-full">
                 <h2 className="text-xl font-semibold mb-6">회사 정보</h2>
 
                 <div className="space-y-4 text-sm">
@@ -41,8 +41,8 @@ export default function ContactSection() {
               </div>
 
               {/* 지도 */}
-              <div className="rounded-2xl overflow-hidden border bg-gray-50">
-                <div className="aspect-[16/11] w-full">
+              <div className="rounded-2xl overflow-hidden border bg-gray-50 h-full">
+                <div className="w-full h-full min-h-[320px]">
                   <iframe
                     src={mapSrc}
                     loading="lazy"
