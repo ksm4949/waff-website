@@ -13,51 +13,72 @@ export default function AiSection() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-stretch">
-            <div className="flex flex-col gap-8 h-full">
-              <Reveal className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <RefreshCw className="w-6 h-6 text-primary" />
+              <div className="flex flex-col gap-8 h-full">
+                <Reveal className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                          <RefreshCw className="w-6 h-6 text-primary" />
+                      </div>
+                      <h3 className="text-xl font-bold text-foreground mb-3">AI 기반 CNC 공구 수명 예측 및 교환주기 최적화</h3>
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">AI 기반 CNC 공구 수명 예측 및 교환주기 최적화</h3>
-                  </div>
-                  <p className="text-md text-muted-foreground leading-relaxed">
-                    공구 사용 시간, 가공 속도 등 부하에 대한 AI 학습에 기반한 유동적인 교환주기 판단 및 제어
-                  </p>
-              </Reveal>
-              <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
-                <img
-                  src="/images/it_services/ai1.png"
-                  alt="AI 기반 CNC 공구 수명 예측 및 교환주기 최적화"
-                  className="w-full h-full object-center"
-                />
-              </Reveal>
+                    <p className="text-md text-muted-foreground leading-relaxed">
+                      공구 사용 시간, 가공 속도 등 부하에 대한 AI 학습에 기반한 유동적인 교환주기 판단 및 제어
+                    </p>
+                </Reveal>
+                <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
+                  <img
+                    src="/images/it_services/ai1.png"
+                    alt="AI 기반 CNC 공구 수명 예측 및 교환주기 최적화"
+                    className="w-full h-full object-center"
+                  />
+                </Reveal>
+              </div>
+
+              <div className="flex flex-col gap-8 h-full">
+                <Reveal className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                          <BellRing className="w-6 h-6 text-primary" />
+                      </div>
+                      <h3 className="text-xl font-bold text-foreground mb-3">CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI</h3>
+                    </div>
+                    <p className="text-md text-muted-foreground leading-relaxed">
+                      해당 알람 이전의 로그를 분석해서 해당 알람에 많은 영향을 준 항목을 선별하여 사용자에게 전달
+                    </p>
+                </Reveal>
+                <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
+                  <img
+                    src="/images/it_services/ai2.png"
+                    alt="CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI"
+                    className="w-full h-full object-cover"
+                  />
+                </Reveal>
+              </div>
             </div>
 
             <div className="flex flex-col gap-8 h-full">
               <Reveal className="bg-secondary/20 p-8 rounded-lg border border-border hover:shadow-lg transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:border-primary">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                        <BellRing className="w-6 h-6 text-primary" />
+                        <Bot className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI</h3>
+                    <h3 className="font-bold text-xl text-foreground mb-3">CNC 인공지능 비서(AI-Assistant)</h3>
                   </div>
                   <p className="text-md text-muted-foreground leading-relaxed">
-                    해당 알람 이전의 로그를 분석해서 해당 알람에 많은 영향을 준 항목을 선별하여 사용자에게 전달
-                  </p>
+                      사용자 질문에 전문가 소견과 조치방안을 알려주며 <br/>
+                      현재 알림과 관련된 매뉴얼과 도면(전기, 기계, 유압)의 정확한 알람의 위치를 찾아서 답변
+                    </p>
               </Reveal>
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                 <img
-                  src="/images/it_services/ai2.png"
+                  src="/images/it_services/ai_assistant.png"
                   alt="CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI"
                   className="w-full h-full object-cover"
                 />
               </Reveal>
             </div>
 
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <Reveal>
                   <div className="bg-secondary/20 p-6 rounded-xl border border-primary/20 backdrop-blur-sm transition-all duration-300">
@@ -65,18 +86,12 @@ export default function AiSection() {
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                           <Bot className="w-6 h-6 text-primary" />
                       </div>
-                      <h3 className="font-bold text-xl text-foreground mb-3">Ontology-Driven RAG System</h3>
+                      <h3 className="font-bold text-xl text-foreground mb-3">CNC 인공지능 비서(AI-Assistant)</h3>
                     </div>
-                    <div className="space-y-4">
-                      <div className="flex gap-3">
-                        <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
-                        <h4 className="font-semibold text-foreground">복잡하고 어려운 문제를 AI를 통해 쉽게 질문하고 답변 가능한 시스템</h4>
-                      </div>
-                      <p className="text-muted-foreground text-sm">
-                        산업 현장의 매뉴얼·노하우·데이터를 RAG 기반으로 통합하여 CNC 가공 장비의 알람·이상 대응을 <br/>
-                        즉시 해결하여 설비의 다운타임을 감소시키는 지능형 AI-assistant 시스템
-                      </p>
-                    </div>
+                    <p className="text-md text-muted-foreground leading-relaxed">
+                      사용자 질문에 전문가 소견과 조치방안을 알려주며 <br/>
+                      현재 알림과 관련된 매뉴얼과 도면(전기, 기계, 유압)의 정확한 알람의 위치를 찾아서 답변
+                    </p>
                   </div>
                 </Reveal>
 
@@ -126,7 +141,7 @@ export default function AiSection() {
                   className="w-full h-full object-center rounded-lg shadow-lg"
                 />
               </Reveal>
-            </div>
+            </div> */}
           </div>
         </section>
     )
