@@ -35,17 +35,10 @@ export default function Footer() {
                 {/* LEFT: Logo / Description */}
                 <div className="self-center">
                   <div className="flex items-center gap-2 mb-4">
-                    <div className="w-12 h-8 bg-gradient-to-r from-foreground to-slate-900 flex items-center justify-center shadow-lg">
-                      <img
-                        src="/images/logos/logo1.png"
-                        alt="logo"
-                        className="w-full h-full object-contain"
-                        />
-                    </div>
                     <img
-                        src="/images/logos/logo2.png"
+                        src="/images/logos/logoKR_white.png"
                         alt="logo"
-                        className="w-25 h-12  object-contain"
+                        className="w-auto h-24 md:h-28 object-contain"
                     />
                   </div>
                   <p className="text-white/80 text-sm">

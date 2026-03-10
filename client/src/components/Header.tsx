@@ -38,23 +38,19 @@ export default function Header() {
     }
     
     if (location === href) {
-      // 같�? ?�이지???�으�??�크롤만 ?�동
       scrollToSection(sectionId);
     } else {
-      // ?�른 ?�이지�??�동
       window.location.href = `${href}#${sectionId}`;
     }
   };
 
   const isActive = (href: string) => {
-    // ?�확???�치 or ?�위 경로 ?�함 (?? /company/xxx)
     return location === href || location.startsWith(href + "/");
   };
 
   const linkClass = (menuId: string, href: string) => {
     const activeRoute = isActive(href);
 
-    // ??hover 중이�? hover 메뉴�??�성처럼 보이�?
     const isVisualActive = hoveredMenu
       ? hoveredMenu === menuId
       : activeRoute;
@@ -143,36 +139,15 @@ export default function Header() {
                 onClick={scrollToTop}
                 className="flex items-center hover:opacity-80 transition-opacity duration-300 group"
             >
-                <div className="w-12 h-18 flex items-center justify-center group-hover:scale-105 transition-all duration-300 ">
-                  <img
-                    src="/images/logos/logo3.png"
-                    alt="logo"
-                    className="w-full h-full object-contain"
-                    />
-                </div>
                 <img
-                    src="/images/logos/logo2(blue).png"
+                    src="/images/logos/logoKR.png"
                     alt="logo"
-                    className="w-full h-8  object-contain"
+                    className="w-auto h-14 md:h-16 object-contain"
                 />
             </button>
         </Link>
 
         {/* Navigation */}
-        {/* <div className="hidden md:flex items-center gap-8">
-          <Link href="/company" className={linkClass("/company")}>
-            ?�사?�개
-            <span className={underlineClass("/company")} />
-          </Link>
-          <Link href="/itservice" className={linkClass("/itservice")}>
-            IT Services
-            <span className={underlineClass("/itservice")} />
-          </Link>
-          <Link href="/otservice" className={linkClass("/otservice")}>
-            OT Services
-            <span className={underlineClass("/otservice")} />
-          </Link>
-        </div> */}
         <nav
           className="hidden md:inline-block relative"
           onMouseEnter={() => setShowMegaMenu(true)}
