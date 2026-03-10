@@ -124,39 +124,45 @@ export default function SmartFactorySection() {
           </p>
         </Reveal>
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16"> */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center mb-20">
-          <div className="space-y-5">
-            <Reveal>
-              <div className="bg-secondary/20 p-6 rounded-lg border border-border hover:shadow-lg hover:border-primary transition-all duration-300 hover:scale-105 hover:-translate-y-1 flex items-start gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20 md:min-h-[28rem] md:items-stretch">
+          <div className="flex h-full flex-col gap-5">
+            <Reveal className="flex-1">
+              <div className="h-full bg-secondary/20 p-6 rounded-lg border border-border hover:shadow-lg hover:border-primary transition-all duration-300 hover:scale-105 hover:-translate-y-1 flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/30 flex items-center justify-center text-xl">
                   <LayoutDashboard />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    <span className="text-accent">W-CMS</span>
-                    {" "}(Waff-Control Management System)
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <div className="mb-3 flex items-start justify-between gap-3">
+                    <h3 className="text-xl md:text-2xl font-bold text-foreground leading-tight">
+                      <span className="text-accent">W-CMS</span>
+                      <span className="mt-1 block text-sm md:text-base font-semibold text-muted-foreground">
+                        (Waff-Control Management System)
+                      </span>
+                    </h3>
+                    <a href="/itservice#cms_main" className="shrink-0 whitespace-nowrap text-base text-accent font-semibold hover:underline inline-flex items-center gap-1 group">
+                      자세히 보기 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    </a>
+                  </div>
+                  <p className="text-base text-muted-foreground leading-relaxed">
                     생산 현장의 모든 정보를 실시간으로 시각화하고 제어하는 통합 대시보드
                   </p>
-                  <a href="/itservice#cms_main" className="text-sm text-accent font-semibold hover:underline inline-flex items-center gap-1 group">
-                    자세히 보기 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-                  </a>
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={300}>
-              <div className="bg-secondary/20 p-6 rounded-lg border border-border hover:shadow-lg hover:border-primary transition-all duration-300 hover:scale-105 hover:-translate-y-1 flex items-start gap-4">
+            <Reveal delay={300} className="flex-1">
+              <div className="h-full bg-secondary/20 p-6 rounded-lg border border-border hover:shadow-lg hover:border-primary transition-all duration-300 hover:scale-105 hover:-translate-y-1 flex items-start gap-4">
                 <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/30 flex items-center justify-center text-xl">
                   <Cog />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
+                  <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3 leading-tight">
                       <span className="text-accent">W-MES</span>
-                      {" "}(Waff-Manufacturing Execution System)
+                      <span className="mt-1 block text-sm md:text-base font-semibold text-muted-foreground">
+                        (Waff-Manufacturing Execution System)
+                      </span>
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-base text-muted-foreground mb-3 leading-relaxed">
                       생산 계획부터 실적 관리까지 전 과정을 통합 관리하는 시스템
                   </p>
                 </div>
@@ -164,7 +170,7 @@ export default function SmartFactorySection() {
             </Reveal>
           </div>
           {/* <Reveal delay={900} className="relative h-96"> */}
-          <Reveal delay={600} className="relative h-80 md:h-96">
+          <Reveal delay={600} className="relative h-80 md:h-full">
             <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 blur-sm" />
             <img
               src="/images/Landing/smartfactory/smartfactory.png"
@@ -197,9 +203,12 @@ export default function SmartFactorySection() {
                       <span className="text-xs font-semibold text-muted-foreground tracking-wide">
                         {item.label}
                       </span>
-                      <span className={`text-2xl md:text-3xl font-black ${item.color}`}>
-                        {item.value} {item.trend}
+                    <span className={`text-2xl md:text-3xl font-black ${item.color}`}>
+                      {item.value}{" "}
+                      <span className={item.trend === "↑" ? "text-blue-600 md:text-emerald-600" : "text-emerald-600"}>
+                        {item.trend}
                       </span>
+                    </span>
                       <p className="text-xs text-muted-foreground leading-relaxed">
                         {item.description}
                       </p>
