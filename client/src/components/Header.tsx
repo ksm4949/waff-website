@@ -1,10 +1,13 @@
 import { Link, useLocation  } from "wouter";
 import { useState } from "react";
+import { Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Header() {
   const [location] = useLocation();
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -42,6 +45,16 @@ export default function Header() {
     } else {
       window.location.href = `${href}#${sectionId}`;
     }
+  };
+
+  const handleMobileMenuClick = (
+    e: React.MouseEvent,
+    href: string,
+    sectionId?: string,
+    disableSectionScroll?: boolean
+  ) => {
+    handleMenuClick(e, href, sectionId, disableSectionScroll);
+    setMobileMenuOpen(false);
   };
 
   const isActive = (href: string) => {
@@ -233,6 +246,72 @@ export default function Header() {
             </div>
           </div>
         </nav>
+
+        {/* Mobile Navigation */}
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <button
+              type="button"
+              className="md:hidden inline-flex items-center justify-center rounded-md border border-border/60 p-2 text-foreground hover:bg-muted/60 transition-colors"
+              aria-label="Open navigation menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[88vw] max-w-xs p-0">
+            <SheetHeader className="border-b border-border/60 px-5 py-4">
+              <SheetTitle>Menu</SheetTitle>
+            </SheetHeader>
+            <div className="h-full overflow-y-auto px-5 py-4">
+              <nav className="space-y-5">
+                {menuData.map((menu) => (
+                  <div key={`mobile-${menu.id}`} className="space-y-2">
+                    <a
+                      href={menu.id === "support" ? menu.href : `${menu.href}#${menu.section}`}
+                      onClick={(e) =>
+                        handleMobileMenuClick(
+                          e,
+                          menu.href,
+                          menu.section,
+                          menu.id === "support"
+                        )
+                      }
+                      className="block text-base font-semibold text-foreground hover:text-primary transition-colors"
+                    >
+                      {menu.title}
+                    </a>
+                    <ul className="space-y-1.5 border-l border-border/50 pl-3">
+                      {menu.submenus.map((submenu, index) => (
+                        <li key={`mobile-${menu.id}-${index}`}>
+                          <a
+                            href={
+                              menu.id === "support"
+                                ? ("href" in submenu ? submenu.href : menu.href)
+                                : `${menu.href}#${"section" in submenu ? submenu.section : ""}`
+                            }
+                            onClick={(e) =>
+                              handleMobileMenuClick(
+                                e,
+                                menu.id === "support"
+                                  ? ("href" in submenu ? submenu.href : menu.href)
+                                  : menu.href,
+                                "section" in submenu ? submenu.section : undefined,
+                                menu.id === "support"
+                              )
+                            }
+                            className="block py-1 text-sm text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            {submenu.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </nav>
+            </div>
+          </SheetContent>
+        </Sheet>
 
 
       </div>
