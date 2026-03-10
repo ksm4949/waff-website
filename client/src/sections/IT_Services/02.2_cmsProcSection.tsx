@@ -2,7 +2,34 @@ import { Reveal } from "@/components/Reveal";
 
 export default function CMS_ProcessSection() {
     return (
-        <section id="cms_process" className="py-20 md:py-32 bg-white">
+        <section 
+            id="cms_process" 
+            // className="py-20 md:py-32 bg-white"
+            className="relative py-24 md:py-36 bg-white overflow-hidden"
+        >
+            {/* 배경 눈금종이 효과 */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0,80,200,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,80,200,.04) 1px, transparent 1px)",
+                backgroundSize: "40px 40px",
+              }}
+            />
+            {/* 좌측상단 푸른색 그라데이션 */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-20"
+              style={{ background: "radial-gradient(circle, #3b82f6 0%, transparent 70%)" }}
+            />
+            {/* 우측하단 옅은 주황색 그라데이션 */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-10"
+              style={{ background: "radial-gradient(circle, #f59e0b 0%, transparent 70%)" }}
+            />
+
             <div className="container">
                 <div className="text-center mb-16">
                     <Reveal>
