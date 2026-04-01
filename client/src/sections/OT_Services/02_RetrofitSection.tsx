@@ -4,17 +4,19 @@ type CardItem = {
   title: string;
   content: string[]; // 최대 2개
   img: string;
+  alt: string;
 };
 
 export default function RetrofitSection() {
     const data: CardItem[] = [
       {
-        title: "FANUC 컨트롤러 교체",
+        title: "컨트롤러 교체",
         content: [
-          "구형 화낙에서 최신 컨트롤러 교체",
+          "구형 컨트롤러에서 최신 컨트롤러 교체 (화낙/지멘스/하이데나인)",
           "LAN 통신 기능 활성화, 데이터 처리속도 증가, 메모리 용량 증가, 유지보수 및 부품 수급 용이"
         ],
-        img: "/images/ot_service/retrofit1.png"
+        img: "/images/ot_service/retrofit1.png",
+        alt: "CNC 컨트롤러 교체, 화낙(FANUC)/지멘스/하이데나인"
       },
       {
         title: "배전반 교체",
@@ -22,7 +24,8 @@ export default function RetrofitSection() {
           "구형 엠프에서 신형 엠프로 교체",
           "입출력 제어 용이, 내부부품 오작동 감소, 유지보수 및 관리용이"
         ],
-        img: "/images/ot_service/retrofit2.png"
+        img: "/images/ot_service/retrofit2.png",
+        alt: "CNC 배전반 교체, CNC개조"
       },
       {
         title: "스핀들/서브 모터 교체",
@@ -30,14 +33,16 @@ export default function RetrofitSection() {
           "구형 DC모터에서 신형 AC모터로 교체",
           "시스템과의 연계성 증가, 위치 제어 가능, 정밀가공성 증가, 유지보수 및 관리 용이"
         ],
-        img: "/images/ot_service/retrofit3.png"
+        img: "/images/ot_service/retrofit3.png",
+        alt: "스핀들/서보 모터 교체, CNC개조"
       },
       {
         title: "케이블 교체",
         content: [
           "센서 및 설비 구동계 오작동 방지, 장비 수명연장"
         ],
-        img: "/images/ot_service/retrofit4.png"
+        img: "/images/ot_service/retrofit4.png",
+        alt: "케이블 교체, CNC개조"
       },
     ]
 
@@ -115,7 +120,7 @@ export default function RetrofitSection() {
                   <div className="aspect-[16/10] w-full bg-gray-100">
                     <img
                       src={item.img}
-                      alt={item.title}
+                      alt={item.alt}
                       className="h-full w-full "
                     />
                   </div>

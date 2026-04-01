@@ -20,7 +20,7 @@ export default function HomeSection () {
                     <span className="text-accent font-bold">와프</span>
                     는 IT와 OT의 완벽한 통합을 통해 제조업의 디지털 전환을 선도합니다.
                     <br/> 
-                    스마트팩토리, CNC Retrofit, HMI 솔루션으로 당신의 공장을 미래로 이끕니다.
+                    스마트팩토리, CNC Retrofit(CNC 개조), HMI 솔루션으로 당신의 공장을 미래로 이끕니다.
                   </p>
                   <div className="flex gap-4 pt-4">
                     <a href="#about">

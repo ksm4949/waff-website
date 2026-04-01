@@ -30,7 +30,7 @@ export default function ManageSection() {
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white h-full">
                 <img
                   src="/images/it_services/manage1.png"
-                  alt="공구수명관리"
+                  alt="공구수명관리, 스마트팩토리/CNC"
                   className="w-full h-[280px] object-contain p-4"
                 />
               </Reveal>
@@ -53,7 +53,7 @@ export default function ManageSection() {
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white h-full">
                 <img
                   src="/images/it_services/manage2.png"
-                  alt="가공속도제어"
+                  alt="가공속도제어, 스마트팩토리/CNC"
                   className="w-full h-[280px] object-contain p-4"
                 />
               </Reveal>
@@ -76,7 +76,7 @@ export default function ManageSection() {
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white h-full">
                 <img
                   src="/images/it_services/manage3.png"
-                  alt="데이터 변환 및 파일전송"
+                  alt="데이터 변환 및 파일전송, 스마트팩토리/CNC"
                   className="w-full h-[280px] object-contain p-4"
                 />
               </Reveal>

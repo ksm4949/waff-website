@@ -55,7 +55,7 @@ export default function AiSection() {
                 <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                   <img
                     src="/images/it_services/ai1.png"
-                    alt="AI 기반 CNC 공구 수명 예측 및 교환주기 최적화"
+                    alt="AI 기반 CNC 공구 수명 예측 및 교환주기 최적화, 제조 ai, 스마트팩토리 구축"
                     className="w-full h-full object-center"
                   />
                 </Reveal>
@@ -76,7 +76,7 @@ export default function AiSection() {
                 <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                   <img
                     src="/images/it_services/ai2.png"
-                    alt="CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI"
+                    alt="CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI, 제조 ai, 스마트팩토리 구축"
                     className="w-full h-full object-cover"
                   />
                 </Reveal>
@@ -99,7 +99,7 @@ export default function AiSection() {
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                 <img
                   src="/images/it_services/ai_assistant.png"
-                  alt="CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI"
+                  alt="사용자 질문을 통한 CNC 조작 지원 AI, 제조 ai, 스마트팩토리 구축"
                   className="w-full h-full object-cover"
                 />
               </Reveal>

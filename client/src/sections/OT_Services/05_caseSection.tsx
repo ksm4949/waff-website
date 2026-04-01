@@ -3,24 +3,24 @@ import ImageSlider from "@/components/ImageSlider";
 
 export default function RetroCaseSection() {
     const imageSlides = [
-        { img: "/images/example/retro_liner00.png", title: "결과" },
-        { img: "/images/example/retro_liner01.png", title: "모터 교체" },
-        { img: "/images/example/retro_liner02.png", title: "컨트롤러 교체" },
-        { img: "/images/example/retro_liner03.png", title: "케이블 교체" },
+        { img: "/images/example/retro_liner00.png", title: "결과", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
+        { img: "/images/example/retro_liner01.png", title: "모터 교체", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
+        { img: "/images/example/retro_liner02.png", title: "컨트롤러 교체", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
+        { img: "/images/example/retro_liner03.png", title: "케이블 교체", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
     ]
     const imageSlides2 = [
-        { img: "/images/example/retro_hb_00.png", title: "초기" },
-        { img: "/images/example/retro_hb_01.png", title: "배전반 교체" },
-        { img: "/images/example/retro_hb_02.png", title: "모터 교체" },
-        { img: "/images/example/retro_hb_03.png", title: "컨트롤패널 교체" },
-        { img: "/images/example/retro_hb_04.png", title: "결과" },
+        { img: "/images/example/retro_hb_00.png", title: "초기", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_hb_01.png", title: "배전반 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_hb_02.png", title: "모터 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_hb_03.png", title: "컨트롤패널 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_hb_04.png", title: "결과", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
     ]
     const imageSlides3 = [
-        { img: "/images/example/retro_mct_00.png", title: "초기" },
-        { img: "/images/example/retro_mct_01.png", title: "컨트롤패널 교체" },
-        { img: "/images/example/retro_mct_02.png", title: "배전반 교체" },
-        { img: "/images/example/retro_mct_03.png", title: "모터 교체" },
-        { img: "/images/example/retro_mct_04.png", title: "결과" },
+        { img: "/images/example/retro_mct_00.png", title: "초기", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_mct_01.png", title: "컨트롤패널 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_mct_02.png", title: "배전반 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_mct_03.png", title: "모터 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_mct_04.png", title: "결과", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
     ]
         
     return (

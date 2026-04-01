@@ -56,7 +56,7 @@ export default function CMS_MainSection() {
                             <img
                               key={index}
                               src={img}
-                              alt="Smart Manufacturing"
+                              alt="스마트팩토리 구축, 모니터링/MES/CMS"
                               className={`
                                 absolute inset-0 w-full h-full object-center rounded-2xl
                                 shadow-2xl border border-white/40
@@ -141,7 +141,7 @@ export default function CMS_MainSection() {
                         <div className="relative h-96 border rounded-lg">
                         <img
                             src="/images/example/cms_intro.png"
-                            alt="W-CMS Dashboard"
+                            alt="W-CMS Dashboard, CMS/MES/스마트팩토리"
                             className="w-full h-full object-cover rounded-lg shadow-lg"
                         />
                         </div>

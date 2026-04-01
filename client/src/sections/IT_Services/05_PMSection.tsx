@@ -50,7 +50,7 @@ export default function PMSection() {
                 <Reveal className="h-full relative overflow-hidden rounded-lg border border-border bg-white shadow-lg">
                     <img
                       src="/images/it_services/pm.png"
-                      alt="W-MES"
+                      alt="W-MES, 스마트팩토리"
                       className="w-full h-full rounded-lg shadow-lg"
                     />
                 </Reveal>

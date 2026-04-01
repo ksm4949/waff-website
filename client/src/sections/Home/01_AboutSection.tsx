@@ -82,7 +82,8 @@ export default function AboutSection() {
             <h2 className="section-title">회사개요</h2>
             <div className="divider-modern mx-auto w-24 mb-6" />
             <p className="section-subtitle">
-              제조 혁신을 이끄는 디지털 전환 파트너,{" "}
+              {/* 제조 혁신을 이끄는 디지털 전환 파트너,{" "} */}
+              스마트팩토리·CNC 개조·제조 DX 전문 {" "}
               <span className="font-bold tracking-tight text-accent">
                 와프
               </span>
@@ -100,7 +101,7 @@ export default function AboutSection() {
                   (장비제어기술)의 역량을 모두 보유한 통합솔루션을 통해 제조업의 디지털 전환을 선도하는 기업입니다. 
                   기계 제어 기술과 소프트웨어 개발 역량을 바탕으로{" "}
                   <span className="font-bold">
-                    스마트팩토리 구축, CNC 장비 현대화, HMI(사용자 친화적 인터페이스 개발)
+                    스마트팩토리 구축, CNC 개조, HMI(사용자 친화적 인터페이스 개발)
                   </span>
                    {" "}등 토털 솔루션을 제공합니다.
                 </p>
@@ -215,7 +216,7 @@ export default function AboutSection() {
             <Reveal className="mt-16 flex justify-center">
               <img
                 src="/images/intro/intro_part.png"
-                alt="사업부"
+                alt="사업부 소개. 스마트팩토리/CNC 개조/HMI/제조 AI/MES/CMS"
                 className="w-full max-w-6xl rounded-2xl shadow-lg object-cover"
               />
             </Reveal>

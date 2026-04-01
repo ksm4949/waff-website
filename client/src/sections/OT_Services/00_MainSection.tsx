@@ -49,7 +49,7 @@ export default function Service_OT_MainSection () {
                 <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 transition-colors">
                   <Wrench className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit</h3>
+                <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit (CNC 개조)</h3>
                 <div className="flex gap-3 mb-4">
                     <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
                     <div>

@@ -28,7 +28,8 @@ export default function SolutionsSection () {
               </div>
               <h3 className="text-xl font-bold text-white/90 mb-3">스마트팩토리</h3>
               <p className="text-gray-300 mb-4">
-                설계, 개발 부터 생산과 출하에 이르기 까지의 과정에 정보통신기술(ICT)를 적용하여 생산성, 품질, 고객만족도를 향상시키는 지능형 공장
+                {/* 설계, 개발 부터 생산과 출하에 이르기 까지의 과정에 정보통신기술(ICT)를 적용하여 생산성, 품질, 고객만족도를 향상시키는 지능형 공장 */}
+                설비 데이터 수집부터 공정 모니터링, PLC 연동, 운영 대시보드까지 통합해 제조 DX 기반을 구축합니다.
               </p>
               <div className="mt-auto text-white/90 font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
                 상세 보기 →
@@ -46,9 +47,10 @@ export default function SolutionsSection () {
               <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Wrench className="w-6 h-6 text-accent" />
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit</h3>
+              <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit(CNC 개조)</h3>
               <p className="text-muted-foreground mb-4">
-                노후 장비를 최신 기술로 업그레이드하는 경제적 솔루션
+                {/* 노후 장비를 최신 기술로 업그레이드하는 경제적 솔루션 */}
+                노후 CNC 설비를 화낙(FANUC), 지멘스, 하이데나인 환경에 맞춰 개조하고, 필요 시 오바훌까지 연계해 가동 안정성을 높입니다.
               </p>
               <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
                 상세 보기 →
@@ -68,7 +70,7 @@ export default function SolutionsSection () {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">HMI</h3>
               <p className="text-muted-foreground mb-4">
-                직관적이고 사용자 친화적인 인터페이스로 설비 제어 단순화
+                직관적이고 사용자 친화적인 인터페이스로 설비 제어를 단순화합니다.
               </p>
               <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
                 상세 보기 →

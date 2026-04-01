@@ -88,7 +88,7 @@ export default function RetroElSection() {
             <Reveal className="relative w-full overflow-hidden rounded-2xl shadow-xl h-full min-h-[320px] lg:min-h-0">
               <img
                 src="/images/example/retro-tools.png"
-                alt="CNC Retrofit 구성 요소"
+                alt="CNC Retrofit 구성 요소, CNC 개조, 화낙/지멘스/하이데나인"
                 className="w-full h-full object-fill"
               />
             </Reveal>

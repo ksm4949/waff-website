@@ -32,7 +32,7 @@ export default function OrganizationSection () {
               <Reveal delay={300} className="relative overflow-hidden rounded-xl border border-border bg-white">
                 <img
                   src="/images/intro/org2.png"
-                  alt="조직구성도-운영"
+                  alt="조직구성도-운영, 스마트팩토리 구현 지원, CNC 개조, 화낙개조, 화낙/지멘스/하이데나인"
                   className="w-full h-[320px] md:h-[420px] object-contain"
                 />
               </Reveal>

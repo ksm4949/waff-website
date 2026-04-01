@@ -7,6 +7,7 @@ import "swiper/css";
 type Slide = {
   img: string;
   title?: string;
+  alt?: string;
 };
 
 type ImageSliderProps = {
@@ -49,7 +50,7 @@ export default function ImageSlider({ slides, maxPerView }: ImageSliderProps) {
             <div className="aspect-[16/10] w-full bg-gray-100">
               <img
                 src={item.img}
-                alt={item.title ?? `case-${index}`}
+                alt={item.alt ?? `case-${index}`}
                 className="h-full w-full "
               />
             </div>

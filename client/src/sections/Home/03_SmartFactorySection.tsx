@@ -144,7 +144,8 @@ export default function SmartFactorySection() {
                     </a>
                   </div>
                   <p className="text-base text-muted-foreground leading-relaxed">
-                    생산 현장의 모든 정보를 실시간으로 시각화하고 제어하는 통합 대시보드
+                    {/* 생산 현장의 모든 정보를 실시간으로 시각화하고 제어하는 통합 대시보드 */}
+                    W-CMS는 설비·공정 데이터를 실시간으로 시각화해 현장 상태를 빠르게 파악하도록 돕는 통합 관리 대시보드입니다.
                   </p>
                 </div>
               </div>
@@ -163,7 +164,8 @@ export default function SmartFactorySection() {
                       </span>
                   </h3>
                   <p className="text-base text-muted-foreground mb-3 leading-relaxed">
-                      생산 계획부터 실적 관리까지 전 과정을 통합 관리하는 시스템
+                      {/* 생산 계획부터 실적 관리까지 전 과정을 통합 관리하는 시스템 */}
+                      W-MES는 생산 계획, 작업 지시, 실적, 추적 관리를 하나의 흐름으로 통합해 스마트팩토리 운영 효율을 높입니다.
                   </p>
                 </div>
               </div>
@@ -191,7 +193,8 @@ export default function SmartFactorySection() {
                 <span className="text-primary">기대효과</span>
               </h3>
               <p className="text-sm text-muted-foreground mt-2">
-                  ICT 융합을 통한 제조 혁신 지표
+                  {/* ICT 융합을 통한 제조 혁신 지표 */}
+                  스마트팩토리와 제조 DX 도입으로 생산성 향상, 불량률 감소, 리드타임 단축, 운영비 절감을 기대할 수 있습니다.
                 </p>
             </div>
             
@@ -237,7 +240,8 @@ export default function SmartFactorySection() {
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
                     <img
                       src={item.img}
-                      alt={item.title}
+                      // alt={item.title}
+                      alt="스마트 팩토리 구축"
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     {/* Step number */}

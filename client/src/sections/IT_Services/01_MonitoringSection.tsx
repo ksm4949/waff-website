@@ -56,7 +56,7 @@ export default function MonitoringSection() {
                   <Reveal className="h-full relative overflow-hidden rounded-xl border border-border bg-secondary/20">
                     <img
                       src="/images/it_services/monitoring.png"
-                      alt="monitoring"
+                      alt="스마트팩토리 구축, 모니터링"
                       className="w-full h-full md:h-full object-center"
                     />
                   </Reveal>
