@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "wouter";
-
+import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
 
 import Service_OT_MainSection from "@/sections/OT_Services/00_MainSection";
@@ -72,6 +72,22 @@ export default function OT_Services() {
     };
 
     return (
+      <>
+        <Helmet>
+          <title>CNC Retrofit / OT 서비스 | WAFF</title>
+          <meta
+            name="description"
+            content="WAFF OT 서비스: CNC Retrofit, HMI, 컨트롤러/모터/케이블 교체 사례 소개"
+          />
+          <link rel="canonical" href="https://www.waff.co.kr/otservice" />
+          <meta property="og:title" content="CNC Retrofit / OT 서비스 | WAFF" />
+          <meta
+            property="og:description"
+            content="노후 CNC 개조, 장비 업그레이드와 OT 서비스 적용 사례"
+          />
+          <meta property="og:url" content="https://www.waff.co.kr/otservice" />
+        </Helmet>
+
         <div className="min-h-screen bg-white flex flex-col">
             {/* Scroll Progress Bar */}
             <div className="fixed top-0 left-0 right-0 z-[100] h-1 bg-secondary/20">
@@ -123,5 +139,6 @@ export default function OT_Services() {
               </button>
             )}
         </div>
+      </>
     )
 }

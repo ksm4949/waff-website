@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { HelmetProvider } from "react-helmet-async";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import { useEffect } from "react";
@@ -50,14 +51,11 @@ function Router() {
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
+      {/* SEO: HelmetProvider는 보통 앱 전역 최상단(ThemeProvider 바깥)에서 감싸는 것을 권장 */}
+      <HelmetProvider>
       <ThemeProvider
         defaultTheme="light"
         // switchable
@@ -67,6 +65,7 @@ function App() {
           <Router />
         </TooltipProvider>
       </ThemeProvider>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 }

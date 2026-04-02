@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "wouter";
-
+import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
 
 import IntroSection from "@/sections/CompIntro/00_IntroSection"
@@ -71,6 +71,32 @@ export default function CompIntro() {
     };
 
     return (
+      <>
+        <Helmet>
+          <title>회사소개 | WAFF</title>
+          <meta
+            name="description"
+            content="WAFF 회사소개: 비전, 조직, 제조 DX 및 OT/IT 서비스 역량을 소개합니다."
+          />
+          <link rel="canonical" href="https://www.waff.co.kr/company" />
+      
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="회사소개 | WAFF" />
+          <meta
+            property="og:description"
+            content="WAFF의 비전과 조직, 제조 혁신 역량을 확인하세요."
+          />
+          <meta property="og:url" content="https://www.waff.co.kr/company" />
+          <meta property="og:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
+      
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="회사소개 | WAFF" />
+          <meta
+            name="twitter:description"
+            content="WAFF의 비전과 조직, 제조 혁신 역량을 확인하세요."
+          />
+          <meta name="twitter:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
+        </Helmet>
         <div className="min-h-screen bg-white flex flex-col">
             {/* Scroll Progress Bar */}
             <div className="fixed top-0 left-0 right-0 z-[100] h-1 bg-secondary/20">
@@ -122,5 +148,6 @@ export default function CompIntro() {
               </button>
             )}
         </div>
+      </>
     )
 }

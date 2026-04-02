@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "wouter";
-
+import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
 
 import Service_IT_MainSection from "@/sections/IT_Services/00_MainSection";
@@ -73,6 +73,33 @@ export default function IT_Services() {
     };
 
     return (
+      <>
+        <Helmet>
+          <title>IT 서비스 | WAFF</title>
+          <meta
+            name="description"
+            content="WAFF IT 서비스: MES, CMS, 데이터 연동 및 제조 현장 맞춤형 디지털 전환 솔루션을 제공합니다."
+          />
+          <link rel="canonical" href="https://www.waff.co.kr/itservice" />
+
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="IT 서비스 | WAFF" />
+          <meta
+            property="og:description"
+            content="제조 데이터 통합과 운영 최적화를 위한 WAFF IT 서비스를 확인하세요."
+          />
+          <meta property="og:url" content="https://www.waff.co.kr/itservice" />
+          <meta property="og:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="IT 서비스 | WAFF" />
+          <meta
+            name="twitter:description"
+            content="제조 데이터 통합과 운영 최적화를 위한 WAFF IT 서비스를 확인하세요."
+          />
+          <meta name="twitter:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
+        </Helmet>
+
         <div className="min-h-screen bg-white flex flex-col">
             {/* Scroll Progress Bar */}
             <div className="fixed top-0 left-0 right-0 z-[100] h-1 bg-secondary/20">
@@ -132,5 +159,6 @@ export default function IT_Services() {
               </button>
             )}
         </div>
+      </>
     )
 }
