@@ -21,11 +21,11 @@ export default function NoticeDetail() {
         <div className="container max-w-4xl">
           <div className="rounded-lg border border-border/70 bg-background p-8 text-center">
             <p className="text-lg font-semibold">
-              {"\uAC8C\uC2DC\uAE00\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."}
+              {"게시글을 찾을 수 없습니다."}
             </p>
             <div className="mt-6">
               <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                <Link href="/notice">{"\uBAA9\uB85D\uC73C\uB85C"}</Link>
+                <Link href="/notice">{"목록으로"}</Link>
               </Button>
             </div>
           </div>
@@ -41,9 +41,9 @@ export default function NoticeDetail() {
         <div className="rounded-lg border border-border/70 bg-background p-6 md:p-8">
           <h1 className="text-2xl md:text-3xl font-bold">{post.title}</h1>
           <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-            <span>{"\uC791\uC131\uC790"}: {post.author}</span>
-            <span>{"\uC791\uC131\uC77C"}: {post.date}</span>
-            <span>{"\uC870\uD68C"}: {post.views}</span>
+            <span>{"작성자"}: {post.author}</span>
+            <span>{"작성일"}: {post.date}</span>
+            <span>{"조회"}: {post.views}</span>
           </div>
 
           <div className="my-6 h-px bg-border" />
@@ -53,7 +53,7 @@ export default function NoticeDetail() {
           {post.imageUrl && (
             <div className="mt-8 rounded-md border border-border bg-white p-3">
               <p className="mb-3 text-sm font-medium text-muted-foreground">
-                {"\uCCA8\uBD80 \uC774\uBBF8\uC9C0"}
+                {"첨부 이미지"}
               </p>
               <img
                 src={post.imageUrl}
@@ -67,7 +67,7 @@ export default function NoticeDetail() {
             <div className="flex items-center border-b border-border px-4 py-3 transition-colors hover:bg-muted/40">
               <span className="w-20 shrink-0 text-sm font-medium text-muted-foreground inline-flex items-center gap-1">
                 <ChevronUpIcon className="size-4" />
-                {"\uC774\uC804\uAE00"}
+                {"이전글"}
               </span>
               {prevPost ? (
                 <Link
@@ -78,14 +78,14 @@ export default function NoticeDetail() {
                 </Link>
               ) : (
                 <span className="text-sm text-muted-foreground">
-                  {"\uC774\uC804 \uAE00\uC774 \uC5C6\uC2B5\uB2C8\uB2E4."}
+                  {"이전 글이 없습니다."}
                 </span>
               )}
             </div>
             <div className="flex items-center px-4 py-3 transition-colors hover:bg-muted/40">
               <span className="w-20 shrink-0 text-sm font-medium text-muted-foreground inline-flex items-center gap-1">
                 <ChevronDownIcon className="size-4" />
-                {"\uB2E4\uC74C\uAE00"}
+                {"다음글"}
               </span>
               {nextPost ? (
                 <Link
@@ -96,7 +96,7 @@ export default function NoticeDetail() {
                 </Link>
               ) : (
                 <span className="text-sm text-muted-foreground">
-                  {"\uB2E4\uC74C \uAE00\uC774 \uC5C6\uC2B5\uB2C8\uB2E4."}
+                  {"다음 글이 없습니다."}
                 </span>
               )}
             </div>
@@ -104,7 +104,7 @@ export default function NoticeDetail() {
 
           <div className="mt-8 flex justify-end">
             <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-              <Link href="/notice">{"\uBAA9\uB85D\uC73C\uB85C"}</Link>
+              <Link href="/notice">{"목록으로"}</Link>
             </Button>
           </div>
         </div>

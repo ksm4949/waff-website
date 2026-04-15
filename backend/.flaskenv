@@ -1,0 +1,12 @@
+FLASK_APP = app
+FLASK_ENV = development
+
+MSSQL_HOST = 192.168.1.57
+MSSQL_PORT = 1433
+MSSQL_USERNAME = sa
+MSSQL_PASSWORD = waff!23
+MSSQL_DATABASE = WEB_BLOG
+
+# SECRET_KEY=your_secret_key
+# JWT_SECRET_KEY=your_jwt_secret
+

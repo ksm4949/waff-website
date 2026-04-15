@@ -116,7 +116,7 @@ export default function HistorySection() {
       <div className="container">
         <div className="text-center mb-16">
           <Reveal>
-            <h2 className="section-title">연{"\u00A0\u00A0\u00A0"}혁</h2>
+            <h2 className="section-title">연{"   "}혁</h2>
           </Reveal>
           <div className="divider-modern mx-auto w-24 mb-6" />
         </div>

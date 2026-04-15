@@ -40,12 +40,12 @@ export default function NoticeWrite() {
 
     if (!title || !content) {
       window.alert(
-        "\uD544\uC218 \uD56D\uBAA9(\uC81C\uBAA9, \uB0B4\uC6A9)\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694."
+        "필수 항목(제목, 내용)을 입력해주세요."
       );
       return;
     }
 
-    window.alert("\uACF5\uC9C0\uC0AC\uD56D \uC791\uC131\uC774 \uC644\uB8CC\uB418\uC5C8\uC2B5\uB2C8\uB2E4. (UI \uC804\uC6A9)");
+    window.alert("공지사항 작성이 완료되었습니다. (UI 전용)");
     navigate("/notice");
   };
 
@@ -54,7 +54,7 @@ export default function NoticeWrite() {
       <div className="container max-w-4xl">
         <div className="text-center mb-14">
           <h1 className="text-3xl md:text-4xl font-bold">
-            {"\uACF5\uC9C0\uC0AC\uD56D \uAE00\uC4F0\uAE30"}
+            {"공지사항 글쓰기"}
           </h1>
           <div className="divider-modern mx-auto w-24 mb-6" />
         </div>
@@ -67,14 +67,14 @@ export default function NoticeWrite() {
         >
           <div className="space-y-2">
             <label htmlFor="title" className="text-sm font-medium">
-              {"\uC81C\uBAA9"}
+              {"제목"}
               <span className="ml-1 text-red-500">*</span>
             </label>
             <Input
               id="title"
               name="title"
               type="text"
-              placeholder={"\uC81C\uBAA9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+              placeholder={"제목을 입력해주세요"}
               className="placeholder:text-gray-400"
               required
             />
@@ -82,13 +82,13 @@ export default function NoticeWrite() {
 
           <div className="space-y-2">
             <label htmlFor="content" className="text-sm font-medium">
-              {"\uB0B4\uC6A9"}
+              {"내용"}
               <span className="ml-1 text-red-500">*</span>
             </label>
             <Textarea
               id="content"
               name="content"
-              placeholder={"\uACF5\uC9C0 \uB0B4\uC6A9\uC744 \uC785\uB825\uD574\uC8FC\uC138\uC694"}
+              placeholder={"공지 내용을 입력해주세요"}
               className="min-h-52 placeholder:text-gray-400"
               required
             />
@@ -96,12 +96,12 @@ export default function NoticeWrite() {
 
           <div className="space-y-2">
             <label htmlFor="attachment" className="text-sm font-medium">
-              {"\uCCA8\uBD80\uD30C\uC77C"}
+              {"첨부파일"}
             </label>
             <Input id="attachment" name="attachment" type="file" onChange={handleFileChange} />
             <p className="text-xs text-muted-foreground">
               {
-                "\uC774\uBBF8\uC9C0 \uD30C\uC77C\uC744 \uCCA8\uBD80\uD558\uBA74 \uC544\uB798 \uB0B4\uC6A9 \uBBF8\uB9AC\uBCF4\uAE30\uC5D0 \uD45C\uC2DC\uB429\uB2C8\uB2E4."
+                "이미지 파일을 첨부하면 아래 내용 미리보기에 표시됩니다."
               }
             </p>
           </div>
@@ -109,11 +109,11 @@ export default function NoticeWrite() {
           {imagePreviewUrl && (
             <div className="rounded-md border border-border bg-white p-4">
               <p className="mb-3 text-sm font-medium text-muted-foreground">
-                {"\uB0B4\uC6A9 \uC601\uC5ED \uC774\uBBF8\uC9C0 \uBBF8\uB9AC\uBCF4\uAE30"}
+                {"내용 영역 이미지 미리보기"}
               </p>
               <img
                 src={imagePreviewUrl}
-                alt={"\uCCA8\uBD80 \uC774\uBBF8\uC9C0 \uBBF8\uB9AC\uBCF4\uAE30"}
+                alt={"첨부 이미지 미리보기"}
                 className="max-h-[420px] w-full rounded-md border border-border object-contain"
               />
             </div>
@@ -121,10 +121,10 @@ export default function NoticeWrite() {
 
           <div className="flex justify-end gap-3 pt-2">
             <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-              <Link href="/notice">{"\uCDE8\uC18C"}</Link>
+              <Link href="/notice">{"취소"}</Link>
             </Button>
             <Button type="submit" className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
-              {"\uC791\uC131\uC644\uB8CC"}
+              {"작성완료"}
             </Button>
           </div>
         </form>

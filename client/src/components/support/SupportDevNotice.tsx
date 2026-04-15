@@ -2,11 +2,11 @@ export default function SupportDevNotice() {
   return (
     <div className="mb-6 rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
       <p className="font-semibold">
-        {"\uACE0\uAC1D\uC9C0\uC6D0 \uAE30\uB2A5 \uAC1C\uBC1C\uC911"}
+        {"고객지원 기능 개발중"}
       </p>
       <p className="mt-1">
         {
-          "\uD604\uC7AC \uACE0\uAC1D\uC9C0\uC6D0 \uBA54\uB274\uB294 \uAC1C\uBC1C \uB2E8\uACC4\uC785\uB2C8\uB2E4. \uBD80\uBD84\uC801\uC73C\uB85C \uC784\uC2DC UI\uAC00 \uD3EC\uD568\uB420 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+          "현재 고객지원 메뉴는 개발 단계입니다. 부분적으로 임시 UI가 포함될 수 있습니다."
         }
       </p>
     </div>

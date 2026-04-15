@@ -1,7 +1,18 @@
-import { Link, useLocation  } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+
+type SectionSubmenu = { title: string; section: string };
+type LinkSubmenu = { title: string; href: string };
+
+type MenuItem = {
+  id: string;
+  title: string;
+  href: string;
+  section: string;
+  submenus: Array<SectionSubmenu | LinkSubmenu>;
+};
 
 export default function Header() {
   const [location] = useLocation();
@@ -15,16 +26,26 @@ export default function Header() {
 
   const scrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
-    if (section) {
-      const headerOffset = 80;
-      const elementPosition = section.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    if (!section) return;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+    const headerOffset = 80;
+    const elementPosition = section.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  };
+
+  const isDirectMenu = (menuId: string) => menuId === "support" || menuId === "blog";
+  const isAdminContext = location.startsWith("/admin");
+
+  const resolveHrefForContext = (menuId: string, href: string) => {
+    if (menuId === "blog" && isAdminContext) {
+      return "/admin/blog";
     }
+    return href;
   };
 
   const handleMenuClick = (
@@ -39,7 +60,7 @@ export default function Header() {
       window.location.href = href;
       return;
     }
-    
+
     if (location === href) {
       scrollToSection(sectionId);
     } else {
@@ -62,11 +83,9 @@ export default function Header() {
   };
 
   const linkClass = (menuId: string, href: string) => {
-    const activeRoute = isActive(href);
-
-    const isVisualActive = hoveredMenu
-      ? hoveredMenu === menuId
-      : activeRoute;
+    const effectiveHref = resolveHrefForContext(menuId, href);
+    const activeRoute = isActive(effectiveHref);
+    const isVisualActive = hoveredMenu ? hoveredMenu === menuId : activeRoute;
 
     return [
       "group relative h-16 md:h-20 px-6 flex items-center",
@@ -77,13 +96,10 @@ export default function Header() {
     ].join(" ");
   };
 
-  // const underlineClass = (href: string) => {
   const underlineClass = (menuId: string, href: string) => {
-    const activeRoute = isActive(href);
-
-    const isVisualActive = hoveredMenu
-      ? hoveredMenu === menuId
-      : activeRoute;
+    const effectiveHref = resolveHrefForContext(menuId, href);
+    const activeRoute = isActive(effectiveHref);
+    const isVisualActive = hoveredMenu ? hoveredMenu === menuId : activeRoute;
 
     return [
       "absolute bottom-0 left-0 h-1 bg-gradient-to-r from-primary to-accent transition-all duration-300 rounded-full",
@@ -91,7 +107,7 @@ export default function Header() {
     ].join(" ");
   };
 
-  const menuData = [
+  const menuData: MenuItem[] = [
     {
       id: "company",
       title: "회사소개",
@@ -114,10 +130,10 @@ export default function Header() {
       section: "intro",
       submenus: [
         { section: "it_main", title: "IT Service" },
-        { section: "it_monitoring", title: "모니터링 / 제어솔루션" },
-        { section: "it_ai", title: "AI 기반 솔루션" },
-        { section: "it_manage", title: "관리 솔루션" },
-        { section: "it_pm", title: "생산관리 솔루션" },
+        { section: "it_monitoring", title: "모니터링 / 제어모듈" },
+        { section: "it_ai", title: "AI 기반 모듈" },
+        { section: "it_manage", title: "관리자 모듈" },
+        { section: "it_pm", title: "생산관리 모듈" },
       ],
     },
     {
@@ -141,26 +157,27 @@ export default function Header() {
         { href: "/notice", title: "공지사항" },
       ],
     },
-  ]
+    {
+      id: "blog",
+      title: "블로그",
+      href: "/blog",
+      section: "blog",
+      submenus: [{ href: "/blog", title: "블로그" }],
+    },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border/40 shadow-sm">
       <div className="container flex items-center justify-between h-16 md:h-20">
-        {/* Logo */}
         <Link href="/" className="font-bold text-lg">
-            <button
-                onClick={scrollToTop}
-                className="flex items-center hover:opacity-80 transition-opacity duration-300 group"
-            >
-                <img
-                    src="/images/logos/logoKR.png"
-                    alt="logo"
-                    className="w-auto h-14 md:h-16 object-contain"
-                />
-            </button>
+          <button
+            onClick={scrollToTop}
+            className="flex items-center hover:opacity-80 transition-opacity duration-300 group"
+          >
+            <img src="/images/logos/logoKR.png" alt="logo" className="w-auto h-14 md:h-16 object-contain" />
+          </button>
         </Link>
 
-        {/* Navigation */}
         <nav
           className="hidden md:inline-block relative"
           onMouseEnter={() => setShowMegaMenu(true)}
@@ -169,48 +186,45 @@ export default function Header() {
             setHoveredMenu(null);
           }}
         >
-          {/* Main Menu */}
-          <div className="inline-flex items-center ">
+          <div className="inline-flex items-center">
             {menuData.map((menu) => (
-              <div
-                key={menu.id}
-                onMouseEnter={() => setHoveredMenu(menu.id)}
-                className="w-[200px]"
-                // className={`w-[200px] ${linkClass(menu.href, hoveredMenu === menu.id)}` }
-              >
+              <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[200px]">
                 <a
-                  href={menu.id === "support" ? menu.href : `${menu.href}#${menu.section}`}
+                  href={
+                    isDirectMenu(menu.id)
+                      ? resolveHrefForContext(menu.id, menu.href)
+                      : `${menu.href}#${menu.section}`
+                  }
                   onClick={(e) =>
                     handleMenuClick(
                       e,
-                      menu.href,
+                      resolveHrefForContext(menu.id, menu.href),
                       menu.section,
-                      menu.id === "support"
+                      isDirectMenu(menu.id)
                     )
                   }
                   className={linkClass(menu.id, menu.href)}
                 >
                   {menu.title}
-                  {/* <span className={underlineClass(`${menu.href}`)} /> */}
                   <span className={underlineClass(menu.id, menu.href)} />
                 </a>
               </div>
             ))}
           </div>
 
-          {/* Mega Menu */}
           <div
             className={`absolute left-0 right-0 top-full w-full
             bg-background/98 backdrop-blur-xl border-t-2 shadow-lg
             origin-top will-change-[opacity,transform]
             transition-[opacity,transform]
-            ${showMegaMenu
-              ? "opacity-100 translate-y-0 scale-y-100 duration-[450ms] ease-out pointer-events-auto"
-              : "opacity-0 -translate-y-0 duration-320 ease-in pointer-events-none"
+            ${
+              showMegaMenu
+                ? "opacity-100 translate-y-0 scale-y-100 duration-[450ms] ease-out pointer-events-auto"
+                : "opacity-0 -translate-y-0 duration-320 ease-in pointer-events-none"
             }`}
           >
-             <div className="py-10">
-              <div className="mx-auto grid w-fit grid-cols-4 gap-0">
+            <div className="py-10">
+              <div className="mx-auto grid w-fit grid-cols-5 gap-0">
                 {menuData.map((menu) => (
                   <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[200px]">
                     <ul className="space-y-2 text-left pl-4">
@@ -218,18 +232,18 @@ export default function Header() {
                         <li key={index}>
                           <a
                             href={
-                              menu.id === "support"
-                                ? ("href" in submenu ? submenu.href : menu.href)
+                              isDirectMenu(menu.id)
+                                ? resolveHrefForContext(menu.id, "href" in submenu ? submenu.href : menu.href)
                                 : `${menu.href}#${"section" in submenu ? submenu.section : ""}`
                             }
                             onClick={(e) =>
                               handleMenuClick(
                                 e,
-                                menu.id === "support"
-                                  ? ("href" in submenu ? submenu.href : menu.href)
+                                isDirectMenu(menu.id)
+                                  ? resolveHrefForContext(menu.id, "href" in submenu ? submenu.href : menu.href)
                                   : menu.href,
                                 "section" in submenu ? submenu.section : undefined,
-                                menu.id === "support"
+                                isDirectMenu(menu.id)
                               )
                             }
                             className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 py-1.5 hover:font-bold flex items-center gap-2"
@@ -247,7 +261,6 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Mobile Navigation */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
             <button
@@ -267,13 +280,17 @@ export default function Header() {
                 {menuData.map((menu) => (
                   <div key={`mobile-${menu.id}`} className="space-y-2">
                     <a
-                      href={menu.id === "support" ? menu.href : `${menu.href}#${menu.section}`}
+                      href={
+                        isDirectMenu(menu.id)
+                          ? resolveHrefForContext(menu.id, menu.href)
+                          : `${menu.href}#${menu.section}`
+                      }
                       onClick={(e) =>
                         handleMobileMenuClick(
                           e,
-                          menu.href,
+                          resolveHrefForContext(menu.id, menu.href),
                           menu.section,
-                          menu.id === "support"
+                          isDirectMenu(menu.id)
                         )
                       }
                       className="block text-base font-semibold text-foreground hover:text-primary transition-colors"
@@ -285,18 +302,18 @@ export default function Header() {
                         <li key={`mobile-${menu.id}-${index}`}>
                           <a
                             href={
-                              menu.id === "support"
-                                ? ("href" in submenu ? submenu.href : menu.href)
+                              isDirectMenu(menu.id)
+                                ? resolveHrefForContext(menu.id, "href" in submenu ? submenu.href : menu.href)
                                 : `${menu.href}#${"section" in submenu ? submenu.section : ""}`
                             }
                             onClick={(e) =>
                               handleMobileMenuClick(
                                 e,
-                                menu.id === "support"
-                                  ? ("href" in submenu ? submenu.href : menu.href)
+                                isDirectMenu(menu.id)
+                                  ? resolveHrefForContext(menu.id, "href" in submenu ? submenu.href : menu.href)
                                   : menu.href,
                                 "section" in submenu ? submenu.section : undefined,
-                                menu.id === "support"
+                                isDirectMenu(menu.id)
                               )
                             }
                             className="block py-1 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -312,10 +329,7 @@ export default function Header() {
             </div>
           </SheetContent>
         </Sheet>
-
-
       </div>
     </header>
   );
 }
-

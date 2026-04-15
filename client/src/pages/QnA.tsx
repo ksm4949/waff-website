@@ -80,11 +80,11 @@ export default function QnA() {
 
         <div className="mb-4 flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {"\uC804\uCCB4 \uAC8C\uC2DC\uAE00 "}<span className="font-semibold">{totalCount}</span>
-            {"\uAC74"}
+            {"전체 게시글 "}<span className="font-semibold">{totalCount}</span>
+            {"건"}
           </p>
           <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-            <Link href="/qna/write">{"\uAE00\uC4F0\uAE30"}</Link>
+            <Link href="/qna/write">{"글쓰기"}</Link>
           </Button>
         </div>
 
@@ -92,25 +92,25 @@ export default function QnA() {
           <Input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder={"\uC81C\uBAA9, \uC791\uC131\uC790 \uAC80\uC0C9"}
+            placeholder={"제목, 작성자 검색"}
           />
           <Button
             type="submit"
             className="bg-[#0b1f4d] text-white hover:bg-[#13357a]"
-            aria-label={"\uAC80\uC0C9"}
+            aria-label={"검색"}
           >
             <SearchIcon className="size-4" />
-            <span className="sr-only">{"\uAC80\uC0C9"}</span>
+            <span className="sr-only">{"검색"}</span>
           </Button>
           <Button
             type="button"
             variant="outline"
             className="hover:bg-gray-100 hover:text-foreground"
             onClick={handleSearchReset}
-            aria-label={"\uCD08\uAE30\uD654"}
+            aria-label={"초기화"}
           >
             <RefreshCwIcon className="size-4" />
-            <span className="sr-only">{"\uCD08\uAE30\uD654"}</span>
+            <span className="sr-only">{"초기화"}</span>
           </Button>
         </form>
 
@@ -118,11 +118,11 @@ export default function QnA() {
           <Table>
             <TableHeader>
               <TableRow className="bg-[#0b1f4d] hover:bg-[#0b1f4d]">
-                <TableHead className="w-20 text-center text-white">{"\uBC88\uD638"}</TableHead>
-                <TableHead className="text-white">{"\uC81C\uBAA9"}</TableHead>
-                <TableHead className="w-24 text-center text-white">{"\uC791\uC131\uC790"}</TableHead>
-                <TableHead className="w-32 text-center text-white">{"\uC791\uC131\uC77C"}</TableHead>
-                <TableHead className="w-20 text-center text-white">{"\uC870\uD68C"}</TableHead>
+                <TableHead className="w-20 text-center text-white">{"번호"}</TableHead>
+                <TableHead className="text-white">{"제목"}</TableHead>
+                <TableHead className="w-24 text-center text-white">{"작성자"}</TableHead>
+                <TableHead className="w-32 text-center text-white">{"작성일"}</TableHead>
+                <TableHead className="w-20 text-center text-white">{"조회"}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
