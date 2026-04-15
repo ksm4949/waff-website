@@ -84,14 +84,18 @@ export async function fetchBlogHome() {
   return requestJson<{ ok: boolean; items?: BlogPost[] }>("/api/blog/home");
 }
 
-export async function fetchBlogCategory(category: BlogCategory, page = 1, pageSize = 6) {
+export async function fetchBlogCategory(category: BlogCategory, page = 1, pageSize = 6, keyword = "") {
   const q = new URLSearchParams({
     page: String(page),
     page_size: String(pageSize),
   });
+  if (keyword.trim()) {
+    q.set("q", keyword.trim());
+  }
   return requestJson<{
     ok: boolean;
     category: BlogCategory;
+    q?: string;
     items?: BlogPost[];
     page: number;
     pageSize: number;
@@ -107,6 +111,7 @@ export async function fetchBlogDetail(postId: number) {
     prevPost?: { id: number; title: string } | null;
     nextPost?: { id: number; title: string } | null;
     attachments?: BlogAttachment[];
+    thumbnailAttachment?: BlogAttachment | null;
   }>(`/api/blog/${postId}`);
 }
 
@@ -117,8 +122,14 @@ export async function createBlogPost(formData: FormData) {
   });
 }
 
-export async function updateBlogPost(postId: number, formData: FormData, replaceAttachments = false) {
+export async function updateBlogPost(
+  postId: number,
+  formData: FormData,
+  replaceAttachments = false,
+  replaceThumbnail = false
+) {
   formData.set("replace_attachments", replaceAttachments ? "true" : "false");
+  formData.set("replace_thumbnail", replaceThumbnail ? "true" : "false");
   return requestJson<{ ok: boolean; id: number }>(`/api/blog/${postId}`, {
     method: "PUT",
     body: formData,

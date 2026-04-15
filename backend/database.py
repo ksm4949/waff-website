@@ -76,30 +76,117 @@ def _row_to_blog_dict(row):
 def get_blog_latest3_by_category():
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("EXEC dbo.usp_blog_latest3_by_category")
+        cursor.execute(
+            """
+            WITH ranked AS (
+                SELECT
+                    id,
+                    category,
+                    title,
+                    content,
+                    author,
+                    published_date,
+                    views,
+                    image_url,
+                    is_featured,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY category
+                        ORDER BY published_date DESC, id DESC
+                    ) AS rn
+                FROM dbo.blog_posts
+                WHERE category IN ('notice', 'external', 'tech')
+            )
+            SELECT
+                id,
+                category,
+                title,
+                content,
+                author,
+                published_date,
+                views,
+                image_url,
+                is_featured
+            FROM ranked
+            WHERE rn <= 3
+            ORDER BY
+                CASE category
+                    WHEN 'notice' THEN 1
+                    WHEN 'external' THEN 2
+                    WHEN 'tech' THEN 3
+                    ELSE 99
+                END,
+                published_date DESC,
+                id DESC
+            """
+        )
         rows = cursor.fetchall()
         cursor.close()
         return [_row_to_blog_dict(row) for row in rows]
 
 
 @with_thread_pool("db")
-def get_blog_category_paged(category: str, page: int = 1, page_size: int = 6):
+def get_blog_category_paged(category: str, page: int = 1, page_size: int = 6, keyword: str = ""):
+    keyword = str(keyword or "").strip()
+    offset_start = (page - 1) * page_size + 1
+    offset_end = page * page_size
+
+    where_sql = "category = ?"
+    where_params = [category]
+    if keyword:
+        like = f"%{keyword}%"
+        where_sql += " AND (title LIKE ? OR content LIKE ? OR author LIKE ?)"
+        where_params.extend([like, like, like])
+
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "EXEC dbo.usp_blog_category_paged ?, ?, ?",
-            (category, page, page_size),
+            f"""
+            SELECT COUNT(1)
+            FROM dbo.blog_posts
+            WHERE {where_sql}
+            """,
+            tuple(where_params),
+        )
+        count_row = cursor.fetchone()
+        total_count = int(count_row[0]) if count_row and count_row[0] is not None else 0
+
+        cursor.execute(
+            f"""
+            WITH ordered AS (
+                SELECT
+                    id,
+                    category,
+                    title,
+                    content,
+                    author,
+                    published_date,
+                    views,
+                    image_url,
+                    is_featured,
+                    ROW_NUMBER() OVER (ORDER BY published_date DESC, id DESC) AS rn
+                FROM dbo.blog_posts
+                WHERE {where_sql}
+            )
+            SELECT
+                id,
+                category,
+                title,
+                content,
+                author,
+                published_date,
+                views,
+                image_url,
+                is_featured
+            FROM ordered
+            WHERE rn BETWEEN ? AND ?
+            ORDER BY rn ASC
+            """,
+            tuple([*where_params, offset_start, offset_end]),
         )
         rows = cursor.fetchall()
         cursor.close()
 
-        items = []
-        total_count = 0
-        for row in rows:
-            row_values = list(row)
-            total_count = int(row_values[-1]) if row_values[-1] is not None else 0
-            items.append(_row_to_blog_dict(row_values[:-1]))
-        return {"items": items, "totalCount": total_count}
+        return {"items": [_row_to_blog_dict(row) for row in rows], "totalCount": total_count}
 
 
 @with_thread_pool("db")
@@ -119,7 +206,10 @@ def get_blog_detail(post_id: int):
                     views,
                     image_url,
                     is_featured,
-                    ROW_NUMBER() OVER (ORDER BY published_date DESC, id DESC) AS rn
+                    ROW_NUMBER() OVER (
+                        PARTITION BY category
+                        ORDER BY published_date DESC, id DESC
+                    ) AS rn
                 FROM dbo.blog_posts
             )
             SELECT
@@ -137,8 +227,8 @@ def get_blog_detail(post_id: int):
                 n.id AS next_id,
                 n.title AS next_title
             FROM ordered c
-            LEFT JOIN ordered p ON p.rn = c.rn - 1
-            LEFT JOIN ordered n ON n.rn = c.rn + 1
+            LEFT JOIN ordered p ON p.category = c.category AND p.rn = c.rn - 1
+            LEFT JOIN ordered n ON n.category = c.category AND n.rn = c.rn + 1
             WHERE c.id = ?
             """,
             (post_id,),
@@ -184,19 +274,47 @@ def get_blog_detail(post_id: int):
         cursor.close()
 
         attachments = []
+        thumbnail_attachment = None
         for a in attachment_rows:
-            attachments.append(
-                {
-                    "id": int(a[0]),
-                    "originalName": str(a[1]),
-                    "mimeType": str(a[2]) if a[2] is not None else "",
-                    "sizeBytes": int(a[3]) if a[3] is not None else 0,
-                    "fileUrl": str(a[4]),
-                    "isThumbnail": bool(a[5]) if a[5] is not None else False,
-                }
-            )
+            item = {
+                "id": int(a[0]),
+                "originalName": str(a[1]),
+                "mimeType": str(a[2]) if a[2] is not None else "",
+                "sizeBytes": int(a[3]) if a[3] is not None else 0,
+                "fileUrl": str(a[4]),
+                "isThumbnail": bool(a[5]) if a[5] is not None else False,
+            }
+            if item["isThumbnail"]:
+                thumbnail_attachment = item
+            else:
+                attachments.append(item)
 
-        return {"post": post, "prevPost": prev_post, "nextPost": next_post, "attachments": attachments}
+        return {
+            "post": post,
+            "prevPost": prev_post,
+            "nextPost": next_post,
+            "attachments": attachments,
+            "thumbnailAttachment": thumbnail_attachment,
+        }
+
+
+@with_thread_pool("db")
+def increment_blog_view(post_id: int):
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE dbo.blog_posts
+            SET views = ISNULL(views, 0) + 1,
+                updated_at = SYSDATETIME()
+            WHERE id = ?
+            """,
+            (post_id,),
+        )
+        affected = int(cursor.rowcount or 0)
+        conn.commit()
+        cursor.close()
+        return affected > 0
 
 
 @with_thread_pool("db")
@@ -206,7 +324,6 @@ def create_blog_post_with_attachments(
     content: str,
     author: str,
     attachments: list,
-    thumbnail_index: int = -1,
 ):
     with get_db_connection() as conn:
         cursor = conn.cursor()
@@ -236,9 +353,10 @@ def create_blog_post_with_attachments(
 
         post_id = int(post_row[0])
         thumbnail_attachment_id = None
+        image_url = ""
 
-        for idx, item in enumerate(attachments):
-            is_thumbnail = 1 if idx == thumbnail_index else 0
+        for item in attachments:
+            is_thumbnail = 1 if item.get("is_thumbnail") else 0
             cursor.execute(
                 """
                 INSERT INTO dbo.blog_attachments
@@ -310,21 +428,62 @@ def get_blog_attachment_for_download(attachment_id: int):
 
 
 @with_thread_pool("db")
-def get_post_attachment_files(post_id: int):
+def get_post_attachment_files(
+    post_id: int, include_thumbnail: bool = True, include_non_thumbnail: bool = True
+):
+    where_clauses = ["post_id = ?"]
+    params = [post_id]
+
+    if include_thumbnail and not include_non_thumbnail:
+        where_clauses.append("is_thumbnail = 1")
+    elif include_non_thumbnail and not include_thumbnail:
+        where_clauses.append("is_thumbnail = 0")
+    elif not include_thumbnail and not include_non_thumbnail:
+        return []
+
+    where_sql = " AND ".join(where_clauses)
+
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
             """
             SELECT id, stored_name
             FROM dbo.blog_attachments
-            WHERE post_id = ?
+            WHERE """
+            + where_sql
+            + """
             ORDER BY id ASC
             """,
-            (post_id,),
+            tuple(params),
         )
         rows = cursor.fetchall()
         cursor.close()
         return [{"id": int(r[0]), "storedName": str(r[1])} for r in rows]
+
+
+@with_thread_pool("db")
+def delete_blog_attachments_by_ids(post_id: int, attachment_ids: list[int]):
+    if not attachment_ids:
+        return 0
+
+    placeholders = ", ".join(["?"] * len(attachment_ids))
+    params = [post_id, *attachment_ids]
+
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            f"""
+            DELETE FROM dbo.blog_attachments
+            WHERE post_id = ?
+              AND is_thumbnail = 0
+              AND id IN ({placeholders})
+            """,
+            tuple(params),
+        )
+        affected = int(cursor.rowcount or 0)
+        conn.commit()
+        cursor.close()
+        return affected
 
 
 @with_thread_pool("db")
@@ -352,8 +511,8 @@ def update_blog_post_with_attachments(
     content: str,
     author: str,
     attachments: list,
-    thumbnail_index: int = -1,
     replace_attachments: bool = False,
+    replace_thumbnail: bool = False,
 ):
     with get_db_connection() as conn:
         cursor = conn.cursor()
@@ -364,7 +523,7 @@ def update_blog_post_with_attachments(
             cursor.close()
             return {"ok": False, "message": "post not found"}
 
-        if replace_attachments:
+        if replace_thumbnail:
             cursor.execute(
                 """
                 UPDATE dbo.blog_posts
@@ -373,7 +532,10 @@ def update_blog_post_with_attachments(
                 """,
                 (post_id,),
             )
-            cursor.execute("DELETE FROM dbo.blog_attachments WHERE post_id = ?", (post_id,))
+            cursor.execute("DELETE FROM dbo.blog_attachments WHERE post_id = ? AND is_thumbnail = 1", (post_id,))
+
+        if replace_attachments:
+            cursor.execute("DELETE FROM dbo.blog_attachments WHERE post_id = ? AND is_thumbnail = 0", (post_id,))
 
         cursor.execute(
             """
@@ -391,8 +553,8 @@ def update_blog_post_with_attachments(
         thumbnail_attachment_id = None
         image_url = None
 
-        for idx, item in enumerate(attachments):
-            is_thumbnail = 1 if idx == thumbnail_index else 0
+        for item in attachments:
+            is_thumbnail = 1 if item.get("is_thumbnail") else 0
             cursor.execute(
                 """
                 INSERT INTO dbo.blog_attachments

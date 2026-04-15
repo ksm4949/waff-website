@@ -8,7 +8,10 @@ import {
   type BlogAttachment,
   type BlogCategory,
 } from "@/lib/blogApi";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FileArchive, FileImage, FileText, File, ImagePlus, X } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
 
 declare global {
@@ -26,6 +29,62 @@ declare global {
 const EDITOR_ROOT_ID = "toast-editor-root";
 const TOAST_EDITOR_CSS = "https://uicdn.toast.com/editor/latest/toastui-editor.min.css";
 const TOAST_EDITOR_SCRIPT = "https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js";
+const THUMBNAIL_MAX_BYTES = 5 * 1024 * 1024;
+const ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024;
+const THUMBNAIL_ALLOWED_EXTS = [".png", ".jpg", ".jpeg", ".webp"];
+const ATTACHMENT_ALLOWED_EXTS = [
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".pdf",
+  ".txt",
+  ".zip",
+  ".doc",
+  ".docx",
+  ".xls",
+  ".xlsx",
+  ".ppt",
+  ".pptx",
+  ".hwp",
+  ".hwpx",
+];
+
+function hasAllowedExtension(fileName: string, allowed: string[]) {
+  const lower = fileName.toLowerCase();
+  return allowed.some((ext) => lower.endsWith(ext));
+}
+
+function formatMb(bytes: number) {
+  return `${Math.round(bytes / 1024 / 1024)}MB`;
+}
+
+function isSameAttachment(file: File, target: { originalName: string; sizeBytes: number }) {
+  return file.name === target.originalName && Number(file.size) === Number(target.sizeBytes);
+}
+
+function extensionOf(fileName: string) {
+  const idx = fileName.lastIndexOf(".");
+  return idx >= 0 ? fileName.slice(idx).toLowerCase() : "";
+}
+
+function AttachmentTypeIcon({ fileName }: { fileName: string }) {
+  const ext = extensionOf(fileName);
+  if ([".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".svg"].includes(ext)) {
+    return <FileImage className="h-4 w-4 text-sky-600" aria-hidden="true" />;
+  }
+  if ([".zip", ".rar", ".7z", ".tar", ".gz"].includes(ext)) {
+    return <FileArchive className="h-4 w-4 text-amber-600" aria-hidden="true" />;
+  }
+  if ([".pdf", ".txt", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".hwp", ".hwpx"].includes(ext)) {
+    return <FileText className="h-4 w-4 text-emerald-700" aria-hidden="true" />;
+  }
+  return <File className="h-4 w-4 text-slate-600" aria-hidden="true" />;
+}
+
+function isImageFileName(fileName: string) {
+  return [".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".svg"].includes(extensionOf(fileName));
+}
 
 function getApiBaseUrl() {
   const envBase = import.meta.env.VITE_API_BASE_URL as string | undefined;
@@ -51,14 +110,15 @@ export default function BlogWrite() {
 
   const [category, setCategory] = useState<BlogCategory>("notice");
   const [title, setTitle] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
-  const [thumbnailIndex, setThumbnailIndex] = useState<number>(-1);
-  const [replaceAttachments, setReplaceAttachments] = useState(false);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [attachmentFiles, setAttachmentFiles] = useState<File[]>([]);
+  const [existingThumbnail, setExistingThumbnail] = useState<BlogAttachment | null>(null);
   const [existingAttachments, setExistingAttachments] = useState<BlogAttachment[]>([]);
   const [initialContent, setInitialContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
   const [initializing, setInitializing] = useState(isEditMode);
+  const [thumbnailPreviewUrl, setThumbnailPreviewUrl] = useState<string | null>(null);
 
   const editorRef = useRef<{ getHTML: () => string; setHTML: (html: string) => void; destroy: () => void } | null>(
     null
@@ -119,8 +179,9 @@ export default function BlogWrite() {
                 throw new Error(payload.message ?? "이미지 업로드 실패");
               }
               callback(toAssetUrl(payload.location), "image");
+              toast.success("본문 이미지 업로드가 완료되었습니다.", { duration: 2200 });
             } catch (error) {
-              window.alert(error instanceof Error ? error.message : "이미지 업로드 오류");
+              toast.error(error instanceof Error ? error.message : "이미지 업로드 오류", { duration: 3500 });
             }
             return false;
           },
@@ -173,6 +234,7 @@ export default function BlogWrite() {
         setCategory(response.post.category);
         setTitle(response.post.title);
         setInitialContent(response.post.content ?? "");
+        setExistingThumbnail(response.thumbnailAttachment ?? null);
         setExistingAttachments(Array.isArray(response.attachments) ? response.attachments : []);
 
         if (editorRef.current) {
@@ -200,32 +262,134 @@ export default function BlogWrite() {
     editorRef.current.setHTML(initialContent || "");
   }, [isEditMode, initializing, initialContent]);
 
-  const imageCandidates = useMemo(
-    () => files.map((f, idx) => ({ idx, file: f })).filter(({ file }) => file.type.startsWith("image/")),
-    [files]
-  );
-  const hasExistingThumbnail = existingAttachments.some((item) => item.isThumbnail);
-  const noThumbnailOptionLabel =
-    isEditMode && !replaceAttachments
-      ? hasExistingThumbnail
-        ? "기존 대표이미지 유지"
-        : "대표이미지 변경 안함"
-      : "대표이미지 사용 안함";
+  useEffect(() => {
+    if (!thumbnailFile) {
+      setThumbnailPreviewUrl(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(thumbnailFile);
+    setThumbnailPreviewUrl(objectUrl);
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [thumbnailFile]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0] ?? null;
+    if (selected) {
+      if (!hasAllowedExtension(selected.name, THUMBNAIL_ALLOWED_EXTS)) {
+        toast.error(`대표이미지는 ${THUMBNAIL_ALLOWED_EXTS.join(", ")} 형식만 가능합니다.`, { duration: 4000 });
+        e.currentTarget.value = "";
+        return;
+      }
+      if (selected.size > THUMBNAIL_MAX_BYTES) {
+        toast.error(`대표이미지는 최대 ${formatMb(THUMBNAIL_MAX_BYTES)}까지 업로드 가능합니다.`, { duration: 4000 });
+        e.currentTarget.value = "";
+        return;
+      }
+      toast.success(`대표이미지로 ${selected.name} 파일을 선택했습니다.`, { duration: 2200 });
+    }
+    setThumbnailFile(selected);
+  };
+
+  const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(e.target.files ?? []);
-    setFiles(selected);
-    setThumbnailIndex(-1);
+    const validSelected: File[] = [];
+    const invalidMessages: string[] = [];
+    const duplicateMessages: string[] = [];
+    for (const file of selected) {
+      if (!hasAllowedExtension(file.name, ATTACHMENT_ALLOWED_EXTS)) {
+        invalidMessages.push(`형식 불가: ${file.name}`);
+        continue;
+      }
+      if (file.size > ATTACHMENT_MAX_BYTES) {
+        invalidMessages.push(`용량 초과: ${file.name} (최대 ${formatMb(ATTACHMENT_MAX_BYTES)})`);
+        continue;
+      }
+      const duplicatedInExisting = existingAttachments.some((item) => isSameAttachment(file, item));
+      if (duplicatedInExisting) {
+        duplicateMessages.push(`기존 첨부와 중복: ${file.name}`);
+        continue;
+      }
+      validSelected.push(file);
+    }
+
+    if (validSelected.length > 0) {
+      setAttachmentFiles((prev) => {
+        const merged = [...prev];
+        for (const file of validSelected) {
+          const exists = merged.some(
+            (x) => x.name === file.name && x.size === file.size && x.lastModified === file.lastModified
+          );
+          if (!exists) merged.push(file);
+        }
+        return merged;
+      });
+      toast.success(`첨부파일 ${validSelected.length}개가 추가되었습니다.`, { duration: 2200 });
+    }
+    if (invalidMessages.length > 0) {
+      toast.error(invalidMessages.join(" / "), { duration: 5000 });
+    }
+    if (duplicateMessages.length > 0) {
+      toast.error(duplicateMessages.join(" / "), { duration: 4500 });
+    }
+    e.currentTarget.value = "";
+  };
+
+  const removeAttachmentAt = (targetIndex: number) => {
+    setAttachmentFiles((prev) => prev.filter((_, idx) => idx !== targetIndex));
+    toast("선택한 첨부파일을 제거했습니다.", { duration: 1800 });
+  };
+
+  const removeExistingAttachmentAt = (targetIndex: number) => {
+    setExistingAttachments((prev) => prev.filter((_, idx) => idx !== targetIndex));
+    toast("기존 첨부파일을 제거 대상으로 표시했습니다.", { duration: 2000 });
+  };
+
+  const appendImageToEditor = (imageUrl: string, altText: string) => {
+    const editor = editorRef.current;
+    if (!editor) {
+      toast.error("에디터 준비가 완료된 뒤 다시 시도해주세요.", { duration: 3000 });
+      return;
+    }
+    const current = editor.getHTML() ?? "";
+    const safeAlt = altText.replace(/"/g, "&quot;");
+    const next = `${current}\n<p><img src="${imageUrl}" alt="${safeAlt}" /></p>`;
+    editor.setHTML(next);
+    toast.success("본문에 이미지를 삽입했습니다.", { duration: 1800 });
+  };
+
+  const insertExistingAttachmentImage = (item: BlogAttachment) => {
+    appendImageToEditor(toAssetUrl(item.fileUrl), item.originalName);
+  };
+
+  const insertNewAttachmentImage = async (file: File) => {
+    try {
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      const response = await fetch(toApiUrl("/api/blog/editor-image"), {
+        method: "POST",
+        body: fd,
+        credentials: "include",
+      });
+      const payload = (await response.json()) as { location?: string; message?: string };
+      if (!response.ok || !payload.location) {
+        throw new Error(payload.message ?? "이미지 업로드 실패");
+      }
+      appendImageToEditor(toAssetUrl(payload.location), file.name);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "본문 삽입용 이미지 업로드 실패", { duration: 3500 });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const content = editorRef.current?.getHTML().trim() ?? "";
-    const author = String(window.localStorage.getItem("adminUser") ?? "관리자");
+    const author = String(window.localStorage.getItem("adminDisplayName") ?? "관리자");
 
     if (!title.trim() || !content) {
-      window.alert("필수 항목(카테고리, 제목, 내용)을 입력해주세요.");
+      toast.error("필수 항목(카테고리, 제목, 내용)을 입력해주세요.", { duration: 3500 });
       return;
     }
 
@@ -234,22 +398,30 @@ export default function BlogWrite() {
     fd.append("title", title.trim());
     fd.append("content", content);
     fd.append("author", author);
-    fd.append("thumbnail_index", String(thumbnailIndex));
-    files.forEach((file) => fd.append("files", file));
+    if (thumbnailFile) {
+      fd.append("thumbnail", thumbnailFile);
+    }
+    attachmentFiles.forEach((file) => fd.append("attachments", file));
+    if (isEditMode) {
+      const keepAttachmentIds = existingAttachments.map((item) => item.id).join(",");
+      fd.append("keep_attachment_ids", keepAttachmentIds);
+    }
 
     try {
       setSubmitting(true);
       if (isEditMode && editPostId) {
-        await updateBlogPost(editPostId, fd, replaceAttachments);
-        window.alert("블로그 글 수정을 완료했습니다.");
+        const shouldReplaceThumbnail = Boolean(thumbnailFile);
+        const shouldReplaceAttachments = false;
+        await updateBlogPost(editPostId, fd, shouldReplaceAttachments, shouldReplaceThumbnail);
+        toast.success("블로그 글 수정을 완료했습니다. 목록으로 이동합니다.", { duration: 2200 });
       } else {
         await createBlogPost(fd);
-        window.alert("블로그 글 작성을 완료했습니다.");
+        toast.success("블로그 글 작성을 완료했습니다. 목록으로 이동합니다.", { duration: 2200 });
       }
-      navigate("/admin/blog");
+      window.setTimeout(() => navigate("/admin/blog"), 500);
     } catch (err) {
       const message = err instanceof Error ? err.message : "저장 중 오류가 발생했습니다.";
-      window.alert(message);
+      toast.error(message, { duration: 4500 });
     } finally {
       setSubmitting(false);
     }
@@ -257,6 +429,10 @@ export default function BlogWrite() {
 
   return (
     <section id="blog-write" className="bg-white py-20 md:py-28">
+      <Helmet>
+        <title>{isEditMode ? "블로그 글 수정 | WAFF Admin" : "블로그 글 작성 | WAFF Admin"}</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="container max-w-4xl">
         <div className="mb-14 text-center">
           <h1 className="text-3xl font-bold md:text-4xl">{isEditMode ? "블로그 글 수정" : "블로그 글쓰기"}</h1>
@@ -317,85 +493,147 @@ export default function BlogWrite() {
             </p>
           </div>
 
-          {isEditMode && existingAttachments.length > 0 ? (
-            <div className="rounded-md border border-border bg-white p-4">
-              <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">기존 첨부파일</p>
-              <ul className="space-y-1 text-sm text-muted-foreground">
-                {existingAttachments.map((item) => (
-                  <li key={item.id}>{item.originalName}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-
-          {isEditMode ? (
-            <div className="rounded-md border border-border bg-white p-4">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={replaceAttachments}
-                  onChange={(e) => setReplaceAttachments(e.target.checked)}
-                />
-                기존 첨부파일을 모두 지우고 새 파일로 교체
-              </label>
-              <p className="mt-2 text-xs text-muted-foreground">
-                체크하지 않으면 새 파일은 기존 첨부에 추가됩니다.
-              </p>
-            </div>
-          ) : null}
-
           <div className="space-y-2">
-            <label htmlFor="files" className="text-sm font-medium">
-              첨부파일 (여러 개 가능)
+            <label htmlFor="thumbnail" className="text-sm font-medium">
+              대표이미지 (썸네일)
             </label>
-            <Input id="files" name="files" type="file" multiple onChange={handleFileChange} />
-            <p className="text-xs text-muted-foreground">이미지/문서 등 여러 파일을 등록할 수 있습니다.</p>
+            <Input
+              id="thumbnail"
+              name="thumbnail"
+              type="file"
+              accept={THUMBNAIL_ALLOWED_EXTS.join(",")}
+              onChange={handleThumbnailChange}
+            />
+            <p className="text-xs text-muted-foreground">
+              허용 형식: {THUMBNAIL_ALLOWED_EXTS.join(", ")} / 최대 {formatMb(THUMBNAIL_MAX_BYTES)}
+            </p>
+            {!thumbnailFile && existingThumbnail ? (
+              <div className="rounded-md border border-border/70 bg-background p-3">
+                <p className="mb-2 text-xs text-muted-foreground">현재 대표이미지</p>
+                <img
+                  src={toAssetUrl(existingThumbnail.fileUrl)}
+                  alt={existingThumbnail.originalName}
+                  className="h-40 w-full rounded-md object-contain bg-white"
+                />
+                <p className="mt-2 truncate text-xs text-muted-foreground">{existingThumbnail.originalName}</p>
+              </div>
+            ) : null}
+            {thumbnailFile ? (
+              <div className="rounded-md border border-border/70 bg-background p-3">
+                <p className="mb-2 text-xs text-muted-foreground">새 대표이미지 미리보기</p>
+                {thumbnailPreviewUrl ? (
+                  <img src={thumbnailPreviewUrl} alt={thumbnailFile.name} className="h-40 w-full rounded-md object-contain bg-white" />
+                ) : null}
+                <div className="mt-2 flex items-center justify-between gap-3 text-xs text-muted-foreground">
+                  <span className="truncate">{thumbnailFile.name}</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2"
+                    onClick={() => setThumbnailFile(null)}
+                  >
+                    제거
+                  </Button>
+                </div>
+              </div>
+            ) : null}
           </div>
 
-          {files.length > 0 ? (
+          <div className="space-y-2">
+            <label htmlFor="attachments" className="text-sm font-medium">
+              첨부파일 (여러 개 가능)
+            </label>
+            <Input id="attachments" name="attachments" type="file" multiple onChange={handleAttachmentChange} />
+            <p className="text-xs text-muted-foreground">
+              허용 형식: {ATTACHMENT_ALLOWED_EXTS.join(", ")} / 파일당 최대 {formatMb(ATTACHMENT_MAX_BYTES)}
+            </p>
+            <p className="text-xs text-muted-foreground">파일 선택을 여러 번 해도 누적됩니다.</p>
+          </div>
+
+          {existingAttachments.length > 0 || attachmentFiles.length > 0 ? (
             <div className="rounded-md border border-border bg-white p-4">
-              <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">선택한 새 파일</p>
+              <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">현재 첨부 목록</p>
               <ul className="space-y-2">
-                {files.map((file, idx) => (
-                  <li key={`${file.name}-${idx}`} className="flex items-center justify-between gap-4 text-sm">
-                    <span className="truncate">{file.name}</span>
-                    <span className="shrink-0 text-xs text-muted-foreground">{Math.round(file.size / 1024)} KB</span>
+                {existingAttachments.map((item, idx) => (
+                  <li
+                    key={`existing-${item.id}`}
+                    className="flex items-center justify-between gap-4 rounded-md border border-border/70 bg-background px-3 py-2 text-sm"
+                  >
+                    <div className="flex min-w-0 items-center gap-2">
+                      <AttachmentTypeIcon fileName={item.originalName} />
+                      <span className="truncate">{item.originalName}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="shrink-0 rounded bg-slate-200 px-2 py-0.5 text-[11px] text-slate-700">기존</span>
+                      {isImageFileName(item.originalName) ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="h-7 px-2"
+                          onClick={() => insertExistingAttachmentImage(item)}
+                          title="본문에 이미지 삽입"
+                        >
+                          <ImagePlus className="mr-1 h-3.5 w-3.5" />
+                          삽입
+                        </Button>
+                      ) : null}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-7 w-7 p-0"
+                        onClick={() => removeExistingAttachmentAt(idx)}
+                        aria-label={`${item.originalName} 기존 첨부 취소`}
+                        title="기존 첨부 취소"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+                {attachmentFiles.map((file, idx) => (
+                  <li
+                    key={`new-${file.name}-${idx}`}
+                    className="flex items-center justify-between gap-4 rounded-md border border-border/70 bg-background px-3 py-2 text-sm"
+                  >
+                    <div className="flex min-w-0 items-center gap-2">
+                      <AttachmentTypeIcon fileName={file.name} />
+                      <span className="truncate">{file.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="shrink-0 rounded bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700">새 파일</span>
+                      <span className="shrink-0 text-xs text-muted-foreground">{Math.round(file.size / 1024)} KB</span>
+                      {isImageFileName(file.name) ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="h-7 px-2"
+                          onClick={() => void insertNewAttachmentImage(file)}
+                          title="본문에 이미지 삽입"
+                        >
+                          <ImagePlus className="mr-1 h-3.5 w-3.5" />
+                          삽입
+                        </Button>
+                      ) : null}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-7 w-7 p-0"
+                        onClick={() => removeAttachmentAt(idx)}
+                        aria-label={`${file.name} 첨부 취소`}
+                        title="첨부 취소"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </li>
                 ))}
               </ul>
-            </div>
-          ) : null}
-
-          {imageCandidates.length > 0 ? (
-            <div className="rounded-md border border-border bg-white p-4">
-              <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">카드 대표 이미지 선택 (1개)</p>
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="thumbnail-choice"
-                    checked={thumbnailIndex === -1}
-                    onChange={() => setThumbnailIndex(-1)}
-                  />
-                  {noThumbnailOptionLabel}
-                </label>
-                {imageCandidates.map(({ idx, file }) => (
-                  <label key={`thumb-${idx}`} className="flex items-center gap-2 text-sm">
-                    <input
-                      type="radio"
-                      name="thumbnail-choice"
-                      checked={thumbnailIndex === idx}
-                      onChange={() => setThumbnailIndex(idx)}
-                    />
-                    {file.name}
-                  </label>
-                ))}
-              </div>
-              {isEditMode && !replaceAttachments ? (
-                <p className="mt-2 text-xs text-muted-foreground">
-                  선택하지 않으면 기존 대표이미지를 그대로 유지합니다.
-                </p>
-              ) : null}
+              <p className="mt-2 text-xs text-muted-foreground">목록에서 X를 누르면 해당 파일이 제출 대상에서 제외됩니다.</p>
             </div>
           ) : null}
 

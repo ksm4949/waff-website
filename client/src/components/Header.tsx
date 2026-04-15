@@ -1,4 +1,4 @@
-import { Link, useLocation } from "wouter";
+﻿import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -40,9 +40,10 @@ export default function Header() {
 
   const isDirectMenu = (menuId: string) => menuId === "support" || menuId === "blog";
   const isAdminContext = location.startsWith("/admin");
+  const isAdminLoggedIn = typeof window !== "undefined" && window.localStorage.getItem("isAdmin") === "true";
 
   const resolveHrefForContext = (menuId: string, href: string) => {
-    if (menuId === "blog" && isAdminContext) {
+    if (menuId === "blog" && isAdminContext && isAdminLoggedIn) {
       return "/admin/blog";
     }
     return href;
@@ -130,10 +131,10 @@ export default function Header() {
       section: "intro",
       submenus: [
         { section: "it_main", title: "IT Service" },
-        { section: "it_monitoring", title: "모니터링 / 제어모듈" },
-        { section: "it_ai", title: "AI 기반 모듈" },
-        { section: "it_manage", title: "관리자 모듈" },
-        { section: "it_pm", title: "생산관리 모듈" },
+        { section: "it_monitoring", title: "모니터링 / 제어 솔루션" },
+        { section: "it_ai", title: "AI 기반 솔루션" },
+        { section: "it_manage", title: "관리 솔루션" },
+        { section: "it_pm", title: "생산관리 솔루션" },
       ],
     },
     {
@@ -333,3 +334,4 @@ export default function Header() {
     </header>
   );
 }
+
