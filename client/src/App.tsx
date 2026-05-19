@@ -52,6 +52,8 @@ function Router() {
           <Route path="/company" component={CompIntro} />
           <Route path="/itservice" component={IT_Services} />
           <Route path="/otservice" component={OT_Services} />
+          <Route path="/cnc-retrofit" component={OT_Services} />
+          <Route path="/fanuc-cnc-retrofit" component={OT_Services} />
           <Route path="/qna" component={QnA} />
           <Route path="/qna/write" component={QnAWrite} />
           <Route path="/qna/:id/verify" component={QnAVerify} />

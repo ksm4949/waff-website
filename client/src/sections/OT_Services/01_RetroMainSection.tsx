@@ -8,15 +8,20 @@ export default function RetroMainSection() {
                         <span className="text-sm font-semibold text-white/90">OT 솔루션</span>
                       </div>
                       <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight mb-6">
-                        CNC Retrofit
+                        화낙 CNC 개조
                         <span className="block text-lg text-muted-foreground font-normal mt-2">
-                          노후 장비의 현대화 솔루션
+                          FANUC CNC Retrofit · 노후 공작기계 현대화
                         </span>
                       </h1>
                       <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-                        노후화된 CNC 장비를{" "} 
+                        노후화된 CNC 장비를{" "}
+                        <span className="text-accent font-bold">화낙(FANUC), 지멘스, 하이데나인</span>
+                        기반의 최신 제어 환경으로 개조합니다. 컨트롤러, 서보, 스핀들, 전장, 조작반, 케이블과{" "}
+                        <span className="text-accent font-bold">PLC Ladder</span>
+                        까지 장비 조건에 맞춰 검토합니다. <br/>
+                        생산 데이터는 FOCAS, MES, 설비 모니터링으로 연동해{" "}
                         <span className="text-accent font-bold">저비용</span>
-                        으로 최신 기술로 업그레이드합니다. <br/>
+                        으로 스마트팩토리 전환까지 이어갑니다. <br/>
                         20년 이상 안정적으로 운영할 수 있는{" "}
                         <span className="text-accent font-bold">현대화 솔루션</span>
                         입니다.

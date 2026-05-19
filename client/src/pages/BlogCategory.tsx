@@ -9,7 +9,7 @@ import {
   type BlogPost,
 } from "@/lib/blogApi";
 import { useEffect, useState } from "react";
-import { RefreshCwIcon, SearchIcon } from "lucide-react";
+import { House, Pencil, RefreshCwIcon, SearchIcon, Trash2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation, useRoute } from "wouter";
 
@@ -19,6 +19,11 @@ const SITE_URL = "https://www.waff.co.kr";
 
 function toExcerptText(html: string) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function truncateText(text: string, maxLength: number) {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trimEnd()}...`;
 }
 
 function isValidCategory(value: string): value is BlogCategory {
@@ -46,11 +51,12 @@ function BlogCard({
 }) {
   const hasImage = Boolean(imageUrl);
   const displayImage = hasImage ? toAssetUrl(imageUrl) : BLOG_FALLBACK_IMAGE;
+  const excerpt = truncateText(toExcerptText(content), 72);
 
   return (
-    <div className="group overflow-hidden rounded-xl border border-[#7d8ca8] bg-white transition-all duration-200 hover:-translate-y-1 hover:border-[#0b1f4d] hover:shadow-[0_12px_30px_rgba(11,31,77,0.18)] focus-within:-translate-y-1 focus-within:border-[#0b1f4d] focus-within:shadow-[0_12px_30px_rgba(11,31,77,0.18)]">
-      <Link href={`/blog/${id}`} className="block">
-        <div className="aspect-[16/10] overflow-hidden bg-[#eef1f6]">
+    <div className="group flex h-full flex-col overflow-hidden rounded-xl border border-[#7d8ca8] bg-white transition-all duration-200 hover:-translate-y-1 hover:border-[#0b1f4d] hover:shadow-[0_12px_30px_rgba(11,31,77,0.18)] focus-within:-translate-y-1 focus-within:border-[#0b1f4d] focus-within:shadow-[0_12px_30px_rgba(11,31,77,0.18)]">
+      <Link href={`/blog/${id}`} className="block aspect-[16/4.2] overflow-hidden bg-[#eef1f6]">
+        <div className="aspect-[16/4.2] overflow-hidden bg-[#eef1f6]">
           {hasImage ? (
             <div className="relative h-full w-full">
               <img
@@ -69,30 +75,42 @@ function BlogCard({
             <img src={displayImage} alt={title} className="h-full w-full object-contain p-8" />
           )}
         </div>
-        <div className="space-y-3 p-4 md:p-5">
-          <p className="text-xs font-semibold text-[#0b1f4d]">{blogCategoryLabel[category]}</p>
-          <h3 className="line-clamp-2 text-lg font-bold leading-snug">{title}</h3>
-          <p className="line-clamp-2 text-sm text-muted-foreground">{toExcerptText(content)}</p>
-          <p className="text-xs text-muted-foreground">{date}</p>
-        </div>
       </Link>
-
-      {adminMode ? (
-        <div className="flex items-center justify-end gap-2 border-t border-border/60 px-4 py-3 md:px-5">
-          <Button asChild type="button" variant="outline" size="sm">
-            <Link href={`/admin/blog/write?mode=edit&id=${id}`}>수정</Link>
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-            onClick={() => onDelete(id)}
-          >
-            삭제
-          </Button>
+      <div className="flex flex-1 flex-col gap-1 p-2 md:p-2.5">
+        <Link href={`/blog/${id}`} className="contents">
+          <p className="text-xs font-semibold text-[#0b1f4d]">{blogCategoryLabel[category]}</p>
+          <h3 className="line-clamp-1 text-[15px] font-bold leading-snug">{title}</h3>
+          <p className="line-clamp-2 text-xs text-muted-foreground">{excerpt}</p>
+        </Link>
+        <div className="mt-auto flex items-center justify-between gap-2">
+          <p className="text-xs text-muted-foreground">{date}</p>
+          {adminMode ? (
+            <div className="flex items-center gap-1">
+              <Button
+                asChild
+                type="button"
+                variant="outline"
+                size="icon"
+                className="h-6 w-6 rounded-full border-[#9fc3f7] bg-white text-[#1f6fd9] hover:bg-[#eef5ff] hover:text-[#0b4fb0]"
+              >
+                <Link href={`/admin/blog/write?mode=edit&id=${id}`} aria-label="수정">
+                  <Pencil className="h-3.5 w-3.5" />
+                </Link>
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="h-6 w-6 rounded-full border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700"
+                onClick={() => onDelete(id)}
+                aria-label="삭제"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }
@@ -111,7 +129,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
   const [error, setError] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState("");
   const [appliedSearchTerm, setAppliedSearchTerm] = useState("");
-  const pageSize = 6;
+  const pageSize = 8;
 
   const listHref = adminMode ? "/admin/blog" : "/blog";
 
@@ -230,7 +248,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
             <p className="text-lg font-semibold">잘못된 카테고리입니다.</p>
             <div className="mt-6">
               <Button asChild type="button" variant="outline">
-                <Link href={listHref}>목록으로</Link>
+                <Link href={listHref}>블로그 홈</Link>
               </Button>
             </div>
           </div>
@@ -249,7 +267,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
   const canonicalUrl = `${SITE_URL}/blog/category/${category}`;
 
   return (
-    <section className="relative overflow-hidden bg-white py-20 md:py-28">
+    <section className="relative overflow-hidden bg-white py-20 md:py-24">
       <Helmet>
         <title>{titleText}</title>
         <meta name="description" content={descText} />
@@ -283,62 +301,95 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
           style={{ background: "radial-gradient(circle, #f59e0b 0%, transparent 70%)" }}
         />
       </div>
-      <div className="container relative z-10 space-y-8">
-        <div className="flex flex-wrap items-end justify-between gap-4 rounded-2xl bg-[#eff1f5] px-8 py-10 md:px-10">
-          <div>
+      <div className="container relative z-10 space-y-6">
+        <div className="flex flex-wrap items-start justify-between gap-4 rounded-2xl border border-[#cfd8ea] bg-[#eff1f5] px-8 py-10 shadow-[0_14px_26px_-18px_rgba(11,31,77,0.45)] md:px-10">
+          <div className="w-full space-y-4">
             <p className="text-sm font-semibold text-[#0b1f4d]">카테고리</p>
-            <h1 className="mt-2 text-3xl font-bold md:text-4xl">{blogCategoryLabel[category]}</h1>
-            <p className="mt-3 text-muted-foreground">
-              {appliedSearchTerm
-                ? `[${appliedSearchTerm}] 검색결과 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`
-                : `"${blogCategoryLabel[category]}" 카테고리 게시글 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`}
-            </p>
-            <form onSubmit={handleSearchSubmit} className="mt-4 flex max-w-md items-center gap-2">
-              <Input
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="제목, 작성자, 내용 검색"
-                className="bg-white"
-              />
-              <Button
-                type="submit"
-                className="bg-[#0b1f4d] text-white hover:bg-[#13357a]"
-                aria-label="검색"
-              >
-                <SearchIcon className="size-4" />
-                <span className="sr-only">검색</span>
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="bg-white hover:bg-gray-100 hover:text-foreground"
-                onClick={handleSearchReset}
-                aria-label="초기화"
-              >
-                <RefreshCwIcon className="size-4" />
-                <span className="sr-only">초기화</span>
-              </Button>
-            </form>
-          </div>
-          <div className="flex gap-2">
-            {adminMode ? (
-              <>
-                <Button asChild className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
-                  <Link href="/admin/blog/write">새 글 작성</Link>
+            <h1 className="text-3xl font-bold md:text-4xl">{blogCategoryLabel[category]}</h1>
+
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-muted-foreground">
+                {appliedSearchTerm
+                  ? `[${appliedSearchTerm}] 검색결과 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`
+                  : `"${blogCategoryLabel[category]}" 카테고리 게시글 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`}
+              </p>
+              <form onSubmit={handleSearchSubmit} className="flex w-full items-center gap-2 md:w-[520px]">
+                <Input
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="제목, 내용 검색"
+                  className="bg-white"
+                />
+                <Button
+                  type="submit"
+                  className="bg-[#0b1f4d] text-white hover:bg-[#13357a]"
+                  aria-label="검색"
+                >
+                  <SearchIcon className="size-4" />
+                  <span className="sr-only">검색</span>
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleLogout}
-                  className="bg-white hover:bg-gray-100"
+                  className="bg-white hover:bg-gray-100 hover:text-foreground"
+                  onClick={handleSearchReset}
+                  aria-label="초기화"
                 >
-                  로그아웃
+                  <RefreshCwIcon className="size-4" />
+                  <span className="sr-only">초기화</span>
                 </Button>
-              </>
-            ) : null}
-            <Button asChild type="button" variant="outline" className="bg-white hover:bg-gray-100 hover:text-foreground">
-              <Link href={listHref}>목록으로</Link>
-            </Button>
+              </form>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {validCategories.map((item) => {
+                const href = adminMode ? `/admin/blog/category/${item}` : `/blog/category/${item}`;
+                const active = item === category;
+                return (
+                  <Button
+                    key={`cat-nav-${item}`}
+                    asChild
+                    type="button"
+                    variant="outline"
+                    className={
+                      active
+                        ? "border-[#0b1f4d] bg-[#0b1f4d] text-white shadow-sm transition hover:border-[#13357a] hover:bg-[#13357a] hover:text-white"
+                        : "bg-white text-[#0b1f4d] hover:bg-gray-100 hover:text-foreground"
+                    }
+                  >
+                    <Link href={href}>{blogCategoryLabel[item]}</Link>
+                  </Button>
+                );
+              })}
+              <span className="px-1 text-[#9aa8c2]">|</span>
+              <Button
+                asChild
+                type="button"
+                variant="outline"
+                size="icon"
+                className="h-9 w-9 bg-white text-[#0b1f4d] hover:bg-gray-100 hover:text-foreground"
+              >
+                <Link href={listHref} aria-label="블로그 홈">
+                  <House className="size-4" />
+                </Link>
+              </Button>
+
+              {adminMode ? (
+                <div className="ml-auto flex flex-wrap items-center gap-2">
+                  <Button asChild className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
+                    <Link href="/admin/blog/write">새 글 작성</Link>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleLogout}
+                    className="bg-white hover:bg-gray-100"
+                  >
+                    로그아웃
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
 
@@ -347,7 +398,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
 
         {!loading && !error ? (
           <>
-            <div className="grid gap-5 md:grid-cols-3">
+            <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {items.map((post) => (
                 <BlogCard
                   key={`${category}-${post.id}`}

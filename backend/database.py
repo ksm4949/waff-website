@@ -2,11 +2,43 @@
 from thread_pool_manager import with_thread_pool
 
 
+from connection_pool import get_db_engine
+
+
+def _is_mysql() -> bool:
+    return get_db_engine() == "mysql"
+
+
+def _sql(sql: str) -> str:
+    if not _is_mysql():
+        return sql
+    has_top_one = "SELECT TOP 1" in sql.upper()
+    converted = (
+        sql.replace("dbo.", "")
+        .replace("SELECT TOP 1", "SELECT")
+        .replace("select top 1", "select")
+        .replace("SYSUTCDATETIME()", "UTC_TIMESTAMP()")
+        .replace("SYSDATETIME()", "NOW()")
+        .replace("CAST(NOW() AS DATE)", "CURDATE()")
+        .replace("ISNULL(", "IFNULL(")
+        .replace("?", "%s")
+    )
+    if has_top_one:
+        converted = f"{converted.rstrip()} LIMIT 1"
+    return converted
+
+
+def _execute(cursor, sql: str, params=None):
+    if params is None:
+        return cursor.execute(_sql(sql))
+    return cursor.execute(_sql(sql), params)
+
+
 @with_thread_pool("db")
 def check_db_connection():
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT 1")
+        _execute(cursor, "SELECT 1")
         row = cursor.fetchone()
         cursor.close()
         return bool(row and row[0] == 1)
@@ -16,7 +48,7 @@ def check_db_connection():
 def get_admin_by_credentials(username: str, password: str):
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             SELECT TOP 1 id, username, display_name, role
             FROM dbo.admins
@@ -38,7 +70,7 @@ def get_admin_by_credentials(username: str, password: str):
             "role": str(row[3]) if row[3] is not None else "admin",
         }
 
-        cursor.execute(
+        _execute(cursor, 
             "UPDATE dbo.admins SET last_login_at = SYSUTCDATETIME() WHERE id = ?",
             (admin["id"],),
         )
@@ -76,7 +108,7 @@ def _row_to_blog_dict(row):
 def get_blog_latest3_by_category():
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             WITH ranked AS (
                 SELECT
@@ -134,12 +166,12 @@ def get_blog_category_paged(category: str, page: int = 1, page_size: int = 6, ke
     where_params = [category]
     if keyword:
         like = f"%{keyword}%"
-        where_sql += " AND (title LIKE ? OR content LIKE ? OR author LIKE ?)"
-        where_params.extend([like, like, like])
+        where_sql += " AND (title LIKE ? OR content LIKE ?)"
+        where_params.extend([like, like])
 
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             f"""
             SELECT COUNT(1)
             FROM dbo.blog_posts
@@ -150,7 +182,7 @@ def get_blog_category_paged(category: str, page: int = 1, page_size: int = 6, ke
         count_row = cursor.fetchone()
         total_count = int(count_row[0]) if count_row and count_row[0] is not None else 0
 
-        cursor.execute(
+        _execute(cursor, 
             f"""
             WITH ordered AS (
                 SELECT
@@ -193,7 +225,7 @@ def get_blog_category_paged(category: str, page: int = 1, page_size: int = 6, ke
 def get_blog_detail(post_id: int):
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             WITH ordered AS (
                 SELECT
@@ -261,7 +293,7 @@ def get_blog_detail(post_id: int):
             else None
         )
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             SELECT id, original_name, mime_type, size_bytes, file_url, is_thumbnail
             FROM dbo.blog_attachments
@@ -302,7 +334,7 @@ def get_blog_detail(post_id: int):
 def increment_blog_view(post_id: int):
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             UPDATE dbo.blog_posts
             SET views = ISNULL(views, 0) + 1,
@@ -330,65 +362,110 @@ def create_blog_post_with_attachments(
 
         image_url = ""
 
-        cursor.execute(
-            """
-            INSERT INTO dbo.blog_posts
-            (
-                category, title, content, author, published_date,
-                views, image_url, is_featured, created_at, updated_at
+        if _is_mysql():
+            _execute(cursor,
+                """
+                INSERT INTO blog_posts
+                (
+                    category, title, content, author, published_date,
+                    views, image_url, is_featured, created_at, updated_at
+                )
+                VALUES
+                (
+                    ?, ?, ?, ?, CURDATE(),
+                    0, ?, 0, NOW(), NOW()
+                )
+                """,
+                (category, title, content, author, image_url),
             )
-            OUTPUT INSERTED.id
-            VALUES
-            (
-                ?, ?, ?, ?, CAST(SYSDATETIME() AS DATE),
-                0, ?, 0, SYSDATETIME(), SYSDATETIME()
+            post_id = int(cursor.lastrowid)
+        else:
+            _execute(cursor, 
+                """
+                INSERT INTO dbo.blog_posts
+                (
+                    category, title, content, author, published_date,
+                    views, image_url, is_featured, created_at, updated_at
+                )
+                OUTPUT INSERTED.id
+                VALUES
+                (
+                    ?, ?, ?, ?, CAST(SYSDATETIME() AS DATE),
+                    0, ?, 0, SYSDATETIME(), SYSDATETIME()
+                )
+                """,
+                (category, title, content, author, image_url),
             )
-            """,
-            (category, title, content, author, image_url),
-        )
-        post_row = cursor.fetchone()
-        if not post_row:
-            cursor.close()
-            raise RuntimeError("failed to create blog post")
-
-        post_id = int(post_row[0])
+            post_row = cursor.fetchone()
+            if not post_row:
+                cursor.close()
+                raise RuntimeError("failed to create blog post")
+            post_id = int(post_row[0])
         thumbnail_attachment_id = None
         image_url = ""
 
         for item in attachments:
             is_thumbnail = 1 if item.get("is_thumbnail") else 0
-            cursor.execute(
-                """
-                INSERT INTO dbo.blog_attachments
-                (
-                    post_id, original_name, stored_name, mime_type, ext,
-                    size_bytes, file_url, is_thumbnail, created_at
+            if _is_mysql():
+                _execute(cursor,
+                    """
+                    INSERT INTO blog_attachments
+                    (
+                        post_id, original_name, stored_name, mime_type, ext,
+                        size_bytes, file_url, is_thumbnail, created_at
+                    )
+                    VALUES
+                    (
+                        ?, ?, ?, ?, ?,
+                        ?, ?, ?, NOW()
+                    )
+                    """,
+                    (
+                        post_id,
+                        item["original_name"],
+                        item["stored_name"],
+                        item["mime_type"],
+                        item["ext"],
+                        item["size_bytes"],
+                        item["file_url"],
+                        is_thumbnail,
+                    ),
                 )
-                OUTPUT INSERTED.id
-                VALUES
-                (
-                    ?, ?, ?, ?, ?,
-                    ?, ?, ?, SYSDATETIME()
+                inserted_attachment_id = int(cursor.lastrowid)
+            else:
+                _execute(cursor, 
+                    """
+                    INSERT INTO dbo.blog_attachments
+                    (
+                        post_id, original_name, stored_name, mime_type, ext,
+                        size_bytes, file_url, is_thumbnail, created_at
+                    )
+                    OUTPUT INSERTED.id
+                    VALUES
+                    (
+                        ?, ?, ?, ?, ?,
+                        ?, ?, ?, SYSDATETIME()
+                    )
+                    """,
+                    (
+                        post_id,
+                        item["original_name"],
+                        item["stored_name"],
+                        item["mime_type"],
+                        item["ext"],
+                        item["size_bytes"],
+                        item["file_url"],
+                        is_thumbnail,
+                    ),
                 )
-                """,
-                (
-                    post_id,
-                    item["original_name"],
-                    item["stored_name"],
-                    item["mime_type"],
-                    item["ext"],
-                    item["size_bytes"],
-                    item["file_url"],
-                    is_thumbnail,
-                ),
-            )
-            attachment_row = cursor.fetchone()
-            if is_thumbnail and attachment_row:
-                thumbnail_attachment_id = int(attachment_row[0])
+                attachment_row = cursor.fetchone()
+                inserted_attachment_id = int(attachment_row[0]) if attachment_row else 0
+            if is_thumbnail and inserted_attachment_id:
+                thumbnail_attachment_id = inserted_attachment_id
                 image_url = item["file_url"]
 
         if thumbnail_attachment_id is not None:
-            cursor.execute(
+            _execute(cursor, 
                 """
                 UPDATE dbo.blog_posts
                 SET thumbnail_attachment_id = ?, image_url = ?, updated_at = SYSDATETIME()
@@ -406,7 +483,7 @@ def create_blog_post_with_attachments(
 def get_blog_attachment_for_download(attachment_id: int):
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             SELECT TOP 1 id, stored_name, original_name
             FROM dbo.blog_attachments
@@ -445,7 +522,7 @@ def get_post_attachment_files(
 
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             """
             SELECT id, stored_name
             FROM dbo.blog_attachments
@@ -471,7 +548,7 @@ def delete_blog_attachments_by_ids(post_id: int, attachment_ids: list[int]):
 
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(
+        _execute(cursor, 
             f"""
             DELETE FROM dbo.blog_attachments
             WHERE post_id = ?
@@ -490,14 +567,14 @@ def delete_blog_attachments_by_ids(post_id: int, attachment_ids: list[int]):
 def delete_blog_post(post_id: int):
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(1) FROM dbo.blog_posts WHERE id = ?", (post_id,))
+        _execute(cursor, "SELECT COUNT(1) FROM dbo.blog_posts WHERE id = ?", (post_id,))
         row = cursor.fetchone()
         exists = bool(row and int(row[0]) > 0)
         if not exists:
             cursor.close()
             return False
 
-        cursor.execute("DELETE FROM dbo.blog_posts WHERE id = ?", (post_id,))
+        _execute(cursor, "DELETE FROM dbo.blog_posts WHERE id = ?", (post_id,))
         conn.commit()
         cursor.close()
         return True
@@ -517,14 +594,14 @@ def update_blog_post_with_attachments(
     with get_db_connection() as conn:
         cursor = conn.cursor()
 
-        cursor.execute("SELECT COUNT(1) FROM dbo.blog_posts WHERE id = ?", (post_id,))
+        _execute(cursor, "SELECT COUNT(1) FROM dbo.blog_posts WHERE id = ?", (post_id,))
         row = cursor.fetchone()
         if not row or int(row[0]) == 0:
             cursor.close()
             return {"ok": False, "message": "post not found"}
 
         if replace_thumbnail:
-            cursor.execute(
+            _execute(cursor, 
                 """
                 UPDATE dbo.blog_posts
                 SET thumbnail_attachment_id = NULL, image_url = '', updated_at = SYSDATETIME()
@@ -532,12 +609,12 @@ def update_blog_post_with_attachments(
                 """,
                 (post_id,),
             )
-            cursor.execute("DELETE FROM dbo.blog_attachments WHERE post_id = ? AND is_thumbnail = 1", (post_id,))
+            _execute(cursor, "DELETE FROM dbo.blog_attachments WHERE post_id = ? AND is_thumbnail = 1", (post_id,))
 
         if replace_attachments:
-            cursor.execute("DELETE FROM dbo.blog_attachments WHERE post_id = ? AND is_thumbnail = 0", (post_id,))
+            _execute(cursor, "DELETE FROM dbo.blog_attachments WHERE post_id = ? AND is_thumbnail = 0", (post_id,))
 
-        cursor.execute(
+        _execute(cursor, 
             """
             UPDATE dbo.blog_posts
             SET category = ?,
@@ -555,38 +632,66 @@ def update_blog_post_with_attachments(
 
         for item in attachments:
             is_thumbnail = 1 if item.get("is_thumbnail") else 0
-            cursor.execute(
-                """
-                INSERT INTO dbo.blog_attachments
-                (
-                    post_id, original_name, stored_name, mime_type, ext,
-                    size_bytes, file_url, is_thumbnail, created_at
+            if _is_mysql():
+                _execute(cursor,
+                    """
+                    INSERT INTO blog_attachments
+                    (
+                        post_id, original_name, stored_name, mime_type, ext,
+                        size_bytes, file_url, is_thumbnail, created_at
+                    )
+                    VALUES
+                    (
+                        ?, ?, ?, ?, ?,
+                        ?, ?, ?, NOW()
+                    )
+                    """,
+                    (
+                        post_id,
+                        item["original_name"],
+                        item["stored_name"],
+                        item["mime_type"],
+                        item["ext"],
+                        item["size_bytes"],
+                        item["file_url"],
+                        is_thumbnail,
+                    ),
                 )
-                OUTPUT INSERTED.id
-                VALUES
-                (
-                    ?, ?, ?, ?, ?,
-                    ?, ?, ?, SYSDATETIME()
+                inserted_attachment_id = int(cursor.lastrowid)
+            else:
+                _execute(cursor, 
+                    """
+                    INSERT INTO dbo.blog_attachments
+                    (
+                        post_id, original_name, stored_name, mime_type, ext,
+                        size_bytes, file_url, is_thumbnail, created_at
+                    )
+                    OUTPUT INSERTED.id
+                    VALUES
+                    (
+                        ?, ?, ?, ?, ?,
+                        ?, ?, ?, SYSDATETIME()
+                    )
+                    """,
+                    (
+                        post_id,
+                        item["original_name"],
+                        item["stored_name"],
+                        item["mime_type"],
+                        item["ext"],
+                        item["size_bytes"],
+                        item["file_url"],
+                        is_thumbnail,
+                    ),
                 )
-                """,
-                (
-                    post_id,
-                    item["original_name"],
-                    item["stored_name"],
-                    item["mime_type"],
-                    item["ext"],
-                    item["size_bytes"],
-                    item["file_url"],
-                    is_thumbnail,
-                ),
-            )
-            inserted_row = cursor.fetchone()
-            if is_thumbnail and inserted_row:
-                thumbnail_attachment_id = int(inserted_row[0])
+                inserted_row = cursor.fetchone()
+                inserted_attachment_id = int(inserted_row[0]) if inserted_row else 0
+            if is_thumbnail and inserted_attachment_id:
+                thumbnail_attachment_id = inserted_attachment_id
                 image_url = item["file_url"]
 
         if thumbnail_attachment_id is not None and image_url is not None:
-            cursor.execute(
+            _execute(cursor, 
                 """
                 UPDATE dbo.blog_attachments
                 SET is_thumbnail = 0
@@ -594,7 +699,7 @@ def update_blog_post_with_attachments(
                 """,
                 (post_id,),
             )
-            cursor.execute(
+            _execute(cursor, 
                 """
                 UPDATE dbo.blog_posts
                 SET thumbnail_attachment_id = ?, image_url = ?, updated_at = SYSDATETIME()
@@ -602,7 +707,7 @@ def update_blog_post_with_attachments(
                 """,
                 (thumbnail_attachment_id, image_url, post_id),
             )
-            cursor.execute(
+            _execute(cursor, 
                 """
                 UPDATE dbo.blog_attachments
                 SET is_thumbnail = 1
@@ -614,3 +719,4 @@ def update_blog_post_with_attachments(
         conn.commit()
         cursor.close()
         return {"ok": True, "id": post_id}
+

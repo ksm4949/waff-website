@@ -7,6 +7,7 @@ import {
   type BlogCategory,
   type BlogPost,
 } from "@/lib/blogApi";
+import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "wouter";
@@ -18,6 +19,11 @@ function toExcerptText(html: string) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function truncateText(text: string, maxLength: number) {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trimEnd()}...`;
+}
+
 function BlogCard({
   id,
   imageUrl,
@@ -27,6 +33,7 @@ function BlogCard({
   date,
   adminMode = false,
   onDelete,
+  compact = false,
 }: {
   id: number;
   imageUrl: string;
@@ -36,14 +43,16 @@ function BlogCard({
   date: string;
   adminMode?: boolean;
   onDelete?: (id: number) => void;
+  compact?: boolean;
 }) {
   const hasImage = Boolean(imageUrl);
   const displayImage = hasImage ? toAssetUrl(imageUrl) : BLOG_FALLBACK_IMAGE;
+  const excerpt = truncateText(toExcerptText(content), compact ? 56 : 92);
 
   return (
-    <div className="group overflow-hidden rounded-xl border border-[#7d8ca8] bg-white transition-all duration-200 hover:-translate-y-1 hover:border-[#0b1f4d] hover:shadow-[0_12px_30px_rgba(11,31,77,0.18)] focus-within:-translate-y-1 focus-within:border-[#0b1f4d] focus-within:shadow-[0_12px_30px_rgba(11,31,77,0.18)]">
-      <Link href={`/blog/${id}`} className="block">
-        <div className="aspect-[16/10] overflow-hidden bg-[#eef1f6]">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-[#7d8ca8] bg-white transition-all duration-200 hover:-translate-y-1 hover:border-[#0b1f4d] hover:shadow-[0_12px_30px_rgba(11,31,77,0.18)] focus-within:-translate-y-1 focus-within:border-[#0b1f4d] focus-within:shadow-[0_12px_30px_rgba(11,31,77,0.18)]">
+      <Link href={`/blog/${id}`} className="block h-[40%] overflow-hidden bg-[#eef1f6]">
+        <div className="h-full overflow-hidden bg-[#eef1f6]">
           {hasImage ? (
             <div className="relative h-full w-full">
               <img
@@ -62,42 +71,75 @@ function BlogCard({
             <img src={displayImage} alt={title} className="h-full w-full object-contain p-8" />
           )}
         </div>
-        <div className="space-y-3 p-4 md:p-5">
-          <p className="text-xs font-semibold text-[#0b1f4d]">{categoryLabel}</p>
-          <h3 className="line-clamp-2 text-lg font-bold leading-snug">{title}</h3>
-          <p className="line-clamp-2 text-sm text-muted-foreground">{toExcerptText(content)}</p>
-          <p className="text-xs text-muted-foreground">{date}</p>
-        </div>
       </Link>
-
-      {adminMode ? (
-        <div className="flex items-center justify-end gap-2 border-t border-border/60 px-4 py-3 md:px-5">
-          <Button asChild type="button" variant="outline" size="sm">
-            <Link href={`/admin/blog/write?mode=edit&id=${id}`}>수정</Link>
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-            onClick={() => onDelete?.(id)}
+      <div className={`${compact ? "h-[60%] p-3" : "h-[60%] p-4 md:p-5"} flex flex-col gap-2`}>
+        <Link href={`/blog/${id}`} className="contents">
+          <p className="text-xs font-semibold text-[#0b1f4d]">{categoryLabel}</p>
+          <h3
+            className={`${
+              compact ? "min-h-[1.5rem] line-clamp-1 text-base leading-[1.3]" : "h-[3rem] line-clamp-2 text-lg leading-[1.3]"
+            } shrink-0 overflow-hidden break-words font-bold`}
           >
-            삭제
-          </Button>
+            {title}
+          </h3>
+          <p
+            className={`${
+              compact ? "line-clamp-2 flex-1 text-xs leading-[1.45]" : "flex-1 text-sm leading-[1.5]"
+            } break-words text-muted-foreground`}
+          >
+            {excerpt}
+          </p>
+        </Link>
+        <div className="mt-auto flex items-center justify-between gap-2">
+          <p className="text-xs text-muted-foreground">{date}</p>
+          {adminMode ? (
+            <div className="flex items-center gap-1">
+              <Button
+                asChild
+                type="button"
+                variant="outline"
+                size="icon"
+                className="h-6 w-6 rounded-full border-[#9fc3f7] bg-white text-[#1f6fd9] hover:bg-[#eef5ff] hover:text-[#0b4fb0]"
+              >
+                <Link href={`/admin/blog/write?mode=edit&id=${id}`} aria-label="수정">
+                  <Pencil className="h-3.5 w-3.5" />
+                </Link>
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="h-6 w-6 rounded-full border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700"
+                onClick={() => onDelete?.(id)}
+                aria-label="삭제"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      </div>
+
     </div>
   );
 }
 
-function EmptyBlogCard() {
+function EmptyBlogCard({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-dashed border-[#9aa8c2] bg-white">
-      <div className="aspect-[16/10] bg-[#f3f6fb]" />
-      <div className="space-y-3 p-4 md:p-5">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-dashed border-[#9aa8c2] bg-white">
+      <div className="h-[40%] bg-[#f3f6fb]" />
+      <div className={`${compact ? "p-3" : "p-4 md:p-5"} flex h-[60%] flex-col gap-2`}>
         <p className="text-xs font-semibold text-[#5b6b88]">안내</p>
-        <h3 className="text-lg font-bold leading-snug text-[#314160]">게시물이 존재하지 않습니다.</h3>
-        <p className="text-sm text-muted-foreground">곧 새로운 소식이 등록될 예정입니다.</p>
+        <h3
+          className={`${
+            compact ? "min-h-[1.5rem] line-clamp-1 text-base leading-[1.3]" : "h-[3rem] line-clamp-2 text-lg leading-[1.3]"
+          } shrink-0 overflow-hidden break-words font-bold text-[#314160]`}
+        >
+          게시물이 존재하지 않습니다.
+        </h3>
+        <p className={`${compact ? "flex-1 text-xs leading-[1.45]" : "flex-1 text-sm leading-[1.5]"} text-muted-foreground`}>
+          곧 새로운 소식이 등록될 예정입니다.
+        </p>
       </div>
     </div>
   );
@@ -116,38 +158,74 @@ function CategorySection({
 }) {
   const moreHref = adminMode ? `/admin/blog/category/${category}` : `/blog/category/${category}`;
   const displayPosts = posts.slice(0, 3);
-  const emptyCount = Math.max(0, 3 - displayPosts.length);
   const sectionId = `blog-section-${category}`;
+  const firstPost = displayPosts[0];
+  const secondPost = displayPosts[1];
+  const thirdPost = displayPosts[2];
 
   return (
-    <div id={sectionId} className="scroll-mt-28 space-y-5">
-      <div>
+    <div id={sectionId} className="scroll-mt-28 xl:px-6">
+      <div className="mb-4 flex items-center justify-between gap-3">
         <h2 className="inline-block border-b-2 border-[#f2c300] pb-0.5 text-2xl font-bold text-[#0b1f4d]">
           {blogCategoryLabel[category]}
         </h2>
-      </div>
-      <div className="grid gap-5 md:grid-cols-3">
-        {displayPosts.map((post) => (
-          <BlogCard
-            key={`${category}-${post.id}`}
-            id={post.id}
-            imageUrl={post.imageUrl}
-            categoryLabel={blogCategoryLabel[category]}
-            title={post.title}
-            content={post.content}
-            date={post.date}
-            adminMode={adminMode}
-            onDelete={onDelete}
-          />
-        ))}
-        {Array.from({ length: emptyCount }).map((_, idx) => (
-          <EmptyBlogCard key={`${category}-empty-${idx}`} />
-        ))}
-      </div>
-      <div className="flex justify-center">
-        <Button asChild type="button" variant="outline">
+        <Button asChild type="button" variant="outline" className="bg-white">
           <Link href={moreHref}>더보기</Link>
         </Button>
+      </div>
+      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-stretch">
+        <div className="md:h-[30rem]">
+          {firstPost ? (
+            <BlogCard
+              id={firstPost.id}
+              imageUrl={firstPost.imageUrl}
+              categoryLabel={blogCategoryLabel[category]}
+              title={firstPost.title}
+              content={firstPost.content}
+              date={firstPost.date}
+              adminMode={adminMode}
+              onDelete={onDelete}
+            />
+          ) : (
+            <EmptyBlogCard />
+          )}
+        </div>
+        <div className="grid min-h-0 gap-4 md:h-[30rem] md:grid-rows-2">
+          <div className="min-h-0 h-full">
+            {secondPost ? (
+              <BlogCard
+                id={secondPost.id}
+                imageUrl={secondPost.imageUrl}
+                categoryLabel={blogCategoryLabel[category]}
+                title={secondPost.title}
+                content={secondPost.content}
+                date={secondPost.date}
+                adminMode={adminMode}
+                onDelete={onDelete}
+                compact
+              />
+            ) : (
+              <EmptyBlogCard compact />
+            )}
+          </div>
+          <div className="min-h-0 h-full">
+            {thirdPost ? (
+              <BlogCard
+                id={thirdPost.id}
+                imageUrl={thirdPost.imageUrl}
+                categoryLabel={blogCategoryLabel[category]}
+                title={thirdPost.title}
+                content={thirdPost.content}
+                date={thirdPost.date}
+                adminMode={adminMode}
+                onDelete={onDelete}
+                compact
+              />
+            ) : (
+              <EmptyBlogCard compact />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -159,6 +237,7 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showTopButton, setShowTopButton] = useState(false);
+  const [refreshToken, setRefreshToken] = useState(() => window.sessionStorage.getItem("blogListRefreshToken") ?? "");
 
   useEffect(() => {
     let cancelled = false;
@@ -183,6 +262,20 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
     load();
     return () => {
       cancelled = true;
+    };
+  }, [refreshToken]);
+
+  useEffect(() => {
+    const syncRefreshToken = () => {
+      setRefreshToken(window.sessionStorage.getItem("blogListRefreshToken") ?? "");
+    };
+
+    syncRefreshToken();
+    window.addEventListener("focus", syncRefreshToken);
+    window.addEventListener("pageshow", syncRefreshToken);
+    return () => {
+      window.removeEventListener("focus", syncRefreshToken);
+      window.removeEventListener("pageshow", syncRefreshToken);
     };
   }, []);
 
@@ -219,12 +312,6 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
     window.localStorage.removeItem("adminUsername");
     window.localStorage.removeItem("adminToken");
     navigate("/admin/login");
-  };
-
-  const handleScrollToCategory = (category: BlogCategory) => {
-    const target = document.getElementById(`blog-section-${category}`);
-    if (!target) return;
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleScrollToTop = () => {
@@ -282,47 +369,23 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
             <p className="mt-3 text-muted-foreground">공지사항, 대외활동, 기술 블로그 소식을 확인해보세요.</p>
           </div>
           <div className="flex flex-col items-start gap-2 sm:items-end">
-            <div className="flex flex-wrap justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="h-8 rounded-full border-[#b9c5db] bg-white px-3 text-xs text-[#0b1f4d] hover:bg-[#f2f5fb]"
-                onClick={() => handleScrollToCategory("notice")}
-              >
-                공지사항
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-8 rounded-full border-[#b9c5db] bg-white px-3 text-xs text-[#0b1f4d] hover:bg-[#f2f5fb]"
-                onClick={() => handleScrollToCategory("external")}
-              >
-                대외활동
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-8 rounded-full border-[#b9c5db] bg-white px-3 text-xs text-[#0b1f4d] hover:bg-[#f2f5fb]"
-                onClick={() => handleScrollToCategory("tech")}
-              >
-                기술
-              </Button>
+            <div className="flex min-h-9 flex-wrap justify-end gap-2">
+              {adminMode ? (
+                <>
+                  <Button asChild className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
+                    <Link href="/admin/blog/write">새 글 작성</Link>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleLogout}
+                    className="bg-white hover:bg-gray-100"
+                  >
+                    로그아웃
+                  </Button>
+                </>
+              ) : null}
             </div>
-            {adminMode ? (
-              <div className="flex gap-2">
-                <Button asChild className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
-                  <Link href="/admin/blog/write">새 글 작성</Link>
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleLogout}
-                  className="bg-white hover:bg-gray-100"
-                >
-                  로그아웃
-                </Button>
-              </div>
-            ) : null}
           </div>
         </div>
 
@@ -330,18 +393,11 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
         {!loading ? (
-          <>
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 xl:gap-0 xl:divide-x xl:divide-[#b9c5db]">
             <CategorySection category="notice" posts={noticePosts} adminMode={adminMode} onDelete={handleDelete} />
-            <div className="h-[2px] w-full bg-[#0b1f4d]/35" />
-            <CategorySection
-              category="external"
-              posts={externalPosts}
-              adminMode={adminMode}
-              onDelete={handleDelete}
-            />
-            <div className="h-[2px] w-full bg-[#0b1f4d]/35" />
+            <CategorySection category="external" posts={externalPosts} adminMode={adminMode} onDelete={handleDelete} />
             <CategorySection category="tech" posts={techPosts} adminMode={adminMode} onDelete={handleDelete} />
-          </>
+          </div>
         ) : null}
       </div>
       {showTopButton ? (

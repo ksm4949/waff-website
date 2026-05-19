@@ -12,37 +12,38 @@ export default function RetrofitSection() {
       {
         title: "컨트롤러 교체",
         content: [
-          "구형 컨트롤러에서 최신 컨트롤러 교체 (화낙/지멘스/하이데나인)",
+          "구형 CNC에서 최신 컨트롤러로 교체 (화낙 FANUC/지멘스/하이데나인)",
           "LAN 통신 기능 활성화, 데이터 처리속도 증가, 메모리 용량 증가, 유지보수 및 부품 수급 용이"
         ],
         img: "/images/ot_service/retrofit1.png",
         alt: "CNC 컨트롤러 교체, 화낙(FANUC)/지멘스/하이데나인"
       },
       {
-        title: "배전반 교체",
+        title: "전장·조작반 개선",
         content: [
-          "구형 엠프에서 신형 엠프로 교체",
-          "입출력 제어 용이, 내부부품 오작동 감소, 유지보수 및 관리용이"
+          "메인 전장박스, 조작반, I/O, 릴레이, 안전회로를 장비 조건에 맞춰 개선",
+          "입출력 제어 용이, 내부부품 오작동 감소, 유지보수 및 관리 용이"
         ],
         img: "/images/ot_service/retrofit2.png",
-        alt: "CNC 배전반 교체, CNC개조"
+        alt: "CNC 전장 박스 및 조작반 개선, CNC개조"
       },
       {
-        title: "스핀들/서브 모터 교체",
+        title: "스핀들/서보 모터 교체",
         content: [
-          "구형 DC모터에서 신형 AC모터로 교체",
+          "구형 DC 모터와 앰프를 신형 AC 서보·스핀들 시스템으로 교체",
           "시스템과의 연계성 증가, 위치 제어 가능, 정밀가공성 증가, 유지보수 및 관리 용이"
         ],
         img: "/images/ot_service/retrofit3.png",
         alt: "스핀들/서보 모터 교체, CNC개조"
       },
       {
-        title: "케이블 교체",
+        title: "PLC·케이블·데이터 연동",
         content: [
-          "센서 및 설비 구동계 오작동 방지, 장비 수명연장"
+          "PLC Ladder, ATC/APC, 유압, 윤활, 도어 인터록 등 설비 시퀀스 개선",
+          "케이블 교체와 FOCAS/MES/설비 모니터링 연동으로 데이터 수집 기반 확보"
         ],
         img: "/images/ot_service/retrofit4.png",
-        alt: "케이블 교체, CNC개조"
+        alt: "PLC Ladder 개선, 케이블 교체, FOCAS MES 데이터 연동"
       },
     ]
 
@@ -83,7 +84,8 @@ export default function RetrofitSection() {
               <div className="divider-modern mx-auto w-24 mb-6" />
               <Reveal>
                 <p className="section-subtitle">
-                  컨트롤러 교체부터 메인판넬 업그레이드까지 CNC 주요 기능을 고도화 할 수 있는 기술입니다.
+                  화낙(FANUC) CNC 개조, 컨트롤러 교체, 전장·조작반 개선, 서보·스핀들 교체부터
+                  PLC Ladder와 제조 데이터 연동까지 CNC 주요 기능을 고도화하는 기술입니다.
                   <br/>
                 </p>
               </Reveal>

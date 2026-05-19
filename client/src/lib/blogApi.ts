@@ -39,6 +39,11 @@ function toApiUrl(path: string) {
   return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 }
 
+function withCacheBust(path: string) {
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}_=${Date.now()}`;
+}
+
 export function toAssetUrl(url: string) {
   if (!url) return "";
   const normalized = String(url).trim().toLowerCase();
@@ -53,8 +58,11 @@ export function getAttachmentDownloadUrl(attachmentId: number) {
 }
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(toApiUrl(path), {
+  const method = String(init?.method ?? "GET").toUpperCase();
+  const requestPath = method === "GET" ? withCacheBust(path) : path;
+  const response = await fetch(toApiUrl(requestPath), {
     credentials: "include",
+    cache: "no-store",
     ...init,
   });
 

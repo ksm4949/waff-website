@@ -100,6 +100,17 @@ function toApiUrl(path: string) {
   return base ? `${base}${path}` : path;
 }
 
+function extractH2HeadingsFromHtml(html: string) {
+  if (!html.trim() || typeof DOMParser === "undefined") return [];
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(`<div id="editor-nav-root">${html}</div>`, "text/html");
+  const root = doc.getElementById("editor-nav-root");
+  if (!root) return [];
+  return Array.from(root.querySelectorAll("h2"))
+    .map((el) => (el.textContent ?? "").trim())
+    .filter(Boolean);
+}
+
 export default function BlogWrite() {
   const [, navigate] = useLocation();
 
@@ -115,6 +126,7 @@ export default function BlogWrite() {
   const [existingThumbnail, setExistingThumbnail] = useState<BlogAttachment | null>(null);
   const [existingAttachments, setExistingAttachments] = useState<BlogAttachment[]>([]);
   const [initialContent, setInitialContent] = useState("");
+  const [liveH2Headings, setLiveH2Headings] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
   const [initializing, setInitializing] = useState(isEditMode);
@@ -123,6 +135,7 @@ export default function BlogWrite() {
   const editorRef = useRef<{ getHTML: () => string; setHTML: (html: string) => void; destroy: () => void } | null>(
     null
   );
+  const lastEditorHtmlRef = useRef("");
 
   useEffect(() => {
     if (window.localStorage.getItem("isAdmin") !== "true") {
@@ -157,6 +170,7 @@ export default function BlogWrite() {
         height: "460px",
         initialEditType: "wysiwyg",
         previewStyle: "vertical",
+        placeholder: "예시: ## 섹션 제목\nh2 또는 Heading 2 제목을 넣으면 상세 페이지 우측 네비게이터가 활성화됩니다.",
         toolbarItems: [
           ["heading", "bold", "italic", "strike"],
           ["hr", "quote"],
@@ -261,6 +275,21 @@ export default function BlogWrite() {
     if (!editorRef.current || !isEditMode || initializing) return;
     editorRef.current.setHTML(initialContent || "");
   }, [isEditMode, initializing, initialContent]);
+
+  useEffect(() => {
+    if (!editorReady || !editorRef.current) return;
+
+    const syncHeadings = () => {
+      const html = editorRef.current?.getHTML() ?? "";
+      if (html === lastEditorHtmlRef.current) return;
+      lastEditorHtmlRef.current = html;
+      setLiveH2Headings(extractH2HeadingsFromHtml(html));
+    };
+
+    syncHeadings();
+    const timer = window.setInterval(syncHeadings, 500);
+    return () => window.clearInterval(timer);
+  }, [editorReady]);
 
   useEffect(() => {
     if (!thumbnailFile) {
@@ -418,6 +447,7 @@ export default function BlogWrite() {
         await createBlogPost(fd);
         toast.success("블로그 글 작성을 완료했습니다. 목록으로 이동합니다.", { duration: 2200 });
       }
+      window.sessionStorage.setItem("blogListRefreshToken", String(Date.now()));
       window.setTimeout(() => navigate("/admin/blog"), 500);
     } catch (err) {
       const message = err instanceof Error ? err.message : "저장 중 오류가 발생했습니다.";
@@ -427,13 +457,25 @@ export default function BlogWrite() {
     }
   };
 
+  const handlePreviewNavigate = (index: number) => {
+    const editorRoot = document.getElementById(EDITOR_ROOT_ID);
+    if (!editorRoot) return;
+    const visibleHeadings = Array.from(editorRoot.querySelectorAll("h2")).filter((el) => {
+      const node = el as HTMLElement;
+      return node.offsetParent !== null;
+    }) as HTMLElement[];
+    const target = visibleHeadings[index];
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
   return (
     <section id="blog-write" className="bg-white py-20 md:py-28">
       <Helmet>
         <title>{isEditMode ? "블로그 글 수정 | WAFF Admin" : "블로그 글 작성 | WAFF Admin"}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="container max-w-4xl">
+      <div className="container max-w-7xl">
         <div className="mb-14 text-center">
           <h1 className="text-3xl font-bold md:text-4xl">{isEditMode ? "블로그 글 수정" : "블로그 글쓰기"}</h1>
           <div className="divider-modern mx-auto mb-6 w-24" />
@@ -441,10 +483,11 @@ export default function BlogWrite() {
 
         {initializing ? <p className="mb-4 text-sm text-muted-foreground">수정 데이터를 불러오는 중...</p> : null}
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6 rounded-lg border border-border/70 bg-background p-6 md:p-8"
-        >
+        <div className="mx-auto flex max-w-[1240px] gap-6 lg:items-start">
+          <form
+            onSubmit={handleSubmit}
+            className="min-w-0 flex-1 space-y-6 rounded-lg border border-border/70 bg-background p-6 md:p-8 lg:max-w-4xl"
+          >
           <div className="space-y-2">
             <label htmlFor="category" className="text-sm font-medium">
               카테고리
@@ -645,7 +688,34 @@ export default function BlogWrite() {
               {submitting ? "저장 중..." : isEditMode ? "수정완료" : "작성완료"}
             </Button>
           </div>
-        </form>
+          </form>
+
+          <aside className="hidden w-72 shrink-0 self-start lg:sticky lg:top-[28vh] lg:block">
+            <div className="rounded-lg border border-[#d6dce8] bg-white p-4 shadow-sm">
+              {liveH2Headings.length > 0 ? (
+                <ul className="border-l-2 border-[#cfd8ea]">
+                  {liveH2Headings.map((heading, idx) => (
+                    <li key={`${heading}-${idx}`} className="relative">
+                      <button
+                        type="button"
+                        className="block w-full py-2 pl-4 text-left text-sm text-[#0b1f4d] transition hover:text-primary"
+                        onClick={() => handlePreviewNavigate(idx)}
+                      >
+                        {heading}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs leading-5 text-muted-foreground">
+                  h2(Heading 2) 제목을 넣으면
+                  <br />
+                  우측 네비게이터 미리보기가 표시됩니다.
+                </p>
+              )}
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   );

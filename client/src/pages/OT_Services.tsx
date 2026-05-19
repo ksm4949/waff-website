@@ -16,6 +16,15 @@ export default function OT_Services() {
     const [location] = useLocation();
     const [showFloatingButton, setShowFloatingButton] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const isCncLanding = location === "/cnc-retrofit" || location === "/fanuc-cnc-retrofit";
+    const pageTitle = isCncLanding
+      ? "화낙 CNC 개조·CNC Retrofit 전문 | WAFF"
+      : "CNC Retrofit / OT 서비스 | WAFF";
+    const pageDescription =
+      "WAFF는 화낙(FANUC) CNC 개조, CNC Retrofit, 컨트롤러·서보·스핀들·전장·조작반·케이블 교체, PLC Ladder 개선과 FOCAS/MES 데이터 연동을 지원합니다.";
+    const canonicalUrl = isCncLanding
+      ? `https://www.waff.co.kr${location}`
+      : "https://www.waff.co.kr/otservice";
 
     useEffect(() => {
       const handleScroll = () => {
@@ -74,18 +83,67 @@ export default function OT_Services() {
     return (
       <>
         <Helmet>
-          <title>CNC Retrofit / OT 서비스 | WAFF</title>
+          <title>{pageTitle}</title>
           <meta
             name="description"
-            content="WAFF OT 서비스: CNC Retrofit, HMI, 컨트롤러/모터/케이블 교체 사례 소개"
+            content={pageDescription}
           />
-          <link rel="canonical" href="https://www.waff.co.kr/otservice" />
-          <meta property="og:title" content="CNC Retrofit / OT 서비스 | WAFF" />
+          <meta
+            name="keywords"
+            content="화낙 CNC 개조, 화낙개조, FANUC retrofit, CNC Retrofit, CNC 개조 업체, 공작기계 리트로핏, PLC Ladder, FOCAS, MES 연동, 창원 CNC 개조"
+          />
+          <link rel="canonical" href={canonicalUrl} />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content={pageTitle} />
           <meta
             property="og:description"
-            content="노후 CNC 개조, 장비 업그레이드와 OT 서비스 적용 사례"
+            content={pageDescription}
           />
-          <meta property="og:url" content="https://www.waff.co.kr/otservice" />
+          <meta property="og:url" content={canonicalUrl} />
+          <meta property="og:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={pageDescription} />
+          <meta name="twitter:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "@id": `${canonicalUrl}#service`,
+              name: "화낙 CNC 개조 및 CNC Retrofit",
+              alternateName: ["FANUC CNC Retrofit", "CNC 개조", "공작기계 리트로핏"],
+              serviceType: "CNC Retrofit",
+              provider: {
+                "@type": "ProfessionalService",
+                name: "WAFF",
+                alternateName: "와프",
+                url: "https://www.waff.co.kr/",
+                telephone: "+82-55-288-0856",
+              },
+              areaServed: {
+                "@type": "Country",
+                name: "대한민국",
+              },
+              description: pageDescription,
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: "CNC Retrofit 수행 범위",
+                itemListElement: [
+                  "FANUC/Siemens/Heidenhain 컨트롤러 교체",
+                  "서보 앰프·서보 모터·스핀들 앰프 교체",
+                  "전장 박스·조작반·케이블 개선",
+                  "PLC Ladder 작성 및 인터록 제어",
+                  "FOCAS·MES·설비 모니터링 데이터 연동",
+                ].map((name) => ({
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name,
+                  },
+                })),
+              },
+            })}
+          </script>
         </Helmet>
 
         <div className="min-h-screen bg-white flex flex-col">

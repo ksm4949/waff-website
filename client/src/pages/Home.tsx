@@ -101,6 +101,9 @@ export default function Home() {
           { id: "home", label: "Intro" },
           { id: "about", label: "회사개요" },
           { id: "core-solutions", label: "핵심 솔루션" },
+          { id: "home_smartfactory", label: "스마트팩토리" },
+          { id: "home_retrofit", label: "CNC Retrofit" },
+          { id: "home_hmi", label: "HMI" },
           ]}
         />  
         {/* Hero Section - Home */}

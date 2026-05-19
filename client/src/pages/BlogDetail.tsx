@@ -9,11 +9,12 @@ import {
   type BlogPost,
 } from "@/lib/blogApi";
 import { ChevronDownIcon, ChevronUpIcon, File, FileArchive, FileImage, FileText } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation, useRoute } from "wouter";
 
 type NeighborPost = { id: number; title: string } | null;
+type HeadingNavItem = { id: string; text: string };
 const SITE_URL = "https://www.waff.co.kr";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/images/logos/logoKR.png`;
 
@@ -37,6 +38,39 @@ function extensionOf(fileName: string) {
   return idx >= 0 ? fileName.slice(idx).toLowerCase() : "";
 }
 
+function slugifyHeadingText(value: string) {
+  const lowered = value.toLowerCase().trim();
+  const compact = lowered.replace(/\s+/g, "-").replace(/[^a-z0-9\-_가-힣]/g, "");
+  return compact || "section";
+}
+
+function buildDetailContentWithHeadingNav(html: string): { html: string; headings: HeadingNavItem[] } {
+  if (!html.trim()) return { html, headings: [] };
+  if (typeof DOMParser === "undefined") return { html, headings: [] };
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(`<div id="blog-detail-content-root">${html}</div>`, "text/html");
+  const root = doc.getElementById("blog-detail-content-root");
+  if (!root) return { html, headings: [] };
+
+  const headings: HeadingNavItem[] = [];
+  const idCounts = new Map<string, number>();
+  const h2List = Array.from(root.querySelectorAll("h2"));
+
+  h2List.forEach((node, index) => {
+    const text = (node.textContent ?? "").trim() || `섹션 ${index + 1}`;
+    const base = slugifyHeadingText(text);
+    const seen = idCounts.get(base) ?? 0;
+    idCounts.set(base, seen + 1);
+    const nextId = seen > 0 ? `${base}-${seen + 1}` : base;
+    node.id = node.id || `h2-${nextId}`;
+    node.setAttribute("data-blog-h2-anchor", "true");
+    headings.push({ id: node.id, text });
+  });
+
+  return { html: root.innerHTML, headings };
+}
+
 function AttachmentTypeIcon({ fileName }: { fileName: string }) {
   const ext = extensionOf(fileName);
   if ([".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".svg"].includes(ext)) {
@@ -55,7 +89,7 @@ export default function BlogDetail() {
   const [, params] = useRoute("/blog/:id");
   const [, navigate] = useLocation();
   const isAdmin = typeof window !== "undefined" && window.localStorage.getItem("isAdmin") === "true";
-  const listHref = isAdmin ? "/admin/blog" : "/blog";
+  const blogHomeHref = isAdmin ? "/admin/blog" : "/blog";
   const postId = Number(params?.id);
 
   const [post, setPost] = useState<BlogPost | null>(null);
@@ -64,12 +98,19 @@ export default function BlogDetail() {
   const [attachments, setAttachments] = useState<BlogAttachment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeHeadingId, setActiveHeadingId] = useState("");
   const canonicalUrl = Number.isFinite(postId) && postId > 0 ? `${SITE_URL}/blog/${postId}` : `${SITE_URL}/blog`;
   const pageTitle = post ? `${post.title} | WAFF 블로그` : "블로그 상세 | WAFF";
   const pageDesc = post
     ? truncate(stripHtml(post.content) || `${blogCategoryLabel[post.category]} 게시글입니다.`)
     : "WAFF 블로그 상세 게시글 페이지입니다.";
   const ogImage = post?.imageUrl ? toAbsoluteUrl(toAssetUrl(post.imageUrl)) : DEFAULT_OG_IMAGE;
+  const categoryListHref = post
+    ? isAdmin
+      ? `/admin/blog/category/${post.category}`
+      : `/blog/category/${post.category}`
+    : blogHomeHref;
+  const detailContent = useMemo(() => buildDetailContentWithHeadingNav(post?.content ?? ""), [post?.content]);
 
   useEffect(() => {
     if (!Number.isFinite(postId) || postId <= 0) {
@@ -105,6 +146,36 @@ export default function BlogDetail() {
       cancelled = true;
     };
   }, [postId]);
+
+  useEffect(() => {
+    const headings = detailContent.headings;
+    if (headings.length === 0) {
+      setActiveHeadingId("");
+      return;
+    }
+
+    const resolveActiveHeading = () => {
+      let currentId = headings[0]?.id ?? "";
+      for (const item of headings) {
+        const el = document.getElementById(item.id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= 170) {
+          currentId = item.id;
+        } else {
+          break;
+        }
+      }
+      setActiveHeadingId((prev) => (prev === currentId ? prev : currentId));
+    };
+
+    resolveActiveHeading();
+    window.addEventListener("scroll", resolveActiveHeading, { passive: true });
+    window.addEventListener("resize", resolveActiveHeading);
+    return () => {
+      window.removeEventListener("scroll", resolveActiveHeading);
+      window.removeEventListener("resize", resolveActiveHeading);
+    };
+  }, [detailContent.headings]);
 
   if (loading) {
     return (
@@ -172,7 +243,7 @@ export default function BlogDetail() {
             <p className="text-lg font-semibold">{error ?? "게시글을 찾을 수 없습니다."}</p>
             <div className="mt-6">
               <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                <Link href={listHref}>목록으로</Link>
+                <Link href={blogHomeHref}>목록으로</Link>
               </Button>
             </div>
           </div>
@@ -193,8 +264,20 @@ export default function BlogDetail() {
     }
   };
 
+  const handleNavigateHeading = (id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    setActiveHeadingId(id);
+    const y = target.getBoundingClientRect().top + window.scrollY - 120;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <section id="blog-detail" className="relative overflow-hidden bg-white py-20 md:py-28">
+    <section id="blog-detail" className="relative bg-white py-20 md:py-28">
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDesc} />
@@ -228,99 +311,188 @@ export default function BlogDetail() {
           style={{ background: "radial-gradient(circle, #f59e0b 0%, transparent 70%)" }}
         />
       </div>
-      <div className="container relative z-10 max-w-4xl">
-        <div className="rounded-lg border-2 border-[#7d8ca8] bg-background p-6 md:p-8">
-          <p className="text-sm font-semibold text-[#0b1f4d]">{blogCategoryLabel[post.category]}</p>
-          <h1 className="mt-2 text-2xl font-bold md:text-3xl">{post.title}</h1>
-          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-            <span>작성자: {post.author}</span>
-            <span>작성일: {post.date}</span>
-            <span>조회: {post.views}</span>
-          </div>
-
-          <div className="my-6 h-px bg-border" />
-
-          <div className="mt-6 rounded-lg border border-[#d6dce8] bg-[#fbfcff] p-5 shadow-sm md:p-6">
-            <div
-              className="prose prose-base max-w-none text-[15px] leading-8 text-[#111827] prose-headings:text-[#0b1f4d] prose-p:my-4 prose-li:my-1"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
-          </div>
-
-          {attachments.length > 0 ? (
-            <div className="mt-6 rounded-md border border-border bg-white p-4">
-              <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">첨부파일</p>
-              <ul className="space-y-2">
-                {attachments.map((item) => (
-                  <li
-                    key={item.id}
-                    className="flex items-center justify-between gap-4 rounded-md border border-border/70 bg-background px-3 py-2"
-                  >
-                    <a
-                      href={getAttachmentDownloadUrl(item.id)}
-                      className="flex min-w-0 items-center gap-2 text-sm text-[#0b1f4d] underline underline-offset-2 hover:text-[#13357a]"
-                    >
-                      <AttachmentTypeIcon fileName={item.originalName} />
-                      <span className="truncate">{item.originalName}</span>
-                    </a>
-                    <span className="shrink-0 text-xs text-muted-foreground">
-                      {Math.max(1, Math.round(item.sizeBytes / 1024))} KB
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-
-          <div className="mt-8 rounded-md border border-border bg-white">
-            <div className="flex items-center border-b border-border px-4 py-3 transition-colors hover:bg-muted/40">
-              <span className="inline-flex w-20 shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground">
-                <ChevronUpIcon className="size-4" />
-                이전글
-              </span>
-              {prevPost ? (
-                <Link href={`/blog/${prevPost.id}`} className="text-sm hover:text-primary hover:underline">
-                  {prevPost.title}
+      <div className="container relative z-10 max-w-7xl">
+        <div className="mx-auto flex max-w-[1240px] gap-8 lg:items-start">
+          <div className="min-w-0 flex-1 lg:max-w-4xl">
+            <div className="rounded-lg border-2 border-[#7d8ca8] bg-background p-6 md:p-8">
+              <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-primary">
+                <Link href={blogHomeHref} className="hover:underline">
+                  블로그
                 </Link>
-              ) : (
-                <span className="text-sm text-muted-foreground">이전 글이 없습니다.</span>
-              )}
-            </div>
-            <div className="flex items-center px-4 py-3 transition-colors hover:bg-muted/40">
-              <span className="inline-flex w-20 shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground">
-                <ChevronDownIcon className="size-4" />
-                다음글
-              </span>
-              {nextPost ? (
-                <Link href={`/blog/${nextPost.id}`} className="text-sm hover:text-primary hover:underline">
-                  {nextPost.title}
+                <span className="text-[#7d8ca8]">&gt;</span>
+                <Link href={categoryListHref} className="hover:underline">
+                  {blogCategoryLabel[post.category]}
                 </Link>
-              ) : (
-                <span className="text-sm text-muted-foreground">다음 글이 없습니다.</span>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-8 flex justify-end gap-2">
-            {isAdmin ? (
-              <>
+              </div>
+              <h1 className="mt-2 text-2xl font-bold md:text-3xl">{post.title}</h1>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                  <span>작성자: {post.author}</span>
+                  <span>작성일: {post.date}</span>
+                  <span>조회: {post.views}</span>
+                </div>
                 <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                  <Link href={`/admin/blog/write?mode=edit&id=${post.id}`}>수정</Link>
+                  <Link href={categoryListHref}>목록으로</Link>
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
-                  onClick={handleDelete}
-                >
-                  삭제
+              </div>
+
+              <div className="my-6 h-px bg-border" />
+
+              {detailContent.headings.length > 0 ? (
+                <div className="mt-6 rounded-lg border border-[#d6dce8] bg-white p-4 md:p-5 lg:hidden">
+                  <ul className="border-l-2 border-[#cfd8ea]">
+                    {detailContent.headings.map((item) => (
+                      <li key={item.id} className="relative">
+                        {activeHeadingId === item.id ? (
+                          <span className="pointer-events-none absolute -left-[3px] top-0 h-full w-[4px] rounded-full bg-primary" />
+                        ) : null}
+                        <button
+                          type="button"
+                          className={`block w-full py-2 pl-4 text-left text-sm transition ${
+                            activeHeadingId === item.id
+                              ? "font-semibold text-primary"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                          onClick={() => handleNavigateHeading(item.id)}
+                        >
+                          {item.text}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-3 flex justify-end">
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center gap-1 text-sm font-semibold text-foreground transition hover:text-primary"
+                      onClick={handleScrollToTop}
+                    >
+                      <ChevronUpIcon className="h-4 w-4" />
+                      <span>TOP</span>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="mt-6 rounded-lg border border-[#d6dce8] bg-[#fbfcff] p-5 shadow-sm md:p-6">
+                <div
+                  className="prose prose-base max-w-none text-[15px] leading-8 text-[#111827] prose-headings:text-[#0b1f4d] prose-p:my-4 prose-li:my-1 [&_h1]:mt-6 [&_h1]:mb-3 [&_h1]:text-4xl [&_h1]:font-bold [&_h1]:leading-tight [&_h2]:mt-5 [&_h2]:mb-2 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:leading-tight [&_h3]:mt-4 [&_h3]:mb-2 [&_h3]:text-2xl [&_h3]:font-semibold"
+                  dangerouslySetInnerHTML={{ __html: detailContent.html }}
+                />
+              </div>
+
+              {attachments.length > 0 ? (
+                <div className="mt-6 rounded-md border border-border bg-white p-4">
+                  <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">첨부파일</p>
+                  <ul className="space-y-2">
+                    {attachments.map((item) => (
+                      <li
+                        key={item.id}
+                        className="flex items-center justify-between gap-4 rounded-md border border-border/70 bg-background px-3 py-2"
+                      >
+                        <a
+                          href={getAttachmentDownloadUrl(item.id)}
+                          className="flex min-w-0 items-center gap-2 text-sm text-[#0b1f4d] underline underline-offset-2 hover:text-[#13357a]"
+                        >
+                          <AttachmentTypeIcon fileName={item.originalName} />
+                          <span className="truncate">{item.originalName}</span>
+                        </a>
+                        <span className="shrink-0 text-xs text-muted-foreground">
+                          {Math.max(1, Math.round(item.sizeBytes / 1024))} KB
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="mt-8 rounded-md border border-border bg-white">
+                <div className="flex items-center border-b border-border px-4 py-3 transition-colors hover:bg-muted/40">
+                  <span className="inline-flex w-20 shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground">
+                    <ChevronUpIcon className="size-4" />
+                    이전글
+                  </span>
+                  {prevPost ? (
+                    <Link href={`/blog/${prevPost.id}`} className="text-sm hover:text-primary hover:underline">
+                      {prevPost.title}
+                    </Link>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">이전 글이 없습니다.</span>
+                  )}
+                </div>
+                <div className="flex items-center px-4 py-3 transition-colors hover:bg-muted/40">
+                  <span className="inline-flex w-20 shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground">
+                    <ChevronDownIcon className="size-4" />
+                    다음글
+                  </span>
+                  {nextPost ? (
+                    <Link href={`/blog/${nextPost.id}`} className="text-sm hover:text-primary hover:underline">
+                      {nextPost.title}
+                    </Link>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">다음 글이 없습니다.</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-8 flex justify-end gap-2">
+                {isAdmin ? (
+                  <>
+                    <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
+                      <Link href={`/admin/blog/write?mode=edit&id=${post.id}`}>수정</Link>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                      onClick={handleDelete}
+                    >
+                      삭제
+                    </Button>
+                  </>
+                ) : null}
+                <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
+                  <Link href={categoryListHref}>목록으로</Link>
                 </Button>
-              </>
-            ) : null}
-            <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-              <Link href={listHref}>목록으로</Link>
-            </Button>
+              </div>
+            </div>
           </div>
+
+          {detailContent.headings.length > 0 ? (
+            <aside className="hidden w-72 shrink-0 self-start lg:sticky lg:top-[32vh] lg:block">
+              <div className="rounded-lg border border-[#d6dce8] bg-white p-4 shadow-sm">
+                <ul className="border-l-2 border-[#cfd8ea]">
+                  {detailContent.headings.map((item) => (
+                    <li key={`aside-${item.id}`} className="relative">
+                      {activeHeadingId === item.id ? (
+                        <span className="pointer-events-none absolute -left-[3px] top-0 h-full w-[4px] rounded-full bg-primary" />
+                      ) : null}
+                      <button
+                        type="button"
+                        className={`block w-full py-2 pl-4 text-left text-sm transition ${
+                          activeHeadingId === item.id
+                            ? "font-semibold text-primary"
+                            : "text-muted-foreground hover:text-foreground"
+                        }`}
+                        onClick={() => handleNavigateHeading(item.id)}
+                      >
+                        {item.text}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 flex justify-end">
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center gap-1 text-sm font-semibold text-foreground transition hover:text-primary"
+                    onClick={handleScrollToTop}
+                  >
+                    <ChevronUpIcon className="h-4 w-4" />
+                    <span>TOP</span>
+                  </button>
+                </div>
+              </div>
+            </aside>
+          ) : null}
         </div>
       </div>
     </section>
