@@ -115,7 +115,7 @@ export default function Header() {
       href: "/company",
       section: "intro",
       submenus: [
-        { title: "인사말", section: "intro" },
+        { title: "회사소개", section: "intro" },
         { title: "Vision", section: "vision" },
         { title: "조직구성", section: "org" },
         { title: "기술력과 인증", section: "technology" },

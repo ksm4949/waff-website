@@ -108,7 +108,7 @@ export default function CompIntro() {
 
             <RightSideNav
               items={[
-                { id: "intro", label: "인사말" },
+                { id: "intro", label: "회사소개" },
                 { id: "vision", label: "Vision" },
                 { id: "org", label: "조직구성" },
                 { id: "technology", label: "기술력과 인증" },

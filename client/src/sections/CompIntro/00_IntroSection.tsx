@@ -25,7 +25,7 @@ export default function IntroSection () {
           />
           <div className="container">
             <div className="text-center mb-8">
-              <h2 className="section-title">인사말</h2>
+              <h2 className="section-title">회사소개</h2>
               <div className="divider-modern mx-auto w-24 mb-6" />
               <p className="section-subtitle">
                 와프(Waff)는{" "}
@@ -48,21 +48,20 @@ export default function IntroSection () {
 
             <div className="rounded-xl bg-accent/10 border border-border p-6">
               <p className="text-lg text-muted-foreground leading-relaxed">
-                안녕하십니까?
-                <br/><br/>
                 <span className="text-primary font-bold">와프(Waff)</span>
-                는 설비 개조공사(Retrofit) 전문기업으로 성장하여, 설비와 접목시킨 스마트공장 솔루션을 제공하고있습니다.
-                <br/> 
-                산업환경 변화에 발 맞추어 사업영역을 자동차·철강부품에서 첨단신소재분야로 확대하고자 합니다.
-                <br/><br/>
-                한발 앞서 시대의 흐름과 변화를 예측하고 고객의 눈높이에 맞춘 품질경영을 바탕으로 고객만족을 넘어서 고객감동을 실천하겠습니다.
+                는 2012년부터 축적한 소프트웨어 개발 역량과 기계 제어 노하우를 융합해,<br/>
+                고객 설비의 잠재력을 극대화하는 첨단 스마트 제조 솔루션을 제공합니다.<br/>
                 <br/>
-                오랫동안 와프에 아낌없는 성원을 보내주신 모든 고객 여러분께 다시 한번 깊은 감사의 말씀 드리며, 고객가치를 최우선으로 생각하는 회사, <br/>
-                사람이 중심이 되는 회사, 미래를 예측하고 선도하는 와프가 되도록 임직원이 하나가 되어 열심히 나아가겠습니다.
-                <br/><br/>
-                감사합니다.
-                <br/><br/>
-                <span className="text-lg font-bold">대표 김민구</span>
+                단순히 노후 부품을 교체하는 수준을 넘어,<br/>
+                기존 설비의 성능을 최신 수준으로 업그레이드하고,<br/>
+                장비 상태를 실시간으로 모니터링하며,<br/>
+                수집된 데이터를 직관적으로 분석할 수 있는 환경을 구축합니다.<br/>
+                <br/>
+                설계 단계에서부터 실행·운영에 이르기까지 전 과정을 책임지며,<br/>
+                공정을 자동화하고 생산 효율을 향상시키는 토털 솔루션을 제공합니다.<br/>
+                <br/>
+                와프와 함께라면, 데이터를 기반으로 움직이는 스마트한 공장,<br/>
+                그리고 안정적이고 지속 가능한 비즈니스 성공이 현실이 됩니다.<br/>
               </p>
             </div>
           </div>
