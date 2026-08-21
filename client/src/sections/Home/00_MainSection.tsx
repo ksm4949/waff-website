@@ -1,32 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function HomeSection () {
+    const { text } = useLanguage();
     return (
         <section id="home" className="relative overflow-hidden bg-gradient-to-br from-white to-gray-500  py-20 md:py-40">
             <div className="container">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
                   <div className="inline-block px-4 py-2 bg-primary/90 rounded-full border border-primary/20 backdrop-blur-sm">
-                    <span className="text-sm font-semibold text-white/90">제조 혁신을 이끄는 디지털 전환</span>
+                    <span className="text-sm font-semibold text-white/90">{text("제조 혁신을 이끄는 디지털 전환", "Digital transformation for manufacturing innovation")}</span>
                   </div>
                   <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight tracking-tight">
-                    스마트 제조의
+                    {text("스마트 제조의", "The future of")}
                     <span className="block text-transparent bg-clip-text bg-gradient-to-tl from-primary via-cyan-500 to-accent">
-                      미래를 함께
+                      {text("미래를 함께", "smart manufacturing")}
                     </span>
                   </h1>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    <span className="text-accent font-bold">와프</span>
-                    는 IT와 OT의 완벽한 통합을 통해 제조업의 디지털 전환을 선도합니다.
+                    <span className="text-accent font-bold">WAFF</span>
+                    {text("는 IT와 OT의 완벽한 통합을 통해 제조업의 디지털 전환을 선도합니다.", " leads manufacturing digital transformation through seamless IT and OT integration.")}
                     <br/> 
-                    스마트팩토리, CNC Retrofit(CNC 개조), HMI 솔루션으로 당신의 공장을 미래로 이끕니다.
+                    {text("스마트팩토리, CNC Retrofit(CNC 개조), HMI 솔루션으로 당신의 공장을 미래로 이끕니다.", "We bring your factory into the future with smart factory, CNC retrofit, and HMI solutions.")}
                   </p>
                   <div className="flex gap-4 pt-4">
                     <a href="#about">
                         <Button className="group px-6 py-3 flex items-center justify-center gap-2 bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 rounded-lg font-semibold">
                           <span className="transition-transform duration-200 ease-out group-hover:translate-x-0.5">
-                            회사개요
+                            {text("회사개요", "Company overview")}
                           </span>
                           <ArrowRight className="w-4 h-4 transition-transform duration-200 ease-out group-hover:translate-x-1" />
                         </Button>
@@ -34,7 +36,7 @@ export default function HomeSection () {
                     <a href="#core-solutions">
                       <Button className="group px-8 py-3 flex items-center justify-center gap-2 bg-gradient-to-br from-primary via-cyan-500 to-accent hover:from-primary hover:via-cyan-600 hover:to-accent text-white transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 rounded-lg font-semibold">
                         <span className="transition-transform duration-200 ease-out group-hover:-translate-x-0.5">
-                            솔루션 알아보기
+                            {text("솔루션 알아보기", "Explore solutions")}
                         </span>
                         <ArrowRight className="w-4 h-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5" />
                       </Button>

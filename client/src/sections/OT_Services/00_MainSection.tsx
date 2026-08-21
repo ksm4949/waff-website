@@ -1,6 +1,8 @@
 import { Wrench, User } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Service_OT_MainSection () {
+    const { text } = useLanguage();
     return (
         <section 
           id="ot_main" 
@@ -49,17 +51,17 @@ export default function Service_OT_MainSection () {
                 <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 transition-colors">
                   <Wrench className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit (CNC 개조)</h3>
+                <h3 className="text-xl font-bold text-foreground mb-3">{text("CNC Retrofit (CNC 개조)", "CNC Retrofit")}</h3>
                 <div className="flex gap-3 mb-4">
                     <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
                     <div>
-                      <h4 className="font-semibold text-foreground">Retrofit을 통해 컨트롤러와 서보 모터, 케이블, 판넬 등을 교체하여 저비용으로 20년 이상 사용 가능하도록 최신장비로 업그레이드</h4>
-                      <p className="text-sm text-muted-foreground">노후화된 CNC 장비는 잦은 트러블로 생산 가동 시간이 현저히 줄어들고 장비의 직각도나 평행도가 틀어져 품질 이슈가 발생할 확률이 높습니다.</p>
+                      <h4 className="font-semibold text-foreground">{text("Retrofit을 통해 컨트롤러와 서보 모터, 케이블, 판넬 등을 교체하여 저비용으로 20년 이상 사용 가능하도록 최신장비로 업그레이드", "Upgrade controllers, servo motors, cables, and panels through retrofit for cost-effective operation over 20 years.")}</h4>
+                      <p className="text-sm text-muted-foreground">{text("노후화된 CNC 장비는 잦은 트러블로 생산 가동 시간이 현저히 줄어들고 장비의 직각도나 평행도가 틀어져 품질 이슈가 발생할 확률이 높습니다.", "Aging CNC equipment is prone to frequent problems, reduced operating time, and quality issues caused by alignment errors.")}</p>
                     </div>
                 </div>
                 
                 <div className="mt-auto text-primary font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
-                  상세 보기 →
+                  {text("상세 보기", "Learn more")} →
                 </div>
               </div>
               
@@ -72,17 +74,17 @@ export default function Service_OT_MainSection () {
                 <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4 transition-colors">
                   <User className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">HMI(Human-Machine Interface) 솔루션</h3>
+                <h3 className="text-xl font-bold text-foreground mb-3">{text("HMI(Human-Machine Interface) 솔루션", "HMI (Human-Machine Interface) Solutions")}</h3>
                 <div className="flex gap-3 mb-4">
                     <div className="flex-shrink-0 w-2 h-2 bg-accent rounded-full mt-2" />
                     <div>
-                      <h4 className="font-semibold text-foreground">공장 환경에 맞는 수집 데이터 설계를 바탕으로 다양한 데이터를 수집해 화면 인터페이스로 구현합니다.</h4>
-                      <p className="text-sm text-muted-foreground">PLC 바탕으로 데이터 수집 / Interface 설계 및 구현</p>
+                      <h4 className="font-semibold text-foreground">{text("공장 환경에 맞는 수집 데이터 설계를 바탕으로 다양한 데이터를 수집해 화면 인터페이스로 구현합니다.", "Collect production data based on factory-specific designs and present it through purpose-built interfaces.")}</h4>
+                      <p className="text-sm text-muted-foreground">{text("PLC 바탕으로 데이터 수집 / Interface 설계 및 구현", "PLC-based data collection and interface design")}</p>
                     </div>
                 </div>
               
                 <div className="mt-auto text-primary font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
-                  상세 보기 →
+                  {text("상세 보기", "Learn more")} →
                 </div>
               </div>
               

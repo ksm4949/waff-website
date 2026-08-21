@@ -6,6 +6,7 @@ import { Route, Switch, useLocation } from "wouter";
 import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import Header from "@/components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -82,10 +83,12 @@ function App() {
     <ErrorBoundary>
       <HelmetProvider>
         <ThemeProvider defaultTheme="light">
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
+          <LanguageProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </HelmetProvider>
     </ErrorBoundary>

@@ -12,6 +12,7 @@ import { ChevronDownIcon, ChevronUpIcon, File, FileArchive, FileImage, FileText 
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation, useRoute } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type NeighborPost = { id: number; title: string } | null;
 type HeadingNavItem = { id: string; text: string };
@@ -86,6 +87,7 @@ function AttachmentTypeIcon({ fileName }: { fileName: string }) {
 }
 
 export default function BlogDetail() {
+  const { text } = useLanguage();
   const [, params] = useRoute("/blog/:id");
   const [, navigate] = useLocation();
   const isAdmin = typeof window !== "undefined" && window.localStorage.getItem("isAdmin") === "true";
@@ -100,10 +102,13 @@ export default function BlogDetail() {
   const [error, setError] = useState<string | null>(null);
   const [activeHeadingId, setActiveHeadingId] = useState("");
   const canonicalUrl = Number.isFinite(postId) && postId > 0 ? `${SITE_URL}/blog/${postId}` : `${SITE_URL}/blog`;
-  const pageTitle = post ? `${post.title} | WAFF 블로그` : "블로그 상세 | WAFF";
+  const categoryLabel = post
+    ? text(blogCategoryLabel[post.category], post.category === "notice" ? "Notices" : post.category === "external" ? "External Activities" : "Technology")
+    : "";
+  const pageTitle = post ? `${post.title} | ${text("WAFF 블로그", "WAFF Blog")}` : text("블로그 상세 | WAFF", "Blog Post | WAFF");
   const pageDesc = post
-    ? truncate(stripHtml(post.content) || `${blogCategoryLabel[post.category]} 게시글입니다.`)
-    : "WAFF 블로그 상세 게시글 페이지입니다.";
+    ? truncate(stripHtml(post.content) || text(`${blogCategoryLabel[post.category]} 게시글입니다.`, `${categoryLabel} post.`))
+    : text("WAFF 블로그 상세 게시글 페이지입니다.", "WAFF blog post page.");
   const ogImage = post?.imageUrl ? toAbsoluteUrl(toAssetUrl(post.imageUrl)) : DEFAULT_OG_IMAGE;
   const categoryListHref = post
     ? isAdmin
@@ -115,7 +120,7 @@ export default function BlogDetail() {
   useEffect(() => {
     if (!Number.isFinite(postId) || postId <= 0) {
       setLoading(false);
-      setError("잘못된 게시글입니다.");
+      setError(text("잘못된 게시글입니다.", "Invalid post."));
       return;
     }
 
@@ -134,7 +139,7 @@ export default function BlogDetail() {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "게시글을 불러오지 못했습니다.");
+          setError(err instanceof Error ? err.message : text("게시글을 불러오지 못했습니다.", "Unable to load the post."));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -145,7 +150,7 @@ export default function BlogDetail() {
     return () => {
       cancelled = true;
     };
-  }, [postId]);
+  }, [postId, text]);
 
   useEffect(() => {
     const headings = detailContent.headings;
@@ -181,8 +186,8 @@ export default function BlogDetail() {
     return (
       <section className="relative overflow-hidden bg-white py-20 md:py-28">
         <Helmet>
-          <title>블로그 상세 | WAFF</title>
-          <meta name="description" content="WAFF 블로그 상세 게시글을 불러오는 중입니다." />
+          <title>{text("블로그 상세 | WAFF", "Blog Post | WAFF")}</title>
+          <meta name="description" content={text("WAFF 블로그 상세 게시글을 불러오는 중입니다.", "Loading the WAFF blog post.")} />
           <link rel="canonical" href={canonicalUrl} />
           <meta name="robots" content="noindex, follow" />
         </Helmet>
@@ -205,7 +210,7 @@ export default function BlogDetail() {
           />
         </div>
         <div className="container relative z-10 max-w-4xl">
-          <p className="text-sm text-muted-foreground">불러오는 중...</p>
+          <p className="text-sm text-muted-foreground">{text("불러오는 중...", "Loading...")}</p>
         </div>
       </section>
     );
@@ -215,8 +220,8 @@ export default function BlogDetail() {
     return (
       <section className="relative overflow-hidden bg-white py-20 md:py-28">
         <Helmet>
-          <title>게시글을 찾을 수 없습니다 | WAFF 블로그</title>
-          <meta name="description" content={error ?? "요청하신 게시글을 찾을 수 없습니다."} />
+          <title>{text("게시글을 찾을 수 없습니다 | WAFF 블로그", "Post Not Found | WAFF Blog")}</title>
+          <meta name="description" content={error ?? text("요청하신 게시글을 찾을 수 없습니다.", "The requested post could not be found.")} />
           <link rel="canonical" href={canonicalUrl} />
           <meta name="robots" content="noindex, follow" />
         </Helmet>
@@ -240,10 +245,10 @@ export default function BlogDetail() {
         </div>
         <div className="container relative z-10 max-w-4xl">
           <div className="rounded-lg border border-border/70 bg-background p-8 text-center">
-            <p className="text-lg font-semibold">{error ?? "게시글을 찾을 수 없습니다."}</p>
+            <p className="text-lg font-semibold">{error ?? text("게시글을 찾을 수 없습니다.", "The requested post could not be found.")}</p>
             <div className="mt-6">
               <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                <Link href={blogHomeHref}>목록으로</Link>
+                <Link href={blogHomeHref}>{text("목록으로", "Back to List")}</Link>
               </Button>
             </div>
           </div>
@@ -253,13 +258,13 @@ export default function BlogDetail() {
   }
 
   const handleDelete = async () => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (!window.confirm(text("정말 삭제하시겠습니까?", "Are you sure you want to delete this post?"))) return;
     try {
       await deleteBlogPost(post.id);
-      window.alert("게시글을 삭제했습니다.");
+      window.alert(text("게시글을 삭제했습니다.", "The post has been deleted."));
       navigate("/admin/blog");
     } catch (err) {
-      const message = err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다.";
+      const message = err instanceof Error ? err.message : text("삭제 중 오류가 발생했습니다.", "An error occurred while deleting the post.");
       window.alert(message);
     }
   };
@@ -317,22 +322,22 @@ export default function BlogDetail() {
             <div className="rounded-lg border-2 border-[#7d8ca8] bg-background p-6 md:p-8">
               <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-primary">
                 <Link href={blogHomeHref} className="hover:underline">
-                  블로그
+                  {text("블로그", "Blog")}
                 </Link>
                 <span className="text-[#7d8ca8]">&gt;</span>
                 <Link href={categoryListHref} className="hover:underline">
-                  {blogCategoryLabel[post.category]}
+                  {categoryLabel}
                 </Link>
               </div>
               <h1 className="mt-2 text-2xl font-bold md:text-3xl">{post.title}</h1>
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-                  <span>작성자: {post.author}</span>
-                  <span>작성일: {post.date}</span>
-                  <span>조회: {post.views}</span>
+                  <span>{text("작성자", "Author")}: {post.author}</span>
+                  <span>{text("작성일", "Date")}: {post.date}</span>
+                  <span>{text("조회", "Views")}: {post.views}</span>
                 </div>
                 <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                  <Link href={categoryListHref}>목록으로</Link>
+                  <Link href={categoryListHref}>{text("목록으로", "Back to List")}</Link>
                 </Button>
               </div>
 
@@ -382,7 +387,7 @@ export default function BlogDetail() {
 
               {attachments.length > 0 ? (
                 <div className="mt-6 rounded-md border border-border bg-white p-4">
-                  <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">첨부파일</p>
+                  <p className="mb-3 text-sm font-semibold text-[#0b1f4d]">{text("첨부파일", "Attachments")}</p>
                   <ul className="space-y-2">
                     {attachments.map((item) => (
                       <li
@@ -409,27 +414,27 @@ export default function BlogDetail() {
                 <div className="flex items-center border-b border-border px-4 py-3 transition-colors hover:bg-muted/40">
                   <span className="inline-flex w-20 shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground">
                     <ChevronUpIcon className="size-4" />
-                    이전글
+                    {text("이전글", "Previous Post")}
                   </span>
                   {prevPost ? (
                     <Link href={`/blog/${prevPost.id}`} className="text-sm hover:text-primary hover:underline">
                       {prevPost.title}
                     </Link>
                   ) : (
-                    <span className="text-sm text-muted-foreground">이전 글이 없습니다.</span>
+                    <span className="text-sm text-muted-foreground">{text("이전 글이 없습니다.", "There is no previous post.")}</span>
                   )}
                 </div>
                 <div className="flex items-center px-4 py-3 transition-colors hover:bg-muted/40">
                   <span className="inline-flex w-20 shrink-0 items-center gap-1 text-sm font-medium text-muted-foreground">
                     <ChevronDownIcon className="size-4" />
-                    다음글
+                    {text("다음글", "Next Post")}
                   </span>
                   {nextPost ? (
                     <Link href={`/blog/${nextPost.id}`} className="text-sm hover:text-primary hover:underline">
                       {nextPost.title}
                     </Link>
                   ) : (
-                    <span className="text-sm text-muted-foreground">다음 글이 없습니다.</span>
+                    <span className="text-sm text-muted-foreground">{text("다음 글이 없습니다.", "There is no next post.")}</span>
                   )}
                 </div>
               </div>
@@ -438,7 +443,7 @@ export default function BlogDetail() {
                 {isAdmin ? (
                   <>
                     <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                      <Link href={`/admin/blog/write?mode=edit&id=${post.id}`}>수정</Link>
+                      <Link href={`/admin/blog/write?mode=edit&id=${post.id}`}>{text("수정", "Edit")}</Link>
                     </Button>
                     <Button
                       type="button"
@@ -446,12 +451,12 @@ export default function BlogDetail() {
                       className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
                       onClick={handleDelete}
                     >
-                      삭제
+                      {text("삭제", "Delete")}
                     </Button>
                   </>
                 ) : null}
                 <Button asChild type="button" variant="outline" className="hover:bg-gray-100 hover:text-foreground">
-                  <Link href={categoryListHref}>목록으로</Link>
+                  <Link href={categoryListHref}>{text("목록으로", "Back to List")}</Link>
                 </Button>
               </div>
             </div>

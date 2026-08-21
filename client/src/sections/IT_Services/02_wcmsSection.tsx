@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const images = [
   "/images/it_services/cms.png",
@@ -8,6 +9,7 @@ const images = [
 ];
 
 export default function CMS_MainSection() {
+    const { text } = useLanguage();
     const [current, setCurrent] = useState(0);
 
     useEffect(() => {
@@ -25,7 +27,7 @@ export default function CMS_MainSection() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                         <div className="space-y-6">
                             <div className="inline-block px-4 py-2 bg-primary rounded-full mb-6">
-                                <span className="text-sm font-semibold text-white/90">IT·OT 통합 솔루션</span>
+                                <span className="text-sm font-semibold text-white/90">{text("IT·OT 통합 솔루션", "Integrated IT/OT Solution")}</span>
                             </div>
                             <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight mb-6">
                                 W-CMS
@@ -34,7 +36,7 @@ export default function CMS_MainSection() {
                                 </span>
                             </h1>
                             <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-                                생산 현장을 실시간으로 보여주는 통합 대시보드. 사용자 맞춤 화면 구성과 데이터 시각화를 통해 전체 현황을 한눈에 파악하세요.
+                                {text("생산 현장을 실시간으로 보여주는 통합 대시보드. 사용자 맞춤 화면 구성과 데이터 시각화를 통해 전체 현황을 한눈에 파악하세요.", "An integrated dashboard that shows your production floor in real time. View the whole operation at a glance through tailored screens and data visualization.")}
                             </p>
                         </div>
 
@@ -56,7 +58,7 @@ export default function CMS_MainSection() {
                             <img
                               key={index}
                               src={img}
-                              alt="스마트팩토리 구축, 모니터링/MES/CMS"
+                              alt={text("스마트팩토리 구축, 모니터링/MES/CMS", "Smart factory monitoring, MES, and CMS")}
                               className={`
                                 absolute inset-0 w-full h-full object-center rounded-2xl
                                 shadow-2xl border border-white/40
@@ -101,37 +103,34 @@ export default function CMS_MainSection() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                         <div className="space-y-8">
                             <div>
-                                <h2 className="section-title">W-CMS란?</h2>
+                                <h2 className="section-title">{text("W-CMS란?", "What is W-CMS?")}</h2>
                                 <p className="text-lg text-muted-foreground leading-relaxed">
-                                    IT와 OT(Operational Technology)의 통합 역량을 기반으로 설계된{" "}
-                                    <span className="text-accent font-bold">제어 관리 시스템</span>
-                                    입니다. 
-                                    생산 설비에서 수집된 데이터를 자동으로 변환·가공하여 기업의 요구사항에 맞는 맞춤형 인터페이스로 제공합니다.
+                                    {text("IT와 OT(Operational Technology)의 통합 역량을 기반으로 설계된 제어 관리 시스템입니다. 생산 설비에서 수집된 데이터를 자동으로 변환·가공하여 기업 요구사항에 맞는 맞춤형 인터페이스로 제공합니다.", "W-CMS is a control management system built on integrated IT and OT capabilities. It automatically transforms equipment data into tailored interfaces that meet each company’s requirements.")}
                                 </p>
                             </div>
 
                             <div className="space-y-4">
-                                <h3 className="font-semibold text-lg text-foreground">핵심 가치</h3>
+                                <h3 className="font-semibold text-lg text-foreground">{text("핵심 가치", "Core Values")}</h3>
                                 <div className="space-y-3">
                                 <div className="flex gap-3 transition-all duration-300 ease-out hover:scale-[1.03] hover:bg-muted/40 rounded-lg p-2">
                                     <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
                                     <div>
-                                    <p className="font-medium text-foreground">실시간 데이터 수집</p>
-                                    <p className="text-sm text-muted-foreground">설비의 모든 정보를 실시간으로 수집하고 모니터링</p>
+                                    <p className="font-medium text-foreground">{text("실시간 데이터 수집", "Real-Time Data Collection")}</p>
+                                    <p className="text-sm text-muted-foreground">{text("설비의 모든 정보를 실시간으로 수집하고 모니터링", "Collect and monitor all equipment information in real time")}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 transition-all duration-300 ease-out hover:scale-[1.03] hover:bg-muted/40 rounded-lg p-2">
                                     <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
                                     <div>
-                                    <p className="font-medium text-foreground">지능형 데이터 변환</p>
-                                    <p className="text-sm text-muted-foreground">복잡한 데이터를 직관적인 형태로 자동 변환</p>
+                                    <p className="font-medium text-foreground">{text("지능형 데이터 변환", "Intelligent Data Transformation")}</p>
+                                    <p className="text-sm text-muted-foreground">{text("복잡한 데이터를 직관적인 형태로 자동 변환", "Automatically transform complex data into intuitive formats")}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 transition-all duration-300 ease-out hover:scale-[1.03] hover:bg-muted/40 rounded-lg p-2">
                                     <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
                                     <div>
-                                    <p className="font-medium text-foreground">맞춤형 인터페이스</p>
-                                    <p className="text-sm text-muted-foreground">각 기업의 특성에 맞는 화면 구성 및 레이아웃</p>
+                                    <p className="font-medium text-foreground">{text("맞춤형 인터페이스", "Tailored Interface")}</p>
+                                    <p className="text-sm text-muted-foreground">{text("각 기업의 특성에 맞는 화면 구성 및 레이아웃", "Screen composition and layout tailored to each company")}</p>
                                     </div>
                                 </div>
                                 </div>
@@ -141,7 +140,7 @@ export default function CMS_MainSection() {
                         <div className="relative h-96 border rounded-lg">
                         <img
                             src="/images/example/cms_intro.png"
-                            alt="W-CMS Dashboard, CMS/MES/스마트팩토리"
+                            alt={text("W-CMS Dashboard, CMS/MES/스마트팩토리", "W-CMS dashboard for CMS, MES, and smart factory")}
                             className="w-full h-full object-cover rounded-lg shadow-lg"
                         />
                         </div>

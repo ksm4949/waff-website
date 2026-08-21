@@ -11,6 +11,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const BLOG_FALLBACK_IMAGE = "/images/logos/logoKR.png";
 const SITE_URL = "https://www.waff.co.kr";
@@ -45,6 +46,7 @@ function BlogCard({
   onDelete?: (id: number) => void;
   compact?: boolean;
 }) {
+  const { text } = useLanguage();
   const hasImage = Boolean(imageUrl);
   const displayImage = hasImage ? toAssetUrl(imageUrl) : BLOG_FALLBACK_IMAGE;
   const excerpt = truncateText(toExcerptText(content), compact ? 56 : 92);
@@ -101,7 +103,7 @@ function BlogCard({
                 size="icon"
                 className="h-6 w-6 rounded-full border-[#9fc3f7] bg-white text-[#1f6fd9] hover:bg-[#eef5ff] hover:text-[#0b4fb0]"
               >
-                <Link href={`/admin/blog/write?mode=edit&id=${id}`} aria-label="수정">
+                <Link href={`/admin/blog/write?mode=edit&id=${id}`} aria-label={text("수정", "Edit")}>
                   <Pencil className="h-3.5 w-3.5" />
                 </Link>
               </Button>
@@ -111,7 +113,7 @@ function BlogCard({
                 size="icon"
                 className="h-6 w-6 rounded-full border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700"
                 onClick={() => onDelete?.(id)}
-                aria-label="삭제"
+                aria-label={text("삭제", "Delete")}
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
@@ -125,20 +127,21 @@ function BlogCard({
 }
 
 function EmptyBlogCard({ compact = false }: { compact?: boolean }) {
+  const { text } = useLanguage();
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-dashed border-[#9aa8c2] bg-white">
       <div className="h-[40%] bg-[#f3f6fb]" />
       <div className={`${compact ? "p-3" : "p-4 md:p-5"} flex h-[60%] flex-col gap-2`}>
-        <p className="text-xs font-semibold text-[#5b6b88]">안내</p>
+        <p className="text-xs font-semibold text-[#5b6b88]">{text("안내", "Notice")}</p>
         <h3
           className={`${
             compact ? "min-h-[1.5rem] line-clamp-1 text-base leading-[1.3]" : "h-[3rem] line-clamp-2 text-lg leading-[1.3]"
           } shrink-0 overflow-hidden break-words font-bold text-[#314160]`}
         >
-          게시물이 존재하지 않습니다.
+          {text("게시물이 존재하지 않습니다.", "No posts are available.")}
         </h3>
         <p className={`${compact ? "flex-1 text-xs leading-[1.45]" : "flex-1 text-sm leading-[1.5]"} text-muted-foreground`}>
-          곧 새로운 소식이 등록될 예정입니다.
+          {text("곧 새로운 소식이 등록될 예정입니다.", "New updates will be posted soon.")}
         </p>
       </div>
     </div>
@@ -156,6 +159,7 @@ function CategorySection({
   adminMode: boolean;
   onDelete: (id: number) => void;
 }) {
+  const { text } = useLanguage();
   const moreHref = adminMode ? `/admin/blog/category/${category}` : `/blog/category/${category}`;
   const displayPosts = posts.slice(0, 3);
   const sectionId = `blog-section-${category}`;
@@ -167,10 +171,10 @@ function CategorySection({
     <div id={sectionId} className="scroll-mt-28 xl:px-6">
       <div className="mb-4 flex items-center justify-between gap-3">
         <h2 className="inline-block border-b-2 border-[#f2c300] pb-0.5 text-2xl font-bold text-[#0b1f4d]">
-          {blogCategoryLabel[category]}
+          {text(blogCategoryLabel[category], category === "notice" ? "Notices" : category === "external" ? "External Activities" : "Technology")}
         </h2>
         <Button asChild type="button" variant="outline" className="bg-white">
-          <Link href={moreHref}>더보기</Link>
+          <Link href={moreHref}>{text("더보기", "View More")}</Link>
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-stretch">
@@ -179,7 +183,7 @@ function CategorySection({
             <BlogCard
               id={firstPost.id}
               imageUrl={firstPost.imageUrl}
-              categoryLabel={blogCategoryLabel[category]}
+              categoryLabel={text(blogCategoryLabel[category], category === "notice" ? "Notices" : category === "external" ? "External Activities" : "Technology")}
               title={firstPost.title}
               content={firstPost.content}
               date={firstPost.date}
@@ -196,7 +200,7 @@ function CategorySection({
               <BlogCard
                 id={secondPost.id}
                 imageUrl={secondPost.imageUrl}
-                categoryLabel={blogCategoryLabel[category]}
+                categoryLabel={text(blogCategoryLabel[category], category === "notice" ? "Notices" : category === "external" ? "External Activities" : "Technology")}
                 title={secondPost.title}
                 content={secondPost.content}
                 date={secondPost.date}
@@ -213,7 +217,7 @@ function CategorySection({
               <BlogCard
                 id={thirdPost.id}
                 imageUrl={thirdPost.imageUrl}
-                categoryLabel={blogCategoryLabel[category]}
+                categoryLabel={text(blogCategoryLabel[category], category === "notice" ? "Notices" : category === "external" ? "External Activities" : "Technology")}
                 title={thirdPost.title}
                 content={thirdPost.content}
                 date={thirdPost.date}
@@ -232,6 +236,7 @@ function CategorySection({
 }
 
 export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
+  const { text } = useLanguage();
   const [, navigate] = useLocation();
   const [items, setItems] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -252,7 +257,7 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "블로그 데이터를 불러오지 못했습니다.");
+          setError(err instanceof Error ? err.message : text("블로그 데이터를 불러오지 못했습니다.", "Unable to load blog data."));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -263,7 +268,7 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
     return () => {
       cancelled = true;
     };
-  }, [refreshToken]);
+  }, [refreshToken, text]);
 
   useEffect(() => {
     const syncRefreshToken = () => {
@@ -293,14 +298,14 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
   const techPosts = useMemo(() => items.filter((x) => x.category === "tech"), [items]);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (!window.confirm(text("정말 삭제하시겠습니까?", "Are you sure you want to delete this post?"))) return;
     try {
       await deleteBlogPost(id);
       const response = await fetchBlogHome();
       setItems(Array.isArray(response.items) ? response.items : []);
-      window.alert("게시글을 삭제했습니다.");
+      window.alert(text("게시글을 삭제했습니다.", "The post has been deleted."));
     } catch (err) {
-      const message = err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다.";
+      const message = err instanceof Error ? err.message : text("삭제 중 오류가 발생했습니다.", "An error occurred while deleting the post.");
       window.alert(message);
     }
   };
@@ -321,25 +326,25 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
   return (
     <section id="blog" className="relative overflow-hidden bg-white py-20 md:py-28">
       <Helmet>
-        <title>블로그 | WAFF</title>
+        <title>{text("블로그 | WAFF", "Blog | WAFF")}</title>
         <meta
           name="description"
-          content="WAFF 블로그에서 공지사항, 대외활동, 기술 콘텐츠를 확인해보세요."
+          content={text("WAFF 블로그에서 공지사항, 대외활동, 기술 콘텐츠를 확인해보세요.", "Explore notices, external activities, and technology content on the WAFF blog.")}
         />
         <link rel="canonical" href={`${SITE_URL}/blog`} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="블로그 | WAFF" />
+        <meta property="og:title" content={text("블로그 | WAFF", "Blog | WAFF")} />
         <meta
           property="og:description"
-          content="WAFF 블로그에서 공지사항, 대외활동, 기술 콘텐츠를 확인해보세요."
+          content={text("WAFF 블로그에서 공지사항, 대외활동, 기술 콘텐츠를 확인해보세요.", "Explore notices, external activities, and technology content on the WAFF blog.")}
         />
         <meta property="og:url" content={`${SITE_URL}/blog`} />
         <meta property="og:image" content={`${SITE_URL}/images/logos/logoKR.png`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="블로그 | WAFF" />
+        <meta name="twitter:title" content={text("블로그 | WAFF", "Blog | WAFF")} />
         <meta
           name="twitter:description"
-          content="WAFF 블로그에서 공지사항, 대외활동, 기술 콘텐츠를 확인해보세요."
+          content={text("WAFF 블로그에서 공지사항, 대외활동, 기술 콘텐츠를 확인해보세요.", "Explore notices, external activities, and technology content on the WAFF blog.")}
         />
         <meta name="twitter:image" content={`${SITE_URL}/images/logos/logoKR.png`} />
         {adminMode ? <meta name="robots" content="noindex, nofollow" /> : null}
@@ -365,15 +370,15 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
       <div className="container relative z-10 space-y-16">
         <div className="flex flex-wrap items-end justify-between gap-4 rounded-2xl border border-[#cfd8ea] bg-[#eff1f5] px-8 py-10 shadow-[0_14px_26px_-18px_rgba(11,31,77,0.45)] md:px-10">
           <div>
-            <h1 className="text-3xl font-bold text-[#0b1f4d] md:text-4xl">블로그</h1>
-            <p className="mt-3 text-muted-foreground">공지사항, 대외활동, 기술 블로그 소식을 확인해보세요.</p>
+            <h1 className="text-3xl font-bold text-[#0b1f4d] md:text-4xl">{text("블로그", "Blog")}</h1>
+            <p className="mt-3 text-muted-foreground">{text("공지사항, 대외활동, 기술 블로그 소식을 확인해보세요.", "Explore notices, external activities, and technology blog updates.")}</p>
           </div>
           <div className="flex flex-col items-start gap-2 sm:items-end">
             <div className="flex min-h-9 flex-wrap justify-end gap-2">
               {adminMode ? (
                 <>
                   <Button asChild className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
-                    <Link href="/admin/blog/write">새 글 작성</Link>
+                    <Link href="/admin/blog/write">{text("새 글 작성", "New Post")}</Link>
                   </Button>
                   <Button
                     type="button"
@@ -381,7 +386,7 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
                     onClick={handleLogout}
                     className="bg-white hover:bg-gray-100"
                   >
-                    로그아웃
+                    {text("로그아웃", "Log Out")}
                   </Button>
                 </>
               ) : null}
@@ -389,7 +394,7 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
           </div>
         </div>
 
-        {loading ? <p className="text-sm text-muted-foreground">불러오는 중...</p> : null}
+        {loading ? <p className="text-sm text-muted-foreground">{text("불러오는 중...", "Loading...")}</p> : null}
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
         {!loading ? (
@@ -405,7 +410,7 @@ export default function Blog({ adminMode = false }: { adminMode?: boolean }) {
           type="button"
           onClick={handleScrollToTop}
           className="fixed bottom-8 right-8 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-accent text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
-          aria-label="맨 위로 이동"
+          aria-label={text("맨 위로 이동", "Back to top")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

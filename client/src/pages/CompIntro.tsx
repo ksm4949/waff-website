@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useLocation } from "wouter";
 import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import IntroSection from "@/sections/CompIntro/00_IntroSection"
 import VisionSection from "@/sections/CompIntro/02_VisionSection";
@@ -12,6 +13,7 @@ import HistorySection from "@/sections/CompIntro/06_HistorySection"
 import ContactSection from "@/sections/CompIntro/07_ContactSection"
 
 export default function CompIntro() {
+  const { text } = useLanguage();
   const [location] = useLocation();
     const [showFloatingButton, setShowFloatingButton] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -73,27 +75,27 @@ export default function CompIntro() {
     return (
       <>
         <Helmet>
-          <title>회사소개 | WAFF</title>
+          <title>{text("회사소개 | WAFF", "Company | WAFF")}</title>
           <meta
             name="description"
-            content="WAFF 회사소개: 비전, 조직, 제조 DX 및 OT/IT 서비스 역량을 소개합니다."
+            content={text("WAFF 회사소개: 비전, 조직, 제조 DX 및 OT/IT 서비스 역량을 소개합니다.", "Learn about WAFF’s vision, organization, manufacturing DX, and OT/IT service capabilities.")}
           />
           <link rel="canonical" href="https://www.waff.co.kr/company" />
       
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="회사소개 | WAFF" />
+          <meta property="og:title" content={text("회사소개 | WAFF", "Company | WAFF")} />
           <meta
             property="og:description"
-            content="WAFF의 비전과 조직, 제조 혁신 역량을 확인하세요."
+            content={text("WAFF의 비전과 조직, 제조 혁신 역량을 확인하세요.", "Discover WAFF’s vision, organization, and manufacturing innovation capabilities.")}
           />
           <meta property="og:url" content="https://www.waff.co.kr/company" />
           <meta property="og:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
       
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="회사소개 | WAFF" />
+          <meta name="twitter:title" content={text("회사소개 | WAFF", "Company | WAFF")} />
           <meta
             name="twitter:description"
-            content="WAFF의 비전과 조직, 제조 혁신 역량을 확인하세요."
+            content={text("WAFF의 비전과 조직, 제조 혁신 역량을 확인하세요.", "Discover WAFF’s vision, organization, and manufacturing innovation capabilities.")}
           />
           <meta name="twitter:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
         </Helmet>
@@ -108,13 +110,13 @@ export default function CompIntro() {
 
             <RightSideNav
               items={[
-                { id: "intro", label: "회사소개" },
+                { id: "intro", label: text("회사소개", "Company") },
                 { id: "vision", label: "Vision" },
-                { id: "org", label: "조직구성" },
-                { id: "technology", label: "기술력과 인증" },
-                { id: "partner", label: "주요 고객" },
-                { id: "history", label: "연혁" },
-                { id: "contact", label: "찾아오시는 길" },
+                { id: "org", label: text("조직구성", "Organization") },
+                { id: "technology", label: text("기술력과 인증", "Technology & Certifications") },
+                { id: "partner", label: text("주요 고객", "Key Customers") },
+                { id: "history", label: text("연혁", "History") },
+                { id: "contact", label: text("찾아오시는 길", "Directions") },
               ]}
             />
 
@@ -130,7 +132,7 @@ export default function CompIntro() {
               <button
                 onClick={scrollToTop}
                 className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-accent rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-white hover:scale-110 animate-in fade-in slide-in-from-bottom-4"
-                aria-label="맨 위로"
+                aria-label={text("맨 위로", "Back to top")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

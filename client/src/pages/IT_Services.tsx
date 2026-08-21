@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useLocation } from "wouter";
 import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import Service_IT_MainSection from "@/sections/IT_Services/00_MainSection";
 import MonitoringSection from "@/sections/IT_Services/01_MonitoringSection";
@@ -14,6 +15,7 @@ import ManageSection from "@/sections/IT_Services/04_ManageSection";
 import PMSection from "@/sections/IT_Services/05_PMSection";
 
 export default function IT_Services() {
+    const { text } = useLanguage();
     const [location] = useLocation();
     const [showFloatingButton, setShowFloatingButton] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
@@ -75,27 +77,27 @@ export default function IT_Services() {
     return (
       <>
         <Helmet>
-          <title>IT 서비스 | WAFF</title>
+          <title>{text("IT 서비스 | WAFF", "IT Services | WAFF")}</title>
           <meta
             name="description"
-            content="WAFF IT 서비스: MES, CMS, 데이터 연동 및 제조 현장 맞춤형 디지털 전환 솔루션을 제공합니다."
+            content={text("WAFF IT 서비스: MES, CMS, 데이터 연동 및 제조 현장 맞춤형 디지털 전환 솔루션을 제공합니다.", "WAFF IT services: MES, CMS, data integration, and tailored digital transformation solutions for manufacturing operations.")}
           />
           <link rel="canonical" href="https://www.waff.co.kr/itservice" />
 
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="IT 서비스 | WAFF" />
+          <meta property="og:title" content={text("IT 서비스 | WAFF", "IT Services | WAFF")} />
           <meta
             property="og:description"
-            content="제조 데이터 통합과 운영 최적화를 위한 WAFF IT 서비스를 확인하세요."
+            content={text("제조 데이터 통합과 운영 최적화를 위한 WAFF IT 서비스를 확인하세요.", "Discover WAFF IT services for manufacturing-data integration and operational optimization.")}
           />
           <meta property="og:url" content="https://www.waff.co.kr/itservice" />
           <meta property="og:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
 
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="IT 서비스 | WAFF" />
+          <meta name="twitter:title" content={text("IT 서비스 | WAFF", "IT Services | WAFF")} />
           <meta
             name="twitter:description"
-            content="제조 데이터 통합과 운영 최적화를 위한 WAFF IT 서비스를 확인하세요."
+            content={text("제조 데이터 통합과 운영 최적화를 위한 WAFF IT 서비스를 확인하세요.", "Discover WAFF IT services for manufacturing-data integration and operational optimization.")}
           />
           <meta name="twitter:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
         </Helmet>
@@ -112,12 +114,12 @@ export default function IT_Services() {
             <RightSideNav
               items={[
                 { id: "it_main", label: "IT Service" },
-                { id: "it_monitoring", label: "모니터링 / 제어 솔루션" },
+                { id: "it_monitoring", label: text("모니터링 / 제어 솔루션", "Monitoring / Control") },
                 { id: "cms_main", label: "W-CMS" },
-                { id: "cms_case", label: "W-CMS 적용사례" },
-                { id: "it_ai", label: "AI 기반 솔루션" },
-                { id: "it_manage", label: "관리 솔루션" },
-                { id: "it_pm", label: "생산관리 솔루션" },
+                { id: "cms_case", label: text("W-CMS 적용사례", "W-CMS Use Cases") },
+                { id: "it_ai", label: text("AI 기반 솔루션", "AI Solutions") },
+                { id: "it_manage", label: text("관리 솔루션", "Management Solutions") },
+                { id: "it_pm", label: text("생산관리 솔루션", "Production Management") },
               ]}
             />
 
@@ -141,7 +143,7 @@ export default function IT_Services() {
               <button
                 onClick={scrollToTop}
                 className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-accent rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-white hover:scale-110 animate-in fade-in slide-in-from-bottom-4"
-                aria-label="맨 위로"
+                aria-label={text("맨 위로", "Back to top")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

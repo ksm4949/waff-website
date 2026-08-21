@@ -1,6 +1,7 @@
 ﻿import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import { Language, useLanguage } from "@/contexts/LanguageContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 type SectionSubmenu = { title: string; section: string };
@@ -15,6 +16,7 @@ type MenuItem = {
 };
 
 export default function Header() {
+  const { language, setLanguage, text } = useLanguage();
   const [location] = useLocation();
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
@@ -111,17 +113,17 @@ export default function Header() {
   const menuData: MenuItem[] = [
     {
       id: "company",
-      title: "회사소개",
+      title: text("회사소개", "Company"),
       href: "/company",
       section: "intro",
       submenus: [
-        { title: "회사소개", section: "intro" },
+        { title: text("회사소개", "Company Overview"), section: "intro" },
         { title: "Vision", section: "vision" },
-        { title: "조직구성", section: "org" },
-        { title: "기술력과 인증", section: "technology" },
-        { title: "주요 고객", section: "partner" },
-        { title: "연혁", section: "history" },
-        { title: "찾아오시는 길", section: "contact" },
+        { title: text("조직구성", "Organization"), section: "org" },
+        { title: text("기술력과 인증", "Technology & Certifications"), section: "technology" },
+        { title: text("주요 고객", "Key Customers"), section: "partner" },
+        { title: text("연혁", "History"), section: "history" },
+        { title: text("찾아오시는 길", "Directions"), section: "contact" },
       ],
     },
     {
@@ -131,10 +133,10 @@ export default function Header() {
       section: "intro",
       submenus: [
         { section: "it_main", title: "IT Service" },
-        { section: "it_monitoring", title: "모니터링 / 제어 솔루션" },
-        { section: "it_ai", title: "AI 기반 솔루션" },
-        { section: "it_manage", title: "관리 솔루션" },
-        { section: "it_pm", title: "생산관리 솔루션" },
+        { section: "it_monitoring", title: text("모니터링 / 제어 솔루션", "Monitoring / Control") },
+        { section: "it_ai", title: text("AI 기반 솔루션", "AI Solutions") },
+        { section: "it_manage", title: text("관리 솔루션", "Management Solutions") },
+        { section: "it_pm", title: text("생산관리 솔루션", "Production Management") },
       ],
     },
     {
@@ -150,20 +152,20 @@ export default function Header() {
     },
     {
       id: "support",
-      title: "고객지원",
+      title: text("고객지원", "Support"),
       href: "/qna",
       section: "support",
       submenus: [
         { href: "/qna", title: "Q & A" },
-        { href: "/notice", title: "공지사항" },
+        { href: "/notice", title: text("공지사항", "Notices") },
       ],
     },
     {
       id: "blog",
-      title: "블로그",
+      title: text("블로그", "Blog"),
       href: "/blog",
       section: "blog",
-      submenus: [{ href: "/blog", title: "블로그" }],
+      submenus: [{ href: "/blog", title: text("블로그", "Blog") }],
     },
   ];
 
@@ -179,7 +181,8 @@ export default function Header() {
           </button>
         </Link>
 
-        <nav
+        <div className="hidden md:flex items-center gap-3">
+          <nav
           className="hidden md:inline-block relative"
           onMouseEnter={() => setShowMegaMenu(true)}
           onMouseLeave={() => {
@@ -189,7 +192,7 @@ export default function Header() {
         >
           <div className="inline-flex items-center">
             {menuData.map((menu) => (
-              <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[200px]">
+              <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[170px]">
                 <a
                   href={
                     isDirectMenu(menu.id)
@@ -227,7 +230,7 @@ export default function Header() {
             <div className="py-10">
               <div className="mx-auto grid w-fit grid-cols-5 gap-0">
                 {menuData.map((menu) => (
-                  <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[200px]">
+                  <div key={menu.id} onMouseEnter={() => setHoveredMenu(menu.id)} className="w-[170px]">
                     <ul className="space-y-2 text-left pl-4">
                       {menu.submenus.map((submenu, index) => (
                         <li key={index}>
@@ -260,21 +263,23 @@ export default function Header() {
               </div>
             </div>
           </div>
-        </nav>
+          </nav>
+          <LanguageSwitch language={language} onChange={setLanguage} />
+        </div>
 
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
             <button
               type="button"
               className="md:hidden inline-flex items-center justify-center rounded-md border border-border/60 p-2 text-foreground hover:bg-muted/60 transition-colors"
-              aria-label="Open navigation menu"
+              aria-label={text("메뉴 열기", "Open navigation menu")}
             >
               <Menu className="h-5 w-5" />
             </button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[88vw] max-w-xs p-0">
             <SheetHeader className="border-b border-border/60 px-5 py-4">
-              <SheetTitle>Menu</SheetTitle>
+              <SheetTitle>{text("메뉴", "Menu")}</SheetTitle>
             </SheetHeader>
             <div className="h-full overflow-y-auto px-5 py-4">
               <nav className="space-y-5">
@@ -327,6 +332,9 @@ export default function Header() {
                   </div>
                 ))}
               </nav>
+              <div className="mt-6 border-t border-border/60 pt-4">
+                <LanguageSwitch language={language} onChange={setLanguage} />
+              </div>
             </div>
           </SheetContent>
         </Sheet>
@@ -335,3 +343,21 @@ export default function Header() {
   );
 }
 
+function LanguageSwitch({ language, onChange }: { language: Language; onChange: (language: Language) => void }) {
+  const isEnglish = language === "en";
+
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isEnglish}
+      aria-label={isEnglish ? "Switch language to Korean" : "Switch language to English"}
+      onClick={() => onChange(isEnglish ? "ko" : "en")}
+      className="relative inline-flex h-8 w-[84px] items-center rounded-full border border-primary bg-primary p-0.5 text-xs font-bold transition-colors"
+    >
+      <span className={`absolute h-7 w-[39px] rounded-full bg-white shadow-sm transition-transform duration-200 ${isEnglish ? "translate-x-[39px]" : "translate-x-0"}`} />
+      <span className={`relative z-10 w-1/2 text-center transition-colors ${isEnglish ? "text-white/70" : "text-primary"}`}>KR</span>
+      <span className={`relative z-10 w-1/2 text-center transition-colors ${isEnglish ? "text-primary" : "text-white/70"}`}>EN</span>
+    </button>
+  );
+}

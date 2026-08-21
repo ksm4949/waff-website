@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/Reveal";
 import { LayoutDashboard, Cog } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type CardItem = {
   title: string;
@@ -7,68 +8,36 @@ type CardItem = {
   img: string;
 };
 
-const effectItems = [
-  {
-    label: "생산 효율",
-    value: "29.92%",
-    trend: "↑",
-    description: "공정 흐름 최적화로 생산성 향상",
-    color: "text-primary",
-    bg: "bg-primary/10",
-    border: "border-primary/30",
-  },
-  {
-    label: "불량률",
-    value: "88.06%",
-    trend: "↓",
-    description: "품질 수준 획기적 개선",
-    color: "text-accent",
-    bg: "bg-accent/10",
-    border: "border-accent/30",
-  },
-  {
-    label: "리드타임",
-    value: "10.45%",
-    trend: "↓",
-    description: "수주출하 리드타임 단축",
-    color: "text-primary",
-    bg: "bg-primary/10",
-    border: "border-primary/30",
-  },
-  {
-    label: "운영 비용",
-    value: "13.16%",
-    trend: "↓",
-    description: "'작업공수' 감소를 통한 비용 절감 효과",
-    color: "text-accent",
-    bg: "bg-accent/10",
-    border: "border-accent/30",
-  },
-];
-
 export default function SmartFactorySection() {
+  const { text } = useLanguage();
+  const effectItems = [
+    { label: text("생산 효율", "Production Efficiency"), value: "29.92%", trend: "↑", description: text("공정 흐름 최적화로 생산성 향상", "Improved productivity through optimized process flow"), color: "text-primary", bg: "bg-primary/10", border: "border-primary/30" },
+    { label: text("불량률", "Defect Rate"), value: "88.06%", trend: "↓", description: text("품질 수준 획기적 개선", "A dramatic improvement in quality"), color: "text-accent", bg: "bg-accent/10", border: "border-accent/30" },
+    { label: text("리드타임", "Lead Time"), value: "10.45%", trend: "↓", description: text("수주출하 리드타임 단축", "Shorter order-to-delivery lead time"), color: "text-primary", bg: "bg-primary/10", border: "border-primary/30" },
+    { label: text("운영 비용", "Operating Cost"), value: "13.16%", trend: "↓", description: text("'작업공수' 감소를 통한 비용 절감 효과", "Cost savings by reducing labor hours"), color: "text-accent", bg: "bg-accent/10", border: "border-accent/30" },
+  ];
   const data: CardItem[] = [
       {
-        title: "기획 / 설계",
+        title: text("기획 / 설계", "Planning / Design"),
         content: [
-          "가상공간에서 제품 제작 전 시뮬레이션",
-          "기간 단축, 맞춤형 제품 개발"
+          text("가상공간에서 제품 제작 전 시뮬레이션", "Simulate products in a virtual environment before production"),
+          text("기간 단축, 맞춤형 제품 개발", "Shorter timelines and customized product development")
         ],
         img: "/images/Landing/smartfactory/smartfactory-card1.png"
       },
       {
-        title: "생산",
+        title: text("생산", "Production"),
         content: [
-          "설비-자재-시스템 간 실시간 정보교환",
-          "다품종 대량생산, 에너지 설비효율재고"
+          text("설비-자재-시스템 간 실시간 정보교환", "Real-time information exchange across equipment, materials, and systems"),
+          text("다품종 대량생산, 에너지 설비효율재고", "High-mix mass production and improved energy and equipment efficiency")
         ],
         img: "/images/Landing/smartfactory/smartfactory-card2.png"
       },
       {
-        title: "유통 / 판매",
+        title: text("유통 / 판매", "Distribution / Sales"),
         content: [
-          "생산현황에 맞춘 실시간 자동 수발주",
-          "재고비용 감소, 품질 물류 등 전 분야 협력"
+          text("생산현황에 맞춘 실시간 자동 수발주", "Real-time automated ordering aligned with production status"),
+          text("재고비용 감소, 품질 물류 등 전 분야 협력", "Reduced inventory cost and collaboration across quality, logistics, and more")
         ],
         img: "/images/Landing/smartfactory/smartfactory-card3.png"
       },
@@ -107,7 +76,7 @@ export default function SmartFactorySection() {
         <Reveal className="text-center mb-20">
           {/* <h2 className="section-title"> */}
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground leading-tight mb-5">
-            스마트팩토리
+            {text("스마트팩토리", "Smart Factory")}
           </h2>
           {/* <div className="divider-modern mx-auto w-24 mb-6" /> */}
           <div className="mx-auto mb-6 flex items-center justify-center gap-2">
@@ -117,10 +86,7 @@ export default function SmartFactorySection() {
           </div>
           {/* <p className="section-subtitle"> */}
           <p className="section-subtitle max-w-2xl mx-auto text-base md:text-lg text-muted-foreground leading-relaxed">
-            설계, 개발 부터 생산과 출하에 이르기 까지의 과정에 정보통신기술(ICT)를 적용하여 <br/>
-            생산성, 품질, 고객만족도를 향상시키는{" "}
-            <span className="text-accent font-bold">지능형 공장</span>
-            을 의미합니다.
+            {text("설계·개발부터 생산·출하까지 전 과정에 정보통신기술(ICT)을 적용해 생산성, 품질, 고객 만족도를 높이는 지능형 공장을 의미합니다.", "An intelligent factory that applies ICT throughout design, development, production, and shipping to improve productivity, quality, and customer satisfaction.")}
           </p>
         </Reveal>
         {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16"> */}
@@ -140,12 +106,12 @@ export default function SmartFactorySection() {
                       </span>
                     </h3>
                     <a href="/itservice#cms_main" className="shrink-0 whitespace-nowrap text-base text-accent font-semibold hover:underline inline-flex items-center gap-1 group">
-                      자세히 보기 <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                      {text("자세히 보기", "Learn more")} <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
                     </a>
                   </div>
                   <p className="text-base text-muted-foreground leading-relaxed">
                     {/* 생산 현장의 모든 정보를 실시간으로 시각화하고 제어하는 통합 대시보드 */}
-                    W-CMS는 설비·공정 데이터를 실시간으로 시각화해 현장 상태를 빠르게 파악하도록 돕는 통합 관리 대시보드입니다.
+                    {text("W-CMS는 설비·공정 데이터를 실시간으로 시각화해 현장 상태를 빠르게 파악하도록 돕는 통합 관리 대시보드입니다.", "W-CMS is an integrated management dashboard that visualizes equipment and process data in real time for rapid visibility into on-site conditions.")}
                   </p>
                 </div>
               </div>
@@ -165,7 +131,7 @@ export default function SmartFactorySection() {
                   </h3>
                   <p className="text-base text-muted-foreground mb-3 leading-relaxed">
                       {/* 생산 계획부터 실적 관리까지 전 과정을 통합 관리하는 시스템 */}
-                      W-MES는 생산 계획, 작업 지시, 실적, 추적 관리를 하나의 흐름으로 통합해 스마트팩토리 운영 효율을 높입니다.
+                      {text("W-MES는 생산 계획, 작업 지시, 실적, 추적 관리를 하나의 흐름으로 통합해 스마트팩토리 운영 효율을 높입니다.", "W-MES integrates production planning, work orders, performance, and traceability into one workflow to improve smart-factory operating efficiency.")}
                   </p>
                 </div>
               </div>
@@ -189,12 +155,11 @@ export default function SmartFactorySection() {
             <div className="text-center mb-10">
               {/* <h3 className="text-2xl font-bold text-foreground mb-8 text-center">스마트팩토리의 기대효과</h3> */}
               <h3 className="text-2xl md:text-3xl font-extrabold text-foreground">
-                스마트팩토리의{" "}
-                <span className="text-primary">기대효과</span>
+                {text("스마트팩토리의 기대효과", "Expected Benefits of a Smart Factory")}
               </h3>
               <p className="text-sm text-muted-foreground mt-2">
                   {/* ICT 융합을 통한 제조 혁신 지표 */}
-                  스마트팩토리와 제조 DX 도입으로 생산성 향상, 불량률 감소, 리드타임 단축, 운영비 절감을 기대할 수 있습니다.
+                  {text("스마트팩토리와 제조 DX 도입으로 생산성 향상, 불량률 감소, 리드타임 단축, 운영비 절감을 기대할 수 있습니다.", "Smart factory and manufacturing DX adoption can improve productivity, reduce defects, shorten lead times, and lower operating costs.")}
                 </p>
             </div>
             
@@ -227,7 +192,7 @@ export default function SmartFactorySection() {
           <Reveal className="text-center mb-8">
             <div className="inline-block px-4 py-2 bg-primary rounded-full">
               <span className="text-sm font-bold text-white tracking-wide">
-                모든 제조과정이 똑똑해집니다
+                {text("모든 제조과정이 똑똑해집니다", "Every manufacturing process becomes smarter")}
               </span>
             </div>
           </Reveal>
@@ -241,7 +206,7 @@ export default function SmartFactorySection() {
                     <img
                       src={item.img}
                       // alt={item.title}
-                      alt="스마트 팩토리 구축"
+                      alt={text("스마트 팩토리 구축", "Smart factory implementation")}
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     {/* Step number */}

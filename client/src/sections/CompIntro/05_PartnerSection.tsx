@@ -1,47 +1,49 @@
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function PartnerSection () {
+  const { text } = useLanguage();
   const partners = [
     // ===== Line 1 =====
     { src: "/images/intro/partners/HHI.png", 
-      alt: "현대중공업",
+      alt: text("현대중공업", "HD Hyundai Heavy Industries"),
       url: "https://www.hhi.co.kr/kr/main" 
     },
     { src: "/images/intro/partners/HD_XiteSolution.png", 
-      alt: "현대사이트솔루션",
+      alt: text("현대사이트솔루션", "HD Hyundai XiteSolution"),
       url: "https://www.hd-xitesolution.com/?locale=ko"
     },
     { src: "/images/intro/partners/EMK.png", 
-      alt: "이엠코리아주식회사",
+      alt: text("이엠코리아주식회사", "EM Korea"),
       url: "http://www.yesemk.com/kor/main/main.html"
     },
     { src: "/images/intro/partners/HDSteel.png", 
-      alt: "현대제철",
+      alt: text("현대제철", "Hyundai Steel"),
       url: "https://www.hyundai-steel.com/kr"
     },
     { src: "/images/intro/partners/POSCO.png", 
-      alt: "포스코",
+      alt: text("포스코", "POSCO"),
       url: "https://www.posco.co.kr/homepage/docs/kor7/jsp/s91a0000001i.jsp"
     },
     { src: "/images/intro/partners/koreamovenex.png", 
-      alt: "한국무브넥스",
+      alt: text("한국무브넥스", "Korea Movenex"),
       url: "https://koreamovenex.com/"
     },
     // ===== Line 2 =====
     { src: "/images/intro/partners/hanwhaAerospace.png", 
-      alt: "한화에어로스페이스",
+      alt: text("한화에어로스페이스", "Hanwha Aerospace"),
       url: "https://www.hanwhaaerospace.com/kor/index.do"
     },
     { src: "/images/intro/partners/POONGSAN.png", 
-      alt: "풍산홀딩스",
+      alt: text("풍산홀딩스", "Poongsan Holdings"),
       url: "http://www.poongsanhc.co.kr/"
     },
     { src: "/images/intro/partners/yunam.jpg", 
-      alt: "연암테크",
+      alt: text("연암테크", "Yunam Tech"),
       url: "http://www.yunamtech.co.kr/kor/main/main.html"
     },
     { src: "/images/intro/partners/lg.png", 
-      alt: "LG전자",
+      alt: text("LG전자", "LG Electronics"),
       url: "https://www.lge.co.kr/home"
     },
     { src: "/images/intro/partners/kai.png", 
@@ -54,7 +56,7 @@ export default function PartnerSection () {
     },
     // ===== Line 3 =====
     { src: "/images/intro/partners/army.png", 
-      alt: "육군종합정비창",
+      alt: text("육군종합정비창", "Republic of Korea Army Depot"),
       url: null
     },
     { src: "/images/intro/partners/nsk.png", 
@@ -62,7 +64,7 @@ export default function PartnerSection () {
       url: "https://www.nsk.com/kr-ko/"
     },
     { src: "/images/intro/partners/yulkok.png", 
-      alt: "율곡",
+      alt: text("율곡", "Yulgok"),
       url: "https://www.yulkok.co.kr/index.do?langSite=ko&BOARD_ID=20161206000000000001"
     },
     { src: "/images/intro/partners/volvo.png", 
@@ -74,7 +76,7 @@ export default function PartnerSection () {
       url: "https://hizeaero.com/main/main.php"
     },
     { src: "/images/intro/partners/songdang.png", 
-      alt: "송당",
+      alt: text("송당", "Songdang"),
       url: "https://songdang.kr/"
     },
     // ===== Line 4 =====
@@ -109,7 +111,7 @@ export default function PartnerSection () {
         <div className="container">
           <div className="text-center mb-16">
             <Reveal>
-              <h2 className="section-title">주요 고객</h2>
+              <h2 className="section-title">{text("주요 고객", "Key Customers")}</h2>
             </Reveal>
             <div className="divider-modern mx-auto w-24 mb-6" />
           </div>

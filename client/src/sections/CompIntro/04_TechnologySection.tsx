@@ -1,7 +1,9 @@
 import { Reveal } from "@/components/Reveal";
 import { Cpu, Award } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function TechnologySection () {
+    const { text } = useLanguage();
     return (
         <section id="technology" className="py-20 md:py-32 bg-white animate-fade-in-up border-t-4 border-primary/10">
             {/* 배경 눈금종이 효과 */}
@@ -30,14 +32,12 @@ export default function TechnologySection () {
             <div className="container">
                 <div className="text-center mb-16">
                     <Reveal>
-                        <h2 className="section-title">기술력과 인증</h2>
+                        <h2 className="section-title">{text("기술력과 인증", "Technology & Certifications")}</h2>
                     </Reveal>
                     <div className="divider-modern mx-auto w-24 mb-6" />
                     <Reveal>
                         <p className="section-subtitle">
-                            탁월한 기술력은 와프의 생명입니다. 
-                            <br/>
-                            끊임없는 개발과 연구를 통해 입증된 기술력을 보유하고 있습니다.
+                            {text("탁월한 기술력은 WAFF의 핵심입니다. 끊임없는 개발과 연구를 통해 입증된 기술력을 보유하고 있습니다.", "Technology excellence is at the core of WAFF. Our capabilities are proven through continuous research and development.")}
                         </p>
                     </Reveal>
                 </div>
@@ -53,36 +53,36 @@ export default function TechnologySection () {
                             <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
                                 <Cpu className="w-6 h-6 text-primary" />
                             </div>
-                            <h3 className="text-xl font-bold text-foreground mb-3">기술 역량</h3>
+                            <h3 className="text-xl font-bold text-foreground mb-3">{text("기술 역량", "Technology Capabilities")}</h3>
                         </div>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            W-CMS / W-MES 저작권 등록
+                            {text("W-CMS / W-MES 저작권 등록", "W-CMS / W-MES copyright registration")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            능동 피드제어 저작권 등록
+                            {text("능동 피드제어 저작권 등록", "Active feed control copyright registration")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            CNC파일전송 저작권 등록
+                            {text("CNC파일전송 저작권 등록", "CNC file-transfer copyright registration")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            툴파손검출 저작권 등록
+                            {text("툴파손검출 저작권 등록", "Tool-breakage detection copyright registration")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            특허_공작기계의 CNC 가공 시 절삭속도 자동 제어 방법 및 장치 등록
+                            {text("특허_공작기계의 CNC 가공 시 절삭속도 자동 제어 방법 및 장치 등록", "Patent: automatic cutting-speed control method and device for CNC machining")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            특허_스핀들 부하율을 활용한 공구마모 및 교체시점 예측시스템 및 방법 등록
+                            {text("특허_스핀들 부하율을 활용한 공구마모 및 교체시점 예측시스템 및 방법 등록", "Patent: tool-wear and replacement-time prediction system using spindle load")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            출원_툴파손 감지방법 및 시스템 등록
+                            {text("출원_툴파손 감지방법 및 시스템 등록", "Patent application: tool-breakage detection method and system")}
                             </li>
                         </ul>
                     </div>
@@ -94,28 +94,28 @@ export default function TechnologySection () {
                             <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
                                 <Award className="w-6 h-6 text-secondary" />
                             </div>
-                            <h3 className="text-xl font-bold text-foreground mb-3">인증</h3>
+                            <h3 className="text-xl font-bold text-foreground mb-3">{text("인증", "Certifications")}</h3>
                         </div>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            ISO 9001, ISO 14001 인증
+                            {text("ISO 9001, ISO 14001 인증", "ISO 9001 and ISO 14001 certification")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            연구개발 전담부서 인정서 인증
+                            {text("연구개발 전담부서 인정서 인증", "Certified in-house R&D department")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            기술역량 우수기업 인증
+                            {text("기술역량 우수기업 인증", "Excellent technology-capability company certification")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            클린 사업장 인증
+                            {text("클린 사업장 인증", "Clean workplace certification")}
                             </li>
                             <li className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-accent rounded-full" />
-                            벤처 기업 인증
+                            {text("벤처 기업 인증", "Venture business certification")}
                             </li>
                         </ul>
                     </div>
@@ -125,7 +125,7 @@ export default function TechnologySection () {
                     <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20">
                       <img
                         src="/images/intro/award.jpg"
-                        alt="award"
+                        alt={text("수상 및 인증", "Awards and certifications")}
                         className="w-full h-[520px] md:h-full object-cover"
                       />
                     </Reveal>

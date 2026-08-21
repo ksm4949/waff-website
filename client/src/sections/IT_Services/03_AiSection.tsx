@@ -1,7 +1,9 @@
 import { Reveal } from "@/components/Reveal";
 import { RefreshCw, BellRing, Bot } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AiSection() {
+    const { text } = useLanguage();
     return (
         <section 
           id="it_ai" 
@@ -34,7 +36,7 @@ export default function AiSection() {
           <div className="container">
             <div className="text-center mb-16 items-center">
               <Reveal>
-                <h2 className="section-title">AI 기반 솔루션</h2>
+                <h2 className="section-title">{text("AI 기반 솔루션", "AI Solutions")}</h2>
               </Reveal>
               <div className="divider-modern mx-auto w-24 mb-6" />
             </div>
@@ -46,16 +48,16 @@ export default function AiSection() {
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                           <RefreshCw className="w-6 h-6 text-primary" />
                       </div>
-                      <h3 className="text-xl font-bold text-foreground mb-3">AI 기반 CNC 공구 수명 예측 및 교환주기 최적화</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-3">{text("AI 기반 CNC 공구 수명 예측 및 교환주기 최적화", "AI-Based CNC Tool-Life Prediction and Replacement Optimization")}</h3>
                     </div>
                     <p className="text-md text-muted-foreground leading-relaxed">
-                      공구 사용 시간, 가공 속도 등 부하에 대한 AI 학습에 기반한 유동적인 교환주기 판단 및 제어
+                      {text("공구 사용 시간, 가공 속도 등 부하에 대한 AI 학습에 기반한 유동적인 교환주기 판단 및 제어", "Dynamic replacement-cycle decisions and control based on AI learning from tool usage, machining speed, and load")}
                     </p>
                 </Reveal>
                 <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                   <img
                     src="/images/it_services/ai1.png"
-                    alt="AI 기반 CNC 공구 수명 예측 및 교환주기 최적화, 제조 ai, 스마트팩토리 구축"
+                    alt={text("AI 기반 CNC 공구 수명 예측 및 교환주기 최적화, 제조 ai, 스마트팩토리 구축", "AI-based CNC tool-life prediction and replacement optimization")}
                     className="w-full h-full object-center"
                   />
                 </Reveal>
@@ -67,16 +69,16 @@ export default function AiSection() {
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                           <BellRing className="w-6 h-6 text-primary" />
                       </div>
-                      <h3 className="text-xl font-bold text-foreground mb-3">CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-3">{text("CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI", "CNC Alarm-Log Root-Cause Inference and Predictive Maintenance AI")}</h3>
                     </div>
                     <p className="text-md text-muted-foreground leading-relaxed">
-                      해당 알람 이전의 로그를 분석해서 해당 알람에 많은 영향을 준 항목을 선별하여 사용자에게 전달
+                      {text("해당 알람 이전의 로그를 분석해서 해당 알람에 많은 영향을 준 항목을 선별하여 사용자에게 전달", "Analyze logs before an alarm and identify the factors that most influenced it")}
                     </p>
                 </Reveal>
                 <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                   <img
                     src="/images/it_services/ai2.png"
-                    alt="CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI, 제조 ai, 스마트팩토리 구축"
+                    alt={text("CNC 알람 로그 기반 고장 원인 추론 및 예지보전 AI, 제조 ai, 스마트팩토리 구축", "CNC alarm-log root-cause inference and predictive-maintenance AI")}
                     className="w-full h-full object-cover"
                   />
                 </Reveal>
@@ -89,17 +91,16 @@ export default function AiSection() {
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <Bot className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="font-bold text-xl text-foreground mb-3">CNC 인공지능 비서(AI-Assistant)</h3>
+                    <h3 className="font-bold text-xl text-foreground mb-3">{text("CNC 인공지능 비서(AI-Assistant)", "CNC AI Assistant")}</h3>
                   </div>
                   <p className="text-md text-muted-foreground leading-relaxed">
-                      사용자 질문에 전문가 소견과 조치방안을 알려주며 <br/>
-                      현재 알림과 관련된 매뉴얼과 도면(전기, 기계, 유압)의 정확한 알람의 위치를 찾아서 답변
+                      {text("사용자 질문에 전문가 소견과 조치방안을 알려주며, 현재 알림과 관련된 매뉴얼과 도면(전기, 기계, 유압)에서 정확한 위치를 찾아 답변합니다.", "Answers user questions with expert guidance and actions, locating the relevant point in manuals and electrical, mechanical, or hydraulic drawings.")}
                     </p>
               </Reveal>
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-secondary/20 flex-1">
                 <img
                   src="/images/it_services/ai_assistant.png"
-                  alt="사용자 질문을 통한 CNC 조작 지원 AI, 제조 ai, 스마트팩토리 구축"
+                  alt={text("사용자 질문을 통한 CNC 조작 지원 AI, 제조 ai, 스마트팩토리 구축", "AI-assisted CNC operation support through user questions")}
                   className="w-full h-full object-cover"
                 />
               </Reveal>

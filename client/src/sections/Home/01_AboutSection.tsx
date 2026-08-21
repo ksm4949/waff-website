@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type CardItem = {
   title: string;
@@ -28,26 +29,27 @@ function CheckCircle2({ className }: { className?: string }) {
 }
 
 export default function AboutSection() {
+    const { text } = useLanguage();
     const data: CardItem[] = [
       {
-        title: "중간 벤더 없이 'One-Stop 구축' 가능",
+        title: text("중간 벤더 없이 'One-Stop 구축' 가능", "One-stop delivery without intermediary vendors"),
         content: [
-          "하드웨어부터 소프트웨어까지 한번에 설계, 개발, 적용 가능",
-          "커뮤니케이션 창구 하나로 일정과 품질 안정성 확보 가능"
+          text("하드웨어부터 소프트웨어까지 한번에 설계, 개발, 적용 가능", "Design, development, and implementation from hardware to software in one place"),
+          text("커뮤니케이션 창구 하나로 일정과 품질 안정성 확보 가능", "A single point of contact for reliable schedules and quality")
         ],
         img: "/images/intro/intro_part1.png"
       },
       {
-        title: "OT 현장 이해 바탕 실용적 IT 설계",
+        title: text("OT 현장 이해 바탕 실용적 IT 설계", "Practical IT design grounded in OT expertise"),
         content: [
-          "단순한 시스템 개발이 아닌, '장비 운전 특성'을 이해한 상태에서 UX/UI나 MES/CMS를 구현하는 현장 밀착형 솔루션",
+          text("단순한 시스템 개발이 아닌, '장비 운전 특성'을 이해한 상태에서 UX/UI나 MES/CMS를 구현하는 현장 밀착형 솔루션", "Field-focused solutions that implement UX/UI and MES/CMS with a deep understanding of equipment operation"),
         ],
         img: "/images/intro/intro_part2.png"
       },
       {
-        title: "빠른 문제 해결과 유지보수 용이성",
+        title: text("빠른 문제 해결과 유지보수 용이성", "Fast issue resolution and easy maintenance"),
         content: [
-          "비통합된 타사 대비 설비 이상, 데이터 오류 발생 시에도 원인 파악과 개선이 빠름",
+          text("비통합된 타사 대비 설비 이상, 데이터 오류 발생 시에도 원인 파악과 개선이 빠름", "Faster identification and improvement of equipment and data issues than disconnected alternatives"),
         ],
         img: "/images/intro/intro_part3.png"
       },
@@ -79,13 +81,13 @@ export default function AboutSection() {
           />
         <div className="container">
           <Reveal className="text-center mb-16">
-            <h2 className="section-title">회사개요</h2>
+            <h2 className="section-title">{text("회사개요", "Company Overview")}</h2>
             <div className="divider-modern mx-auto w-24 mb-6" />
             <p className="section-subtitle">
               {/* 제조 혁신을 이끄는 디지털 전환 파트너,{" "} */}
-              스마트팩토리·CNC 개조·제조 DX 전문 {" "}
+              {text("스마트팩토리·CNC 개조·제조 DX 전문", "Smart factory, CNC retrofit, and manufacturing DX specialist")} {" "}
               <span className="font-bold tracking-tight text-accent">
-                와프
+                WAFF
               </span>
             </p>
           </Reveal>
@@ -93,22 +95,17 @@ export default function AboutSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <Reveal delay={200}>
-                <h3 className="text-2xl font-bold text-foreground mb-4">와프(WAFF)는</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-4">{text("와프(WAFF)는", "About WAFF")}</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                    <span className="font-bold text-lg text-accent">IT</span>
-                    (데이터 수집&분석)와{" "} 
-                    <span className="font-bold text-lg text-accent">OT</span>
-                  (장비제어기술)의 역량을 모두 보유한 통합솔루션을 통해 제조업의 디지털 전환을 선도하는 기업입니다. 
-                  기계 제어 기술과 소프트웨어 개발 역량을 바탕으로{" "}
-                  <span className="font-bold">
-                    스마트팩토리 구축, CNC 개조, HMI(사용자 친화적 인터페이스 개발)
-                  </span>
-                   {" "}등 토털 솔루션을 제공합니다.
+                  {text(
+                    "IT(데이터 수집·분석)와 OT(장비 제어 기술)를 모두 아우르는 통합 솔루션으로 제조업의 디지털 전환을 선도합니다. 기계 제어와 소프트웨어 개발 역량을 바탕으로 스마트팩토리 구축, CNC 개조, HMI 등 토털 솔루션을 제공합니다.",
+                    "WAFF leads manufacturing digital transformation with integrated solutions that combine IT data collection and analytics with OT equipment-control expertise. We deliver total solutions including smart factory implementation, CNC retrofit, and HMI development."
+                  )}
                 </p>
               </Reveal>
 
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg text-foreground">핵심 가치</h3>
+                <h3 className="font-semibold text-lg text-foreground">{text("핵심 가치", "Core Values")}</h3>
                 <div className="space-y-3">
                   <Reveal delay={200}>
                     <div className="
@@ -121,8 +118,8 @@ export default function AboutSection() {
                     ">
                       <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">기술 혁신</p>
-                        <p className="text-sm text-muted-foreground">최신 기술을 활용한 지속적인 혁신</p>
+                        <p className="font-medium text-foreground">{text("기술 혁신", "Technology Innovation")}</p>
+                        <p className="text-sm text-muted-foreground">{text("최신 기술을 활용한 지속적인 혁신", "Continuous innovation using the latest technology")}</p>
                       </div>
                     </div>
                   </Reveal>
@@ -137,8 +134,8 @@ export default function AboutSection() {
                     ">
                       <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">고객 중심</p>
-                        <p className="text-sm text-muted-foreground">고객의 요구사항을 최우선으로 고려</p>
+                        <p className="font-medium text-foreground">{text("고객 중심", "Customer Focus")}</p>
+                        <p className="text-sm text-muted-foreground">{text("고객의 요구사항을 최우선으로 고려", "Putting customer requirements first")}</p>
                       </div>
                     </div>
                   </Reveal>
@@ -153,8 +150,8 @@ export default function AboutSection() {
                     ">
                       <CheckCircle2 className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">지속 가능성</p>
-                        <p className="text-sm text-muted-foreground">장기적인 파트너십과 안정적인 운영</p>
+                        <p className="font-medium text-foreground">{text("지속 가능성", "Sustainability")}</p>
+                        <p className="text-sm text-muted-foreground">{text("장기적인 파트너십과 안정적인 운영", "Long-term partnerships and reliable operations")}</p>
                       </div>
                     </div>
                   </Reveal>
@@ -177,7 +174,7 @@ export default function AboutSection() {
                 <Reveal className="mb-8 text-left">
                     <div className="inline-block px-4 py-2 bg-primary rounded-full">
                     <span className="text-sm font-semibold text-white/90">
-                        통합 기업의 강점
+                        {text("통합 기업의 강점", "The strength of an integrated company")}
                     </span>
                     </div>
                 </Reveal>
@@ -216,7 +213,7 @@ export default function AboutSection() {
             <Reveal className="mt-16 flex justify-center">
               <img
                 src="/images/intro/intro_part.png"
-                alt="사업부 소개. 스마트팩토리/CNC 개조/HMI/제조 AI/MES/CMS"
+                alt={text("사업부 소개. 스마트팩토리/CNC 개조/HMI/제조 AI/MES/CMS", "Business areas: Smart Factory, CNC Retrofit, HMI, Manufacturing AI, MES, CMS")}
                 className="w-full max-w-6xl rounded-2xl shadow-lg object-cover"
               />
             </Reveal>

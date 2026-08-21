@@ -1,13 +1,15 @@
 import { Reveal } from "@/components/Reveal";
 import { Hammer, Gauge, ArrowRightLeft } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ManageSection() {
+    const { text } = useLanguage();
     return (
         <section id="it_manage" className="py-20 md:py-32 bg-gradient-to-br from-slate-50 to-gray-500">
         <div className="container">
           <div className="text-center mb-16 items-center">
             <Reveal>
-              <h2 className="section-title">관리 솔루션</h2>
+              <h2 className="section-title">{text("관리 솔루션", "Management Solutions")}</h2>
             </Reveal>
             <div className="divider-modern mx-auto w-24 mb-6" />
           </div>
@@ -19,10 +21,10 @@ export default function ManageSection() {
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <Hammer className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">공구 수명 관리</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-3">{text("공구 수명 관리", "Tool Life Management")}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  공구별 기준 가공 횟수/시간 데이터를 바탕으로 적절한 교환주기에 알람이 발생하도록 합니다.
+                  {text("공구별 기준 가공 횟수/시간 데이터를 바탕으로 적절한 교환주기에 알람이 발생하도록 합니다.", "Generate alerts at the appropriate replacement interval using each tool’s machining-count and time data.")}
                 </p>
               </Reveal>
 
@@ -30,7 +32,7 @@ export default function ManageSection() {
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white h-full">
                 <img
                   src="/images/it_services/manage1.png"
-                  alt="공구수명관리, 스마트팩토리/CNC"
+                  alt={text("공구수명관리, 스마트팩토리/CNC", "Tool life management for smart factory CNC")}
                   className="w-full h-[280px] object-contain p-4"
                 />
               </Reveal>
@@ -43,17 +45,17 @@ export default function ManageSection() {
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <Gauge className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">가공 속도 제어</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-3">{text("가공 속도 제어", "Machining Speed Control")}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  소재 상태에 따라 부하를 자동 탐지해 스핀들 회전 속도 및 가공 Feed를 자동으로 가/감속합니다.
+                  {text("소재 상태에 따라 부하를 자동 탐지해 스핀들 회전 속도 및 가공 Feed를 자동으로 가/감속합니다.", "Automatically detect load by material condition and adjust spindle speed and machining feed.")}
                 </p>
               </Reveal>
 
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white h-full">
                 <img
                   src="/images/it_services/manage2.png"
-                  alt="가공속도제어, 스마트팩토리/CNC"
+                  alt={text("가공속도제어, 스마트팩토리/CNC", "Machining speed control for smart factory CNC")}
                   className="w-full h-[280px] object-contain p-4"
                 />
               </Reveal>
@@ -66,17 +68,17 @@ export default function ManageSection() {
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                         <ArrowRightLeft className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-3">데이터 변환 및 파일 전송</h3>
+                    <h3 className="text-xl font-bold text-foreground mb-3">{text("데이터 변환 및 파일 전송", "Data Transformation and File Transfer")}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  PC와 기기간의 실시간 데이터 변환 및 전송을 통해 신속한 데이터 관리 및 공유가 가능합니다.
+                  {text("PC와 기기간의 실시간 데이터 변환 및 전송을 통해 신속한 데이터 관리 및 공유가 가능합니다.", "Manage and share data quickly through real-time transformation and transfer between PCs and machines.")}
                 </p>
               </Reveal>
 
               <Reveal className="relative overflow-hidden rounded-xl border border-border bg-white h-full">
                 <img
                   src="/images/it_services/manage3.png"
-                  alt="데이터 변환 및 파일전송, 스마트팩토리/CNC"
+                  alt={text("데이터 변환 및 파일전송, 스마트팩토리/CNC", "Data transformation and file transfer for smart factory CNC")}
                   className="w-full h-[280px] object-contain p-4"
                 />
               </Reveal>

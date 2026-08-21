@@ -1,86 +1,90 @@
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-type HistoryItem = { month: string; text: string };
+type HistoryItem = { month: string; ko: string; en: string };
 type HistoryYear = { year: string; items: HistoryItem[] };
 
 const historyData: HistoryYear[] = [
   {
     year: "2012",
-    items: [{ month: "12", text: "와프 설립" }],
+    items: [{ month: "12", ko: "와프 설립", en: "WAFF established" }],
   },
   {
     year: "2014",
-    items: [{ month: "05", text: "CLEAN 사업장 인정" }],
+    items: [{ month: "05", ko: "CLEAN 사업장 인정", en: "CLEAN workplace recognition" }],
   },
   {
     year: "2017",
     items: [
-      { month: "04", text: "연구전담부서 설립" },
-      { month: "08", text: "벤처기업 인증 획득" },
+      { month: "04", ko: "연구전담부서 설립", en: "In-house R&D department established" },
+      { month: "08", ko: "벤처기업 인증 획득", en: "Venture business certification acquired" },
     ],
   },
   {
     year: "2018",
-    items: [{ month: "05", text: "기술역량 우수기업 인증 획득" }],
+    items: [{ month: "05", ko: "기술역량 우수기업 인증 획득", en: "Excellent technology-capability company certification acquired" }],
   },
   {
     year: "2019",
     items: [
-      { month: "01", text: "소프트웨어 사업자 신고" },
-      { month: "02", text: "창원시 MOU 협약 체결" },
-      { month: "04", text: "OKUMA 글로벌트레이딩 리더 MOU 체결" },
-      { month: "12", text: "와프 사업장 주소 변경" },
+      { month: "01", ko: "소프트웨어 사업자 신고", en: "Registered as a software business" },
+      { month: "02", ko: "창원시 MOU 협약 체결", en: "Signed an MOU with Changwon City" },
+      { month: "04", ko: "OKUMA 글로벌트레이딩 리더 MOU 체결", en: "Signed an MOU with OKUMA Global Trading Leader" },
+      { month: "12", ko: "와프 사업장 주소 변경", en: "WAFF business address relocated" },
     ],
   },
   {
     year: "2020",
-    items: [{ month: "06", text: "W-MES 저작권 등록" }],
+    items: [{ month: "06", ko: "W-MES 저작권 등록", en: "W-MES copyright registered" }],
   },
   {
     year: "2021",
     items: [
-      { month: "02", text: "W-CMS 저작권 등록" },
-      { month: "07", text: "(주)볼보코리아 업체 등록" },
-      { month: "07", text: "기술역량 우수기업 인증 획득" },
-      { month: "10", text: "(주)현대중공업 업체 등록" },
-      { month: "11", text: "소재·부품·장비 전문기업 확인서 획득" },
+      { month: "02", ko: "W-CMS 저작권 등록", en: "W-CMS copyright registered" },
+      { month: "07", ko: "(주)볼보코리아 업체 등록", en: "Registered as a Volvo Korea supplier" },
+      { month: "07", ko: "기술역량 우수기업 인증 획득", en: "Excellent technology-capability company certification acquired" },
+      { month: "10", ko: "(주)현대중공업 업체 등록", en: "Registered as an HD Hyundai Heavy Industries supplier" },
+      { month: "11", ko: "소재·부품·장비 전문기업 확인서 획득", en: "Certified as a materials, parts, and equipment specialist company" },
     ],
   },
   {
     year: "2022",
     items: [
-      { month: "01", text: "지능형 수송기계 MC 가입" },
-      { month: "03", text: "경남 ICT 협회 가입" },
-      { month: "03", text: "(주)풍산홀딩스 업체 등록" },
-      { month: "10", text: "ISO14001, ISO9001 인증 획득" },
-      { month: "12", text: "(주)현대두산 인프라코어 업체 등록" },
+      { month: "01", ko: "지능형 수송기계 MC 가입", en: "Joined the Intelligent Transport Machinery MC" },
+      { month: "03", ko: "경남 ICT 협회 가입", en: "Joined the Gyeongnam ICT Association" },
+      { month: "03", ko: "(주)풍산홀딩스 업체 등록", en: "Registered as a Poongsan Holdings supplier" },
+      { month: "10", ko: "ISO14001, ISO9001 인증 획득", en: "ISO 14001 and ISO 9001 certification acquired" },
+      { month: "12", ko: "(주)현대두산 인프라코어 업체 등록", en: "Registered as an HD Hyundai Infracore supplier" },
     ],
   },
   {
     year: "2023",
     items: [
-      { month: "06", text: "창원형 강소기업 선정" },
-      { month: "09", text: "벤처기업 선정" },
+      { month: "06", ko: "창원형 강소기업 선정", en: "Selected as a Changwon small giant company" },
+      { month: "09", ko: "벤처기업 선정", en: "Selected as a venture business" },
     ],
   },
   {
     year: "2024",
     items: [
-      { month: "05", text: "LG전자 업체 등록" },
-      { month: "05", text: "툴파손 관리로 툴파손 검출 특허 출원" },
+      { month: "05", ko: "LG전자 업체 등록", en: "Registered as an LG Electronics supplier" },
+      { month: "05", ko: "툴파손 관리로 툴파손 검출 특허 출원", en: "Filed a patent for tool-breakage detection through tool-breakage management" },
     ],
   },
   {
     year: "2025",
     items: [
-      { month: "04", text: "CNC 파일전송 프로그램 개발" },
-      { month: "04", text: "능동 피드제어 개발" },
+      { month: "04", ko: "CNC 파일전송 프로그램 개발", en: "Developed a CNC file-transfer program" },
+      { month: "04", ko: "능동 피드제어 개발", en: "Developed active feed control" },
     ],
   },
 ];
 
 export default function HistorySection() {
-  const sortedHistoryData = [...historyData].sort(
+  const { text } = useLanguage();
+  const sortedHistoryData = [...historyData]
+    .map((group) => ({ ...group, items: group.items.map((item) => ({ month: item.month, text: text(item.ko, item.en) })) }))
+    .sort(
     (a, b) => parseInt(b.year, 10) - parseInt(a.year, 10)
   );
 
@@ -116,7 +120,7 @@ export default function HistorySection() {
       <div className="container">
         <div className="text-center mb-16">
           <Reveal>
-            <h2 className="section-title">연{"   "}혁</h2>
+            <h2 className="section-title">{text("연혁", "History")}</h2>
           </Reveal>
           <div className="divider-modern mx-auto w-24 mb-6" />
         </div>

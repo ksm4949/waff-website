@@ -1,26 +1,28 @@
 import { Reveal } from "@/components/Reveal";
 import ImageSlider from "@/components/ImageSlider";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function RetroCaseSection() {
+    const { text } = useLanguage();
     const imageSlides = [
-        { img: "/images/example/retro_liner00.png", title: "결과", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
-        { img: "/images/example/retro_liner01.png", title: "모터 교체", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
-        { img: "/images/example/retro_liner02.png", title: "컨트롤러 교체", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
-        { img: "/images/example/retro_liner03.png", title: "케이블 교체", alt: "CNC개조, 화낙개조, 화낙,지멘스" },
+        { img: "/images/example/retro_liner00.png", title: text("결과", "Result"), alt: text("CNC개조, 화낙개조, 화낙,지멘스", "CNC retrofit for FANUC and Siemens") },
+        { img: "/images/example/retro_liner01.png", title: text("모터 교체", "Motor Replacement"), alt: text("CNC개조, 화낙개조, 화낙,지멘스", "CNC retrofit for FANUC and Siemens") },
+        { img: "/images/example/retro_liner02.png", title: text("컨트롤러 교체", "Controller Replacement"), alt: text("CNC개조, 화낙개조, 화낙,지멘스", "CNC retrofit for FANUC and Siemens") },
+        { img: "/images/example/retro_liner03.png", title: text("케이블 교체", "Cable Replacement"), alt: text("CNC개조, 화낙개조, 화낙,지멘스", "CNC retrofit for FANUC and Siemens") },
     ]
     const imageSlides2 = [
-        { img: "/images/example/retro_hb_00.png", title: "초기", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_hb_01.png", title: "배전반 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_hb_02.png", title: "모터 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_hb_03.png", title: "컨트롤패널 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_hb_04.png", title: "결과", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_hb_00.png", title: text("초기", "Initial Condition"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_hb_01.png", title: text("배전반 교체", "Electrical Cabinet Replacement"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_hb_02.png", title: text("모터 교체", "Motor Replacement"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_hb_03.png", title: text("컨트롤패널 교체", "Control Panel Replacement"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_hb_04.png", title: text("결과", "Result"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
     ]
     const imageSlides3 = [
-        { img: "/images/example/retro_mct_00.png", title: "초기", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_mct_01.png", title: "컨트롤패널 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_mct_02.png", title: "배전반 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_mct_03.png", title: "모터 교체", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
-        { img: "/images/example/retro_mct_04.png", title: "결과", alt: "CNC개조, 화낙개조, 화낙, FANUC" },
+        { img: "/images/example/retro_mct_00.png", title: text("초기", "Initial Condition"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_mct_01.png", title: text("컨트롤패널 교체", "Control Panel Replacement"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_mct_02.png", title: text("배전반 교체", "Electrical Cabinet Replacement"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_mct_03.png", title: text("모터 교체", "Motor Replacement"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
+        { img: "/images/example/retro_mct_04.png", title: text("결과", "Result"), alt: text("CNC개조, 화낙개조, 화낙, FANUC", "CNC retrofit for FANUC") },
     ]
         
     return (
@@ -55,12 +57,12 @@ export default function RetroCaseSection() {
           <div className="container">
             <div className="text-center mb-16">
               <Reveal>
-                <h2 className="section-title">적용 사례</h2>
+                <h2 className="section-title">{text("적용 사례", "Use Cases")}</h2>
               </Reveal>
               <div className="divider-modern mx-auto w-24 mb-6" />
               <Reveal>
                 <p className="section-subtitle">
-                  실제 적용된 노후 장비 현대화 프로젝트
+                  {text("실제 적용된 노후 장비 현대화 프로젝트", "Modernization projects for aging equipment implemented in the field")}
                 </p>
               </Reveal>
             </div>
@@ -69,13 +71,13 @@ export default function RetroCaseSection() {
               {/* 1행 - 실린더 내외경 가공기 */}
               <Reveal className="bg-secondary/20 p-6 rounded-lg border border-border">
                 <h3 className="font-semibold text-2xl text-foreground mb-3">
-                  실린더 내외경 가공기 Retrofit
+                  {text("실린더 내외경 가공기 Retrofit", "Cylinder ID/OD Machining Machine Retrofit")}
                 </h3>
                 <ul className="space-y-2 text-lg text-muted-foreground">
-                  <li>• 조작반/메인컨트롤러 교체</li>
-                  <li>• 화낙AC 서보 모터 교체</li>
-                  <li>• 지멘스 스핀들 드라이버 교체</li>
-                  <li>• 케이블 전량 교체</li>
+                  <li>• {text("조작반/메인컨트롤러 교체", "Control panel/main controller replacement")}</li>
+                  <li>• {text("화낙AC 서보 모터 교체", "FANUC AC servo motor replacement")}</li>
+                  <li>• {text("지멘스 스핀들 드라이버 교체", "Siemens spindle driver replacement")}</li>
+                  <li>• {text("케이블 전량 교체", "Complete cable replacement")}</li>
                 </ul>
               </Reveal>
               <Reveal className="relative h-72 md:h-full rounded-lg overflow-hidden shadow-lg bg-secondary/20">
@@ -84,14 +86,14 @@ export default function RetroCaseSection() {
               {/* 2행 - 호빙머신 */}
               <Reveal className="bg-secondary/20 p-6 rounded-lg border border-border">
                 <h3 className="font-semibold text-2xl text-foreground mb-3">
-                  호빙머신 Retrofit
+                  {text("호빙머신 Retrofit", "Hobbing Machine Retrofit")}
                 </h3>
                 <ul className="space-y-2 text-lg text-muted-foreground">
-                  <li>• 컨트롤러: FANUC 0i-MF로 교체</li>
-                  <li>• 조작반 / 메인컨트롤러 교체</li>
-                  <li>• FANUC 서보 및 스핀들 모터 교체</li>
-                  <li>• FANUC 스핀들/서보 드라이버 교체</li>
-                  <li>• OP 및 MAIN PANNEL 교체</li>
+                  <li>• {text("컨트롤러: FANUC 0i-MF로 교체", "Controller: FANUC 0i-MF replacement")}</li>
+                  <li>• {text("조작반 / 메인컨트롤러 교체", "Control panel/main controller replacement")}</li>
+                  <li>• {text("FANUC 서보 및 스핀들 모터 교체", "FANUC servo and spindle motor replacement")}</li>
+                  <li>• {text("FANUC 스핀들/서보 드라이버 교체", "FANUC spindle/servo driver replacement")}</li>
+                  <li>• {text("OP 및 MAIN PANNEL 교체", "OP and main panel replacement")}</li>
                 </ul>
               </Reveal>
               <Reveal className="relative h-72 md:h-full rounded-lg overflow-hidden shadow-lg bg-secondary/20">
@@ -101,14 +103,14 @@ export default function RetroCaseSection() {
               {/* 3행 - 머시닝센터 */}
               <Reveal className="bg-secondary/20 p-6 rounded-lg border border-border">
                 <h3 className="font-semibold text-2xl text-foreground mb-3">
-                  머시닝센터(MCT) Retrofit
+                  {text("머시닝센터(MCT) Retrofit", "Machining Center (MCT) Retrofit")}
                 </h3>
                 <ul className="space-y-2 text-lg text-muted-foreground">
-                  <li>• 컨트롤러: FANUC 31i-MB5로 교체</li>
-                  <li>• 조작반 / 메인컨트롤러 교체</li>
-                  <li>• FANUC 서보 및 스핀들 모터 교체</li>
-                  <li>• FANUC 스핀들/서보 드라이버 교체</li>
-                  <li>• OP 및 MAIN PANNEL, 케이블 전량 교체</li>
+                  <li>• {text("컨트롤러: FANUC 31i-MB5로 교체", "Controller: FANUC 31i-MB5 replacement")}</li>
+                  <li>• {text("조작반 / 메인컨트롤러 교체", "Control panel/main controller replacement")}</li>
+                  <li>• {text("FANUC 서보 및 스핀들 모터 교체", "FANUC servo and spindle motor replacement")}</li>
+                  <li>• {text("FANUC 스핀들/서보 드라이버 교체", "FANUC spindle/servo driver replacement")}</li>
+                  <li>• {text("OP 및 MAIN PANNEL, 케이블 전량 교체", "OP and main panel plus complete cable replacement")}</li>
                 </ul>
               </Reveal>
               <Reveal className="relative h-72 md:h-full rounded-lg overflow-hidden shadow-lg bg-secondary/20">

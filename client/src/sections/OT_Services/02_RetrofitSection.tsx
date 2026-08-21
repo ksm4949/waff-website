@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type CardItem = {
   title: string;
@@ -8,42 +9,43 @@ type CardItem = {
 };
 
 export default function RetrofitSection() {
+    const { text } = useLanguage();
     const data: CardItem[] = [
       {
-        title: "컨트롤러 교체",
+        title: text("컨트롤러 교체", "Controller Replacement"),
         content: [
-          "구형 CNC에서 최신 컨트롤러로 교체 (화낙 FANUC/지멘스/하이데나인)",
-          "LAN 통신 기능 활성화, 데이터 처리속도 증가, 메모리 용량 증가, 유지보수 및 부품 수급 용이"
+          text("구형 CNC에서 최신 컨트롤러로 교체 (화낙 FANUC/지멘스/하이데나인)", "Replace legacy CNC controls with modern FANUC, Siemens, or Heidenhain controllers"),
+          text("LAN 통신 기능 활성화, 데이터 처리속도 증가, 메모리 용량 증가, 유지보수 및 부품 수급 용이", "Enable LAN communication, faster processing, more memory, and easier maintenance and parts sourcing")
         ],
         img: "/images/ot_service/retrofit1.png",
-        alt: "CNC 컨트롤러 교체, 화낙(FANUC)/지멘스/하이데나인"
+        alt: text("CNC 컨트롤러 교체, 화낙(FANUC)/지멘스/하이데나인", "CNC controller replacement for FANUC, Siemens, and Heidenhain")
       },
       {
-        title: "전장·조작반 개선",
+        title: text("전장·조작반 개선", "Electrical Cabinet and Panel Upgrade"),
         content: [
-          "메인 전장박스, 조작반, I/O, 릴레이, 안전회로를 장비 조건에 맞춰 개선",
-          "입출력 제어 용이, 내부부품 오작동 감소, 유지보수 및 관리 용이"
+          text("메인 전장박스, 조작반, I/O, 릴레이, 안전회로를 장비 조건에 맞춰 개선", "Improve main electrical cabinets, panels, I/O, relays, and safety circuits for the equipment"),
+          text("입출력 제어 용이, 내부부품 오작동 감소, 유지보수 및 관리 용이", "Simplify I/O control, reduce component faults, and improve maintenance")
         ],
         img: "/images/ot_service/retrofit2.png",
-        alt: "CNC 전장 박스 및 조작반 개선, CNC개조"
+        alt: text("CNC 전장 박스 및 조작반 개선, CNC개조", "CNC electrical cabinet and panel upgrade")
       },
       {
-        title: "스핀들/서보 모터 교체",
+        title: text("스핀들/서보 모터 교체", "Spindle and Servo Motor Replacement"),
         content: [
-          "구형 DC 모터와 앰프를 신형 AC 서보·스핀들 시스템으로 교체",
-          "시스템과의 연계성 증가, 위치 제어 가능, 정밀가공성 증가, 유지보수 및 관리 용이"
+          text("구형 DC 모터와 앰프를 신형 AC 서보·스핀들 시스템으로 교체", "Replace legacy DC motors and amplifiers with modern AC servo and spindle systems"),
+          text("시스템과의 연계성 증가, 위치 제어 가능, 정밀가공성 증가, 유지보수 및 관리 용이", "Improve system integration, positioning control, machining precision, and maintenance")
         ],
         img: "/images/ot_service/retrofit3.png",
-        alt: "스핀들/서보 모터 교체, CNC개조"
+        alt: text("스핀들/서보 모터 교체, CNC개조", "Spindle and servo motor replacement")
       },
       {
-        title: "PLC·케이블·데이터 연동",
+        title: text("PLC·케이블·데이터 연동", "PLC, Cable, and Data Integration"),
         content: [
-          "PLC Ladder, ATC/APC, 유압, 윤활, 도어 인터록 등 설비 시퀀스 개선",
-          "케이블 교체와 FOCAS/MES/설비 모니터링 연동으로 데이터 수집 기반 확보"
+          text("PLC Ladder, ATC/APC, 유압, 윤활, 도어 인터록 등 설비 시퀀스 개선", "Improve machine sequences including PLC ladder, ATC/APC, hydraulics, lubrication, and door interlocks"),
+          text("케이블 교체와 FOCAS/MES/설비 모니터링 연동으로 데이터 수집 기반 확보", "Establish a data-collection foundation with cable replacement and FOCAS, MES, and equipment-monitoring integration")
         ],
         img: "/images/ot_service/retrofit4.png",
-        alt: "PLC Ladder 개선, 케이블 교체, FOCAS MES 데이터 연동"
+        alt: text("PLC Ladder 개선, 케이블 교체, FOCAS MES 데이터 연동", "PLC ladder improvement, cable replacement, and FOCAS/MES data integration")
       },
     ]
 
@@ -84,8 +86,7 @@ export default function RetrofitSection() {
               <div className="divider-modern mx-auto w-24 mb-6" />
               <Reveal>
                 <p className="section-subtitle">
-                  화낙(FANUC) CNC 개조, 컨트롤러 교체, 전장·조작반 개선, 서보·스핀들 교체부터
-                  PLC Ladder와 제조 데이터 연동까지 CNC 주요 기능을 고도화하는 기술입니다.
+                  {text("화낙(FANUC) CNC 개조, 컨트롤러 교체, 전장·조작반 개선, 서보·스핀들 교체부터 PLC Ladder와 제조 데이터 연동까지 CNC 주요 기능을 고도화하는 기술입니다.", "CNC retrofit technology that modernizes core functions, from FANUC controller replacement and electrical-panel upgrades to servo/spindle replacement, PLC ladder work, and manufacturing-data integration.")}
                   <br/>
                 </p>
               </Reveal>

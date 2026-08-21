@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import HomeSection from "@/sections/Home/00_MainSection";
 import AboutSection from "@/sections/Home/01_AboutSection";
@@ -18,6 +19,7 @@ import HomeCTASection from "@/sections/Home/99_CTASection";
  */
 
 export default function Home() {
+  const { language, text } = useLanguage();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showFloatingButton, setShowFloatingButton] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
@@ -43,27 +45,27 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>WAFF | 제조 혁신 DX·OT·IT 파트너</title>
+        <title>{text("WAFF | 제조 혁신 DX·OT·IT 파트너", "WAFF | Manufacturing DX, OT & IT Partner")}</title>
         <meta
           name="description"
-          content="WAFF는 CNC 개조(Retrofit), OT/IT 서비스, 제조 AI를 통해 스마트팩토리 전환을 지원합니다."
+          content={text("WAFF는 CNC 개조(Retrofit), OT/IT 서비스, 제조 AI를 통해 스마트팩토리 전환을 지원합니다.", "WAFF supports smart factory transformation through CNC retrofit, OT/IT services, and manufacturing AI.")}
         />
         <link rel="canonical" href="https://www.waff.co.kr/" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="WAFF | 제조 혁신 DX·OT·IT 파트너" />
+        <meta property="og:title" content={text("WAFF | 제조 혁신 DX·OT·IT 파트너", "WAFF | Manufacturing DX, OT & IT Partner")} />
         <meta
           property="og:description"
-          content="CNC 개조(Retrofit)부터 제조 AI까지, WAFF의 제조 혁신 서비스를 확인하세요."
+          content={text("CNC 개조(Retrofit)부터 제조 AI까지, WAFF의 제조 혁신 서비스를 확인하세요.", "Discover WAFF’s manufacturing innovation services, from CNC retrofit to manufacturing AI.")}
         />
         <meta property="og:url" content="https://www.waff.co.kr/" />
         <meta property="og:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
 
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="WAFF | 제조 혁신 DX·OT·IT 파트너" />
+        <meta name="twitter:title" content={text("WAFF | 제조 혁신 DX·OT·IT 파트너", "WAFF | Manufacturing DX, OT & IT Partner")} />
         <meta
           name="twitter:description"
-          content="CNC 개조(Retrofit)부터 제조 AI까지, WAFF의 제조 혁신 서비스를 확인하세요."
+          content={text("CNC 개조(Retrofit)부터 제조 AI까지, WAFF의 제조 혁신 서비스를 확인하세요.", "Discover WAFF’s manufacturing innovation services, from CNC retrofit to manufacturing AI.")}
         />
         <meta name="twitter:image" content="https://www.waff.co.kr/images/logos/logoKR.png" />
       </Helmet>
@@ -90,7 +92,7 @@ export default function Home() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
-              <span className="text-xs text-muted-foreground font-medium">스크롤</span>
+              <span className="text-xs text-muted-foreground font-medium">{text("스크롤", "Scroll")}</span>
             </div>
           </div>
         )}
@@ -99,9 +101,9 @@ export default function Home() {
         <RightSideNav
           items={[
           { id: "home", label: "Intro" },
-          { id: "about", label: "회사개요" },
-          { id: "core-solutions", label: "핵심 솔루션" },
-          { id: "home_smartfactory", label: "스마트팩토리" },
+          { id: "about", label: text("회사개요", "Company") },
+          { id: "core-solutions", label: text("핵심 솔루션", "Solutions") },
+          { id: "home_smartfactory", label: text("스마트팩토리", "Smart Factory") },
           { id: "home_retrofit", label: "CNC Retrofit" },
           { id: "home_hmi", label: "HMI" },
           ]}
@@ -126,7 +128,7 @@ export default function Home() {
         <button
           onClick={scrollToTop}
           className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-accent rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-white hover:scale-110 animate-in fade-in slide-in-from-bottom-4"
-          aria-label="맨 위로"
+          aria-label={text("맨 위로", "Back to top")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

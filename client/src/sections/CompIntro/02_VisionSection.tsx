@@ -1,22 +1,24 @@
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function VisionSection() {
+    const { text } = useLanguage();
     const features = [
     {
       id: 1,
-      title: "AI 기반의 공정 최적화",
+      title: text("AI 기반의 공정 최적화", "AI-Based Process Optimization"),
       image: "/images/intro/intro_vision1.png",
       // color: "from-blue-500 to-cyan-500"
     },
     {
       id: 2,
-      title: "지능형 제조 통합 플랫폼",
+      title: text("지능형 제조 통합 플랫폼", "Integrated Intelligent Manufacturing Platform"),
       image: "/images/intro/intro_vision2.png",
       // color: "from-cyan-500 to-green-500"
     },
     {
       id: 3,
-      title: "디지털 트윈 기술",
+      title: text("디지털 트윈 기술", "Digital Twin Technology"),
       image: "/images/intro/intro_vision3.png",
       // color: "from-purple-500 to-blue-500"
     }
@@ -58,13 +60,7 @@ export default function VisionSection() {
               <div className="divider-modern mx-auto w-24 mb-6" />
                 <Reveal>
                   <p className="section-subtitle">
-                    <span className="font-bold">와프</span>
-                    는 기존의 리트로핏 및 장비제어 솔루션을 넘어
-                    <br/>
-                    <span className="text-accent font-bold">제조 현장의 DX(Digital Transformation)</span>
-                    를 실현하는
-                    <span className="text-accent font-bold">Total Solution Provider</span>
-                    로 도약하고자 합니다.
+                    {text("WAFF는 기존의 리트로핏 및 장비 제어 솔루션을 넘어 제조 현장의 DX(Digital Transformation)를 실현하는 Total Solution Provider로 도약하고자 합니다.", "WAFF aims to become a total solution provider that goes beyond retrofit and equipment-control solutions to deliver digital transformation across manufacturing operations.")}
                     {/* <span className="text-primary font-bold">사례 보기</span> */}
                   </p>
                 </Reveal>

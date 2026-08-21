@@ -1,16 +1,18 @@
 import { Cpu, Wrench, Monitor } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function SolutionsSection () {
+    const { text } = useLanguage();
     return (
         <section id="core-solutions" className="py-20 md:py-32 bg-gradient-to-br from-slate-50 to-gray-500">
         <div className="container">
           <Reveal className="text-center mb-16">
-            <h2 className="section-title">핵심 솔루션</h2>
+            <h2 className="section-title">{text("핵심 솔루션", "Core Solutions")}</h2>
             <div className="divider-modern mx-auto w-24 mb-6" />
             <p className="section-subtitle">
-              <span className="text-accent font-bold">와프</span>
-              의 세 가지 핵심 솔루션으로 제조 혁신을 실현하세요.
+              <span className="text-accent font-bold">WAFF</span>
+              {text("의 세 가지 핵심 솔루션으로 제조 혁신을 실현하세요.", "'s three core solutions bring manufacturing innovation to life.")}
             </p>
           </Reveal>
 
@@ -26,13 +28,13 @@ export default function SolutionsSection () {
               <div className="w-12 h-12 bg-accent/50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/80 transition-colors">
                 <Cpu className="w-6 h-6 text-white/70" />
               </div>
-              <h3 className="text-xl font-bold text-white/90 mb-3">스마트팩토리</h3>
+              <h3 className="text-xl font-bold text-white/90 mb-3">{text("스마트팩토리", "Smart Factory")}</h3>
               <p className="text-gray-300 mb-4">
                 {/* 설계, 개발 부터 생산과 출하에 이르기 까지의 과정에 정보통신기술(ICT)를 적용하여 생산성, 품질, 고객만족도를 향상시키는 지능형 공장 */}
-                설비 데이터 수집부터 공정 모니터링, PLC 연동, 운영 대시보드까지 통합해 제조 DX 기반을 구축합니다.
+                {text("설비 데이터 수집부터 공정 모니터링, PLC 연동, 운영 대시보드까지 통합해 제조 DX 기반을 구축합니다.", "We integrate equipment data collection, process monitoring, PLC connectivity, and operational dashboards to establish a manufacturing DX foundation.")}
               </p>
               <div className="mt-auto text-white/90 font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
-                상세 보기 →
+                {text("상세 보기", "Learn more")} →
               </div>
             </div>
             </Reveal>
@@ -47,13 +49,13 @@ export default function SolutionsSection () {
               <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Wrench className="w-6 h-6 text-accent" />
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">CNC Retrofit(CNC 개조)</h3>
+              <h3 className="text-xl font-bold text-foreground mb-3">{text("CNC Retrofit(CNC 개조)", "CNC Retrofit")}</h3>
               <p className="text-muted-foreground mb-4">
                 {/* 노후 장비를 최신 기술로 업그레이드하는 경제적 솔루션 */}
-                노후 CNC 설비를 화낙(FANUC), 지멘스, 하이데나인 환경에 맞춰 개조하고, 필요 시 오바훌까지 연계해 가동 안정성을 높입니다.
+                {text("노후 CNC 설비를 화낙(FANUC), 지멘스, 하이데나인 환경에 맞춰 개조하고, 필요 시 오바훌까지 연계해 가동 안정성을 높입니다.", "We retrofit aging CNC equipment for FANUC, Siemens, and Heidenhain environments, with overhaul support where needed to improve operating stability.")}
               </p>
               <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
-                상세 보기 →
+                {text("상세 보기", "Learn more")} →
               </div>
             </div>
             </Reveal>
@@ -70,10 +72,10 @@ export default function SolutionsSection () {
               </div>
               <h3 className="text-xl font-bold text-foreground mb-3">HMI</h3>
               <p className="text-muted-foreground mb-4">
-                직관적이고 사용자 친화적인 인터페이스로 설비 제어를 단순화합니다.
+                {text("직관적이고 사용자 친화적인 인터페이스로 설비 제어를 단순화합니다.", "We simplify equipment control with intuitive, user-friendly interfaces.")}
               </p>
               <div className="mt-auto text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300 inline-flex items-center gap-1">
-                상세 보기 →
+                {text("상세 보기", "Learn more")} →
               </div>
             </div>
             </Reveal>

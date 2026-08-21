@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState} from "react";
 import { Zap, Monitor, Award } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Img = { src: string; alt?: string };
 
@@ -51,6 +52,7 @@ function useCrossfade(images: Img[], intervalMs = 4500, fadeMs = 900) {
 }
 
 export default function HomeHMISection() {
+    const { text } = useLanguage();
     const images = useMemo(() => IMAGES, []);
     const { current, next, fade, fadeMs } = useCrossfade(images, 4800, 1000);
 
@@ -88,9 +90,7 @@ export default function HomeHMISection() {
             <h2 className="section-title">HMI (Human Machine Interface)</h2>
             <div className="divider-modern mx-auto w-24 mb-6" />
             <p className="section-subtitle">
-              직관적이고{" "}
-              <span className="font-bold text-accent">사용자 친화적인</span>
-              {" "}인터페이스로 설비 제어를 단순화합니다
+              {text("직관적이고 사용자 친화적인 인터페이스로 설비 제어를 단순화합니다", "We simplify equipment control with intuitive, user-friendly interfaces.")}
             </p>
           </Reveal>
 
@@ -105,11 +105,9 @@ export default function HomeHMISection() {
 
             <div className="space-y-8">
               <Reveal>
-                <h3 className="text-2xl font-bold text-foreground mb-4">사용자 중심의 설계</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-4">{text("사용자 중심의 설계", "User-Centered Design")}</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  복잡한 산업 설비를 직관적인 화면으로 구성하여 누구나 쉽게 조작할 수 있도록 설계했습니다. 
-                  <br/>
-                  터치스크린, 다중 언어 지원, 맞춤형 레이아웃 등으로 사용자 경험을 극대화합니다.
+                  {text("복잡한 산업 설비를 직관적인 화면으로 구성하여 누구나 쉽게 조작할 수 있도록 설계했습니다. 터치스크린, 다중 언어 지원, 맞춤형 레이아웃 등으로 사용자 경험을 극대화합니다.", "We design intuitive screens for complex industrial equipment so anyone can operate them easily. Touchscreens, multilingual support, and tailored layouts maximize the user experience.")}
                 </p>
               </Reveal>
 
@@ -120,8 +118,8 @@ export default function HomeHMISection() {
                       <Zap className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">실시간 모니터링</h4>
-                      <p className="text-sm text-muted-foreground">설비 상태를 실시간으로 확인하고 즉시 대응</p>
+                      <h4 className="font-semibold text-foreground mb-1">{text("실시간 모니터링", "Real-Time Monitoring")}</h4>
+                      <p className="text-sm text-muted-foreground">{text("설비 상태를 실시간으로 확인하고 즉시 대응", "Monitor equipment status in real time and respond immediately")}</p>
                     </div>
                   </div>
                 </Reveal>
@@ -132,8 +130,8 @@ export default function HomeHMISection() {
                       <Monitor className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">맞춤형 화면 구성</h4>
-                      <p className="text-sm text-muted-foreground">각 사용자 역할에 맞는 정보만 표시</p>
+                      <h4 className="font-semibold text-foreground mb-1">{text("맞춤형 화면 구성", "Tailored Screen Layouts")}</h4>
+                      <p className="text-sm text-muted-foreground">{text("각 사용자 역할에 맞는 정보만 표시", "Show only the information relevant to each user role")}</p>
                     </div>
                   </div>
                 </Reveal>
@@ -144,8 +142,8 @@ export default function HomeHMISection() {
                       <Award className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">높은 신뢰성</h4>
-                      <p className="text-sm text-muted-foreground">산업용 표준 준수로 안정적인 운영 보장</p>
+                      <h4 className="font-semibold text-foreground mb-1">{text("높은 신뢰성", "High Reliability")}</h4>
+                      <p className="text-sm text-muted-foreground">{text("산업용 표준 준수로 안정적인 운영 보장", "Industrial standards compliance for reliable operation")}</p>
                     </div>
                   </div>
                 </Reveal>

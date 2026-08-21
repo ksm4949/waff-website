@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useLocation } from "wouter";
 import { Helmet } from "react-helmet-async";
 import RightSideNav from "@/components/RightSideNav";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import Service_OT_MainSection from "@/sections/OT_Services/00_MainSection";
 import RetroMainSection from "@/sections/OT_Services/01_RetroMainSection";
@@ -13,15 +14,16 @@ import RetroCaseSection from "@/sections/OT_Services/05_caseSection";
 import HMISection from "@/sections/OT_Services/06_HMISection";
 
 export default function OT_Services() {
+    const { text } = useLanguage();
     const [location] = useLocation();
     const [showFloatingButton, setShowFloatingButton] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
     const isCncLanding = location === "/cnc-retrofit" || location === "/fanuc-cnc-retrofit";
     const pageTitle = isCncLanding
-      ? "화낙 CNC 개조·CNC Retrofit 전문 | WAFF"
-      : "CNC Retrofit / OT 서비스 | WAFF";
+      ? text("화낙 CNC 개조·CNC Retrofit 전문 | WAFF", "FANUC CNC Retrofit Specialist | WAFF")
+      : text("CNC Retrofit / OT 서비스 | WAFF", "CNC Retrofit / OT Services | WAFF");
     const pageDescription =
-      "WAFF는 화낙(FANUC) CNC 개조, CNC Retrofit, 컨트롤러·서보·스핀들·전장·조작반·케이블 교체, PLC Ladder 개선과 FOCAS/MES 데이터 연동을 지원합니다.";
+      text("WAFF는 화낙(FANUC) CNC 개조, CNC Retrofit, 컨트롤러·서보·스핀들·전장·조작반·케이블 교체, PLC Ladder 개선과 FOCAS/MES 데이터 연동을 지원합니다.", "WAFF supports FANUC CNC retrofit, controller, servo, spindle, electrical cabinet, panel, and cable upgrades, PLC ladder improvement, and FOCAS/MES data integration.");
     const canonicalUrl = isCncLanding
       ? `https://www.waff.co.kr${location}`
       : "https://www.waff.co.kr/otservice";
@@ -159,7 +161,7 @@ export default function OT_Services() {
               items={[
                 { id: "ot_main", label: "OT Service" },
                 { id: "retro_main", label: "CNC Retrofit" },
-                { id: "retro_case", label: "Retorfit 적용사례" },
+                { id: "retro_case", label: text("Retorfit 적용사례", "Retrofit Use Cases") },
                 { id: "ot_hmi", label: "HMI" },
               ]}
             />
@@ -179,7 +181,7 @@ export default function OT_Services() {
               <button
                 onClick={scrollToTop}
                 className="fixed bottom-8 right-8 z-50 w-12 h-12 bg-accent rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-white hover:scale-110 animate-in fade-in slide-in-from-bottom-4"
-                aria-label="맨 위로"
+                aria-label={text("맨 위로", "Back to top")}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

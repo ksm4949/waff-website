@@ -1,6 +1,8 @@
 import { Link, useLocation  } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
+  const { text } = useLanguage();
   const [location] = useLocation();
 
   const scrollToSection = (sectionId: string) => {
@@ -42,7 +44,7 @@ export default function Footer() {
                     />
                   </div>
                   <p className="text-white/80 text-sm">
-                    제조 혁신을 이끄는 디지털 전환 파트너
+                    {text("제조 혁신을 이끄는 디지털 전환 파트너", "Your digital transformation partner for manufacturing innovation")}
                   </p>
                 </div>
 
@@ -57,12 +59,12 @@ export default function Footer() {
                           onClick={(e)=> handleMenuClick(e, "/company", "contact")}
                           className="text-white/80 hover:text-white hover:underline"
                         >
-                          👉 찾아오시는 길
+                          👉 {text("찾아오시는 길", "Directions")}
                         </Link>
                         {/* 다른 추가할 링크들 */}
                       </nav>
                       <p className="text-white/80">
-                        경남 창원시 성산구 완암로 147(성산동)
+                        {text("경남 창원시 성산구 완암로 147(성산동)", "147 Wanam-ro, Seongsan-gu, Changwon-si, Gyeongnam, Korea")}
                       </p>
                       <p className="text-white/80">Tel. 055-288-0856</p>
                       <p className="text-white/80">FAX. 055-288-0857</p>

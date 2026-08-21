@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { House, Pencil, RefreshCwIcon, SearchIcon, Trash2 } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation, useRoute } from "wouter";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const validCategories: BlogCategory[] = ["notice", "external", "tech"];
 const BLOG_FALLBACK_IMAGE = "/images/logos/logoKR.png";
@@ -49,6 +50,7 @@ function BlogCard({
   adminMode: boolean;
   onDelete: (id: number) => void;
 }) {
+  const { text } = useLanguage();
   const hasImage = Boolean(imageUrl);
   const displayImage = hasImage ? toAssetUrl(imageUrl) : BLOG_FALLBACK_IMAGE;
   const excerpt = truncateText(toExcerptText(content), 72);
@@ -78,7 +80,7 @@ function BlogCard({
       </Link>
       <div className="flex flex-1 flex-col gap-1 p-2 md:p-2.5">
         <Link href={`/blog/${id}`} className="contents">
-          <p className="text-xs font-semibold text-[#0b1f4d]">{blogCategoryLabel[category]}</p>
+          <p className="text-xs font-semibold text-[#0b1f4d]">{text(blogCategoryLabel[category], category === "notice" ? "Notices" : category === "external" ? "External Activities" : "Technology")}</p>
           <h3 className="line-clamp-1 text-[15px] font-bold leading-snug">{title}</h3>
           <p className="line-clamp-2 text-xs text-muted-foreground">{excerpt}</p>
         </Link>
@@ -93,7 +95,7 @@ function BlogCard({
                 size="icon"
                 className="h-6 w-6 rounded-full border-[#9fc3f7] bg-white text-[#1f6fd9] hover:bg-[#eef5ff] hover:text-[#0b4fb0]"
               >
-                <Link href={`/admin/blog/write?mode=edit&id=${id}`} aria-label="수정">
+                <Link href={`/admin/blog/write?mode=edit&id=${id}`} aria-label={text("수정", "Edit")}>
                   <Pencil className="h-3.5 w-3.5" />
                 </Link>
               </Button>
@@ -103,7 +105,7 @@ function BlogCard({
                 size="icon"
                 className="h-6 w-6 rounded-full border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-700"
                 onClick={() => onDelete(id)}
-                aria-label="삭제"
+                aria-label={text("삭제", "Delete")}
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
@@ -116,6 +118,7 @@ function BlogCard({
 }
 
 export default function BlogCategory({ adminMode = false }: { adminMode?: boolean }) {
+  const { text } = useLanguage();
   const [, navigate] = useLocation();
   const [, publicParams] = useRoute("/blog/category/:category");
   const [, adminParams] = useRoute("/admin/blog/category/:category");
@@ -154,7 +157,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "카테고리 데이터를 불러오지 못했습니다.");
+          setError(err instanceof Error ? err.message : text("카테고리 데이터를 불러오지 못했습니다.", "Unable to load category data."));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -165,7 +168,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
     return () => {
       cancelled = true;
     };
-  }, [category, currentPage, appliedSearchTerm]);
+  }, [category, currentPage, appliedSearchTerm, text]);
 
   const goToPage = (page: number) => {
     const next = Math.min(Math.max(page, 1), Math.max(totalPages, 1));
@@ -174,16 +177,16 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
   };
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    if (!window.confirm(text("정말 삭제하시겠습니까?", "Are you sure you want to delete this post?"))) return;
     try {
       await deleteBlogPost(id);
       const response = await fetchBlogCategory(category!, currentPage, pageSize, appliedSearchTerm);
       setItems(Array.isArray(response.items) ? response.items : []);
       setTotalCount(Number.isFinite(response.totalCount) ? Number(response.totalCount) : 0);
       setTotalPages(Number.isFinite(response.totalPages) ? Number(response.totalPages) : 1);
-      window.alert("게시글을 삭제했습니다.");
+      window.alert(text("게시글을 삭제했습니다.", "The post has been deleted."));
     } catch (err) {
-      const message = err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다.";
+      const message = err instanceof Error ? err.message : text("삭제 중 오류가 발생했습니다.", "An error occurred while deleting the post.");
       window.alert(message);
     }
   };
@@ -211,17 +214,17 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
     return (
       <section className="relative overflow-hidden bg-white py-20 md:py-28">
         <Helmet>
-          <title>블로그 카테고리 | WAFF</title>
-          <meta name="description" content="WAFF 블로그 카테고리를 확인해보세요." />
+          <title>{text("블로그 카테고리 | WAFF", "Blog Category | WAFF")}</title>
+          <meta name="description" content={text("WAFF 블로그 카테고리를 확인해보세요.", "Explore WAFF blog categories.")} />
           <link rel="canonical" href={`${SITE_URL}/blog`} />
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="블로그 카테고리 | WAFF" />
-          <meta property="og:description" content="WAFF 블로그 카테고리를 확인해보세요." />
+          <meta property="og:title" content={text("블로그 카테고리 | WAFF", "Blog Category | WAFF")} />
+          <meta property="og:description" content={text("WAFF 블로그 카테고리를 확인해보세요.", "Explore WAFF blog categories.")} />
           <meta property="og:url" content={`${SITE_URL}/blog`} />
           <meta property="og:image" content={`${SITE_URL}/images/logos/logoKR.png`} />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="블로그 카테고리 | WAFF" />
-          <meta name="twitter:description" content="WAFF 블로그 카테고리를 확인해보세요." />
+          <meta name="twitter:title" content={text("블로그 카테고리 | WAFF", "Blog Category | WAFF")} />
+          <meta name="twitter:description" content={text("WAFF 블로그 카테고리를 확인해보세요.", "Explore WAFF blog categories.")} />
           <meta name="twitter:image" content={`${SITE_URL}/images/logos/logoKR.png`} />
           {adminMode ? <meta name="robots" content="noindex, nofollow" /> : null}
         </Helmet>
@@ -245,10 +248,10 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
         </div>
         <div className="container relative z-10 max-w-4xl">
           <div className="rounded-lg border border-border/70 bg-background p-8 text-center">
-            <p className="text-lg font-semibold">잘못된 카테고리입니다.</p>
+            <p className="text-lg font-semibold">{text("잘못된 카테고리입니다.", "Invalid category.")}</p>
             <div className="mt-6">
               <Button asChild type="button" variant="outline">
-                <Link href={listHref}>블로그 홈</Link>
+                <Link href={listHref}>{text("블로그 홈", "Blog Home")}</Link>
               </Button>
             </div>
           </div>
@@ -257,13 +260,13 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
     );
   }
 
-  const categoryLabel = blogCategoryLabel[category];
+  const categoryLabel = text(blogCategoryLabel[category], category === "notice" ? "Notices" : category === "external" ? "External Activities" : "Technology");
   const titleText = appliedSearchTerm
-    ? `[${appliedSearchTerm}] 검색결과 | ${categoryLabel} | WAFF`
-    : `${categoryLabel} | 블로그 | WAFF`;
+    ? text(`[${appliedSearchTerm}] 검색결과 | ${categoryLabel} | WAFF`, `[${appliedSearchTerm}] Search Results | ${categoryLabel} | WAFF`)
+    : text(`${categoryLabel} | 블로그 | WAFF`, `${categoryLabel} | Blog | WAFF`);
   const descText = appliedSearchTerm
-    ? `WAFF ${categoryLabel} 카테고리에서 "${appliedSearchTerm}" 검색 결과를 확인해보세요.`
-    : `WAFF 블로그 ${categoryLabel} 카테고리 게시글을 확인해보세요.`;
+    ? text(`WAFF ${categoryLabel} 카테고리에서 "${appliedSearchTerm}" 검색 결과를 확인해보세요.`, `View search results for "${appliedSearchTerm}" in the WAFF ${categoryLabel} category.`)
+    : text(`WAFF 블로그 ${categoryLabel} 카테고리 게시글을 확인해보세요.`, `Explore posts in the WAFF ${categoryLabel} category.`);
   const canonicalUrl = `${SITE_URL}/blog/category/${category}`;
 
   return (
@@ -304,39 +307,39 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
       <div className="container relative z-10 space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4 rounded-2xl border border-[#cfd8ea] bg-[#eff1f5] px-8 py-10 shadow-[0_14px_26px_-18px_rgba(11,31,77,0.45)] md:px-10">
           <div className="w-full space-y-4">
-            <p className="text-sm font-semibold text-[#0b1f4d]">카테고리</p>
-            <h1 className="text-3xl font-bold md:text-4xl">{blogCategoryLabel[category]}</h1>
+            <p className="text-sm font-semibold text-[#0b1f4d]">{text("카테고리", "Category")}</p>
+            <h1 className="text-3xl font-bold md:text-4xl">{categoryLabel}</h1>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-muted-foreground">
                 {appliedSearchTerm
-                  ? `[${appliedSearchTerm}] 검색결과 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`
-                  : `"${blogCategoryLabel[category]}" 카테고리 게시글 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`}
+                  ? text(`[${appliedSearchTerm}] 검색결과 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`, `[${appliedSearchTerm}] ${totalCount} results · page ${currentPage}/${Math.max(totalPages, 1)}`)
+                  : text(`"${blogCategoryLabel[category]}" 카테고리 게시글 ${totalCount}건 중 ${currentPage}/${Math.max(totalPages, 1)}페이지`, `${totalCount} posts in ${categoryLabel} · page ${currentPage}/${Math.max(totalPages, 1)}`)}
               </p>
               <form onSubmit={handleSearchSubmit} className="flex w-full items-center gap-2 md:w-[520px]">
                 <Input
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="제목, 내용 검색"
+                  placeholder={text("제목, 내용 검색", "Search title or content")}
                   className="bg-white"
                 />
                 <Button
                   type="submit"
                   className="bg-[#0b1f4d] text-white hover:bg-[#13357a]"
-                  aria-label="검색"
+                  aria-label={text("검색", "Search")}
                 >
                   <SearchIcon className="size-4" />
-                  <span className="sr-only">검색</span>
+                  <span className="sr-only">{text("검색", "Search")}</span>
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   className="bg-white hover:bg-gray-100 hover:text-foreground"
                   onClick={handleSearchReset}
-                  aria-label="초기화"
+                  aria-label={text("초기화", "Reset")}
                 >
                   <RefreshCwIcon className="size-4" />
-                  <span className="sr-only">초기화</span>
+                  <span className="sr-only">{text("초기화", "Reset")}</span>
                 </Button>
               </form>
             </div>
@@ -357,7 +360,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
                         : "bg-white text-[#0b1f4d] hover:bg-gray-100 hover:text-foreground"
                     }
                   >
-                    <Link href={href}>{blogCategoryLabel[item]}</Link>
+                    <Link href={href}>{text(blogCategoryLabel[item], item === "notice" ? "Notices" : item === "external" ? "External Activities" : "Technology")}</Link>
                   </Button>
                 );
               })}
@@ -369,7 +372,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
                 size="icon"
                 className="h-9 w-9 bg-white text-[#0b1f4d] hover:bg-gray-100 hover:text-foreground"
               >
-                <Link href={listHref} aria-label="블로그 홈">
+                <Link href={listHref} aria-label={text("블로그 홈", "Blog Home")}>
                   <House className="size-4" />
                 </Link>
               </Button>
@@ -377,7 +380,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
               {adminMode ? (
                 <div className="ml-auto flex flex-wrap items-center gap-2">
                   <Button asChild className="bg-[#0b1f4d] text-white hover:bg-[#13357a]">
-                    <Link href="/admin/blog/write">새 글 작성</Link>
+                    <Link href="/admin/blog/write">{text("새 글 작성", "New Post")}</Link>
                   </Button>
                   <Button
                     type="button"
@@ -385,7 +388,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
                     onClick={handleLogout}
                     className="bg-white hover:bg-gray-100"
                   >
-                    로그아웃
+                    {text("로그아웃", "Log Out")}
                   </Button>
                 </div>
               ) : null}
@@ -393,7 +396,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
           </div>
         </div>
 
-        {loading ? <p className="text-sm text-muted-foreground">불러오는 중...</p> : null}
+        {loading ? <p className="text-sm text-muted-foreground">{text("불러오는 중...", "Loading...")}</p> : null}
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
         {!loading && !error ? (
@@ -417,7 +420,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  이전
+                  {text("이전", "Previous")}
                 </Button>
                 {Array.from({ length: Math.max(totalPages, 1) }, (_, i) => i + 1).map((page) => (
                   <Button
@@ -436,7 +439,7 @@ export default function BlogCategory({ adminMode = false }: { adminMode?: boolea
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
-                  다음
+                  {text("다음", "Next")}
                 </Button>
               </div>
             ) : null}

@@ -1,17 +1,19 @@
 import { Reveal } from "@/components/Reveal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function HMISection() {
+    const { text } = useLanguage();
     return (
         <section id="ot_hmi" className="py-20 md:py-32 bg-gradient-to-br from-slate-50 to-gray-500">
         <div className="container">
           <div className="text-center mb-16 items-center">
             <Reveal>
-              <h2 className="section-title">HMI 솔루션</h2>
+              <h2 className="section-title">{text("HMI 솔루션", "HMI Solutions")}</h2>
             </Reveal>
             <div className="divider-modern mx-auto w-24 mb-6" />
             <Reveal>
               <p className="section-subtitle">
-                공장 환경에 맞는 수집 데이터 설계를 바탕으로 다양한 데이터를 수집해 화면 인터페이스로 구현합니다.
+                {text("공장 환경에 맞는 수집 데이터 설계를 바탕으로 다양한 데이터를 수집해 화면 인터페이스로 구현합니다.", "We collect data based on designs tailored to your factory environment and implement it through intuitive screen interfaces.")}
                 <br/>
                 {/* <span className="text-primary font-bold">사례 보기</span> */}
               </p>
@@ -29,18 +31,9 @@ export default function HMISection() {
 
             <div className="space-y-8">
               <Reveal>
-                <h3 className="text-2xl font-bold text-foreground mb-4">HMI란?</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-4">{text("HMI란?", "What is HMI?")}</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  HMI는 공장 자동화 환경에서 설비와 작업자를 연결하는 핵심 인터페이스입니다. <br/>
-                  각종 센서와 PLC 데이터를 실시간으로 수집·분석하여
-                  운영 현황을 한눈에 파악할 수 있도록 제공합니다. <br/>
-
-                  직관적인 그래픽 UI와 사용자 맞춤 설정 기능을 통해
-                  복잡한 공정도 쉽고 빠르게 제어할 수 있으며, <br/>
-                  설비 이상 감지 및 예방 유지보수를 지원합니다. <br/>
-
-                  스마트팩토리 구현을 위한 필수 요소로,
-                  생산 효율과 품질 경쟁력을 동시에 강화합니다.
+                  {text("HMI는 공장 자동화 환경에서 설비와 작업자를 연결하는 핵심 인터페이스입니다. 각종 센서와 PLC 데이터를 실시간으로 수집·분석하여 운영 현황을 한눈에 파악할 수 있도록 제공합니다. 직관적인 그래픽 UI와 사용자 맞춤 설정 기능을 통해 복잡한 공정도 쉽고 빠르게 제어할 수 있으며, 설비 이상 감지 및 예방 유지보수를 지원합니다. 스마트팩토리 구현을 위한 필수 요소로, 생산 효율과 품질 경쟁력을 동시에 강화합니다.", "HMI is the key interface that connects equipment and operators in factory automation. It collects and analyzes sensor and PLC data in real time to provide at-a-glance operational visibility. Intuitive graphical UI and user-specific settings make complex processes easy to control while supporting anomaly detection and preventive maintenance. As an essential component of smart factories, it strengthens both production efficiency and quality competitiveness.")}
                 </p>
               </Reveal>
 
